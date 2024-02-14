@@ -1,7 +1,80 @@
 <!DOCTYPE html>
 <html>
+<head>
+<style>
+  /* 设置整个页面的字体和颜色 */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* 创建一个容器，其中的左右两栏 */
+  .container {
+    flex: 1;
+    display: flex;
+    background-color: white;
+  }
+
+  /* 设置标题栏的样式 */
+  .title-bar {
+    background-color: white; /* 或者您可以选择一个特定的颜色 */
+    padding: 20px;
+    text-align: center;
+  }
+
+  /* 设置大标题的样式 */
+  .title-bar h1 {
+    margin: 0;
+    color: #333; /* 您可以根据需要调整颜色 */
+  }
+
+  /* 设置副标题的样式 */
+  .title-bar p {
+    margin: 0;
+    color: #555; /* 您可以根据需要调整颜色 */
+  }
+
+  /* 设置左栏的样式 */
+  .left-column {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+  }
+
+  /* 设置右栏的样式 */
+  .right-column {
+    flex: 3;
+    background-color: white;
+    padding: 20px;
+  }
+</style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+
+  <!-- 标题栏 -->
+  <div class="title-bar">
+    <h1>王一帆作品集</h1>
+    <p>视觉传达设计：智能设计理论研究、设计思维与方法研究</p>
+  </div>
+
+  <!-- 容器，包含左右两栏 -->
+  <div class="container">
+    <div class="left-column">
+      <!-- 这里是您的简历内容 -->
+      <h2>简历</h2>
+      <p>这里是您的简历详细信息...</p>
+    </div>
+    <div class="right-column">
+      <!-- 这里是您的工作集内容 -->
+      <h2>作品集</h2>
+      <p>这里是您的工作集详细信息...</p>
+    </div>
+  </div>
+
 </body>
 </html>
