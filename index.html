@@ -1,80 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-  /* 设置整个页面的字体和颜色 */
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
+  <title>王一帆设计作品集</title>
+  <style>
+    /* 设置整个页面的字体和颜色 */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
 
-  /* 创建一个容器，其中的左右两栏 */
-  .container {
-    flex: 1;
-    display: flex;
-    background-color: white;
-  }
+    /* 设置P字体和颜色 */
+    p{font-family: Arial, sans-serif;
+      font-size:12px;
+      line-height: 24px;
+    }
 
-  /* 设置标题栏的样式 */
-  .title-bar {
-    background-color: white; /* 或者您可以选择一个特定的颜色 */
-    padding: 20px;
-    text-align: center;
-  }
+    /* 设置轮播图 */
+    #carousel {
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      position: relative;
+    }
 
-  /* 设置大标题的样式 */
-  .title-bar h1 {
-    margin: 0;
-    color: #333; /* 您可以根据需要调整颜色 */
-  }
+    #carousel img {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transition: opacity 1s;
+      object-fit: cover; /* 保持图片的宽高比，可能会裁剪 */
+      object-position: center; /* 调整图片的位置，避免裁剪 */
+    }
 
-  /* 设置副标题的样式 */
-  .title-bar p {
-    margin: 0;
-    color: #555; /* 您可以根据需要调整颜色 */
-  }
-
-  /* 设置左栏的样式 */
-  .left-column {
-    flex: 1;
-    background-color: white;
-    padding: 20px;
-  }
-
-  /* 设置右栏的样式 */
-  .right-column {
-    flex: 3;
-    background-color: white;
-    padding: 20px;
-  }
-</style>
+    /* 标题和副标题的容器 */
+    .title-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+    }
+    .title {
+      font-size: 40px;
+    }
+    .subtitle {
+      font-size: 15px;
+      margin-top: 0;
+    }
+    /* 隐藏默认的图片下方的标题栏 */
+    .title-overlay {
+      display: none;
+    }
+  </style>
 </head>
+
+
+
+
 <body>
 
-  <!-- 标题栏 -->
-  <div class="title-bar">
-    <h1>王一帆作品集</h1>
-    <p>视觉传达设计研究、智能设计理论研究、设计思维与方法研究</p>
+  <div id="carousel">
+    <img src="./images/carousel/image1.jpg" style="opacity: 1;">
+    <img src="./images/carousel/image2.jpg" style="opacity: 0;">
+    <img src="./images/carousel/image3.jpg" style="opacity: 0;">
+    <!-- 可以继续添加更多图片 -->
+    <!-- 标题和副标题的容器 -->
+    <div class="title-container">
+      <p class="title">王一帆作品集</p>
+      <p class="subtitle">视觉传达设计/智能设计理论研究/设计思维与方法研究</p>
+    </div>
+    
   </div>
+  <script>
+      // 轮播图的JavaScript代码
+      let currentIndex = 0;
+      function changeImage() {
+          const images = document.querySelectorAll('#carousel img');
+          images[currentIndex].style.opacity = 0;
+          currentIndex = (currentIndex + 1) % images.length;
+          images[currentIndex].style.opacity = 1;
+      }
+      setInterval(changeImage, 3000); // 每3秒更换一张图片
+  </script>
 
-  <!-- 容器，包含左右两栏 -->
-  <div class="container">
-    <div class="left-column">
-      <!-- 这里是您的简历内容 -->
-      <h2>简历</h2>
-      <p>这里是您的简历详细信息...</p>
-    </div>
-    <div class="right-column">
-      <!-- 这里是您的工作集内容 -->
-      <h2>作品集</h2>
-      <p>这里是您的工作集详细信息...</p>
-    </div>
-  </div>
+
+
+
 
 </body>
 </html>
