@@ -1502,9 +1502,9 @@ body {
   line-height: 1.8125;
   text-align: left;
 }
-.blog-info__excerpt:not(:empty):after {
+/* .blog-info__excerpt:not(:empty):after {
   content: " […]";
-}
+} */
 
 .blog-meta {
   -webkit-box-align: baseline;
