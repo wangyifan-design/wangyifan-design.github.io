@@ -1224,8 +1224,8 @@ body {
   background-image: url("../img/project-11.jpg");
 }
 
-.item-12 {
-  background-image: url("../img/project-12.jpg");
+.item-stickers {
+  background-image: url("../img/project-stickers.jpg");
 }
 
 .item-13 {
@@ -1240,12 +1240,24 @@ body {
   }
 }
 
-.item-14 {
-  background-image: url("../img/project-14.jpg");
+.item-UI {
+  background-image: url("../img/project-UI.jpg");
 }
 
-.item-15 {
-  background-image: url("../img/project-15.jpg");
+.item-books {
+  background-image: url("../img/project-books.jpg");
+}
+
+.item-posters {
+  background-image: url("../img/project-posters.jpg");
+}
+
+.item-mascot {
+  background-image: url("../img/project-mascot.jpg");
+}
+
+.item-brands {
+  background-image: url("../img/project-brands.jpg");
 }
 
 @media (min-width: 40em) {
