@@ -1220,8 +1220,8 @@ body {
   background-image: url("../img/project-10.jpg");
 }
 
-.item-11 {
-  background-image: url("../img/project-11.jpg");
+.item-animation {
+  background-image: url("../img/project-animation.jpg");
 }
 
 .item-stickers {
@@ -1252,7 +1252,7 @@ body {
   background-image: url("../img/project-posters.jpg");
 }
 
-.item-mascot {
+.item-mascots {
   background-image: url("../img/project-mascot.jpg");
 }
 
