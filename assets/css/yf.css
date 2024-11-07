@@ -1177,17 +1177,10 @@ body {
   background-image: url("../img/project-2.jpg");
 }
 
-.item-3 {
-  background-image: url("../img/project-3/project-3.jpg");
-}
-
 .item-4 {
   background-image: url("../img/project-4.jpg");
 }
 
-.item-5 {
-  background-image: url("../img/project-5.jpg");
-}
 @media (min-width: 40em) {
   #layout-grid:checked ~ .rk-portfolio .item-5 {
     background-position: center left;
@@ -1223,9 +1216,6 @@ body {
   background-image: url("../img/project-exhibition/project-exhibition.jpg");
 }
 
-.item-stickers {
-  background-image: url("../img/project-stickers/project-stickers.jpg");
-}
 
 .item-13 {
   background-image: url("../img/project-13.jpg");
@@ -1239,16 +1229,8 @@ body {
   }
 }
 
-.item-activities {
-  background-image: url("../img/project-activities/project-activities.jpg");
-}
-
 .item-books {
   background-image: url("../img/project-books/project-books.jpg");
-}
-
-.item-posters {
-  background-image: url("../img/project-posters/project-posters.jpg");
 }
 
 .item-mascots {
