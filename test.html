@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>poster</title>
+
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr); /* 默认12栏布局 */
+            gap: 10px; /* 栏之间的空隙 */
+            padding: 50px; /* 页边距 */
+        }
+
+        .item {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .item-2 {
+            grid-column: span 2;
+        }
+
+        .item-3 {
+            grid-column: span 3;
+        }
+
+        .item-4 {
+            grid-column: span 4;
+        }
+
+        .item-6 {
+            grid-column: span 6;
+        }
+
+        .item-12 {
+            grid-column: span 12;
+        }
+
+        img {
+            width: 100%; /* 让图片宽度适应容器 */
+            height: auto; /* 保持图片的纵横比 */
+            display: block; /* 移除默认的内联间隙 */
+        }
+
+        /* 使用媒体查询进行响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: repeat(6, 1fr); /* 屏幕宽度小于768px时使用6栏布局 */
+            }
+
+            .item-2 {
+                grid-column: span 3; /* 在6栏布局中，原来的2栏元素需要跨3栏 */
+            }
+
+            .item-3 {
+                grid-column: span 6; /* 在6栏布局中，原来的3栏元素需要跨6栏 */
+            }
+
+            .item-4 {
+                grid-column: span 6; /* 在6栏布局中，原来的4栏元素需要跨6栏 */
+            }
+
+            .item-6 {
+                grid-column: span 6; /* 在6栏布局中，原来的6栏元素需要跨6栏 */
+            }
+
+            .item-12 {
+                grid-column: span 6; /* 在6栏布局中，原来的6栏元素需要跨6栏 */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr); /* 屏幕宽度小于480px时使用2栏布局 */
+            }
+
+            .item-2,
+            .item-3,
+            .item-4,
+            .item-6,
+            .item-12 {
+                grid-column: span 2; /* 在2栏布局中，所有元素都跨2栏 */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+  <header class="ae-container-fluid ae-container-fluid--full rk-header ">
+
+    <input type="checkbox" id="mobile-menu" class="rk-mobile-menu">
+    <label for="mobile-menu">
+      <svg>
+        <use xlink:href="assets/img/symbols.svg#bar"></use>
+      </svg>
+      <svg>
+        <use xlink:href="assets/img/symbols.svg#bar"></use>
+      </svg>
+      <svg>
+        <use xlink:href="assets/img/symbols.svg#bar"></use>
+      </svg>
+    </label>
+
+    <div class="ae-container-fluid rk-topbar">
+      <h1 class="rk-logo">
+        <img src="assets/img/wang-ico.svg" width="40px">
+        <a href="index.html">Wang Yifan Design Portfolio</a></h1>
+      <nav class="rk-navigation">
+        <ul class="rk-menu">
+          <li class="rk-menu__item"><a href="index.html" class="rk-menu__link">Home</a>
+          </li>
+          <li class="rk-menu__item"><a href="portfolio.html" class="active rk-menu__link">Portfolio</a>
+          </li>
+          <li class="rk-menu__item"><a href="resume.html" 
+            class="rk-menu__link">Resume</a>
+          </li>
+          <li class="rk-menu__item"><a href="research.html"
+             class="rk-menu__link">Research</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+    <div class="container" data-images="assets/img/project-posters/poster-1/p1.jpg,assets/img/project-posters/poster-1/p2.jpg,assets/img/project-posters/poster-1/p3.jpg">
+      <img class="item item-6" src="assets/img/project-posters/poster-1/p1.jpg" alt="Image 1">
+      <button>Next Image</button>
+    </div>
+
+    <div class="container" data-images="image4.jpg,image5.jpg,image6.jpg">
+      <img class="item item-2" src="image4.jpg" alt="Image 4">
+      <button>Next Image</button>
+    </div>
+
+    <script src="assets/js/switch.js"></script>
+
+</body>
+</html>

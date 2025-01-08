@@ -8,6 +8,25 @@
     <link rel="stylesheet" href="assets/css/aurora-pack.min.css">
     <link rel="stylesheet" href="assets/css/aurora-theme-base.min.css">
     <link rel="stylesheet" href="assets/css/yf.css">
+    <style>
+      #slideshow {
+          width: 100%; /* 你可以根据需要调整宽度 */
+          height: 400px; /* 你可以根据需要调整高度 */
+          overflow: hidden;
+          position: relative;
+          padding-bottom: 69%; 
+      }
+      .slide {
+          position: absolute;
+          width: 100%;
+          height: auto;
+          opacity: 0;
+          transition: opacity 1s;
+      }
+      .active {
+          opacity: 1;
+      }
+  </style>
   </head>
   <body class="top-fixed">
     <header class="ae-container-fluid ae-container-fluid--full rk-header ">
@@ -74,17 +93,12 @@
         </div>
 
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">01 ｜ Design Thinking & Methodology</h4>
+          <h4 class="ae-u-bolder ae-grid__item item-lg-12">02 ｜ Design Thinking & Methodology</h4>
           <p class="ae-lambda item-lg-12">Supervisor: Chen Nan<br>June, 2021</p>
           <p  class="item-lg-10">"Design Thinking & Methodology" is a textbook designed by Mr. Chen Nan for the design thinking series of courses. I participated in the organization and layout of the book, and also designed a brain pattern for the textbook.<br>
           The feature of this book in layout design is that it places the images mentioned in the main text next to the text and uses colored dots as the indexing method.</p>
 
-          <div class="item-lg-6">
-            <img src="assets/img/project-books/b-1.jpg" alt="Yifan Portfolio"></div>
-          <div class="item-lg-6">
-            <img src="assets/img/project-books/b-0.jpg" alt="Yifan Portfolio"></div>
-
-          <div class="item-lg-3">
+          <!-- <div class="item-lg-3">
             <img src="assets/img/project-books/b-2.jpg" alt="Yifan Portfolio"></div>
           <div class="ae-grid__item item-lg-3">
             <img src="assets/img/project-books/b-3.jpg" alt="Yifan Portfolio"></div>
@@ -92,10 +106,36 @@
             <img src="assets/img/project-books/b-5.jpg" alt="Yifan Portfolio"></div>
           <div class="ae-grid__item item-lg-3">
             <img src="assets/img/project-books/b-6.jpg" alt="Yifan Portfolio"></div>
+        </div> -->
+
+        <div id="slideshow">
+          <img src="assets/img/project-books/b-2.jpg" class="slide active" alt="page1">
+          <img src="assets/img/project-books/b-3.jpg" class="slide" alt="page2">
+          <img src="assets/img/project-books/b-5.jpg" class="slide" alt="page3">
+          <img src="assets/img/project-books/b-6.jpg" class="slide" alt="page4">
         </div>
 
+        <script>
+          let currentIndex = 0;
+          const slides = document.querySelectorAll('.slide');
+          const totalSlides = slides.length;
+      
+          setInterval(() => {
+              slides[currentIndex].classList.remove('active');
+              currentIndex = (currentIndex + 1) % totalSlides;
+              slides[currentIndex].classList.add('active');
+          }, 2000); // 1秒切换一次
+        </script>
+
+
+        <div class="item-lg-6">
+          <img src="assets/img/project-books/b-1.jpg" alt="Yifan Portfolio"></div>
+        <div class="item-lg-6">
+          <img src="assets/img/project-books/b-0.jpg" alt="Yifan Portfolio"></div>
+
+
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">02 ｜ Chinese Stamp Designer - Chen Nan</h4>
+          <h4 class="ae-u-bolder ae-grid__item item-lg-12">03 ｜ Chinese Stamp Designer - Chen Nan</h4>
           <p class="ae-lambda item-lg-12">Supervisor: Chen Nan<br>June, 2022</p>
           <p  class="item-lg-10">This stamp album organizes Professor Chen Nan's stamp designs, including "Tsinghua University" personalized service special stamp, New Year blessings, China Dream and other 10 groups of theme stamps. I participated in the design of the stamp album.</p>
 
@@ -103,7 +143,7 @@
         </div>
 
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">03 ｜ The Star of the Polar Bear</h4>
+          <h4 class="ae-u-bolder ae-grid__item item-lg-12">04 ｜ The Star of the Polar Bear</h4>
           <p class="ae-lambda item-lg-12">October, 2015</p>
           <div>
             <img src="assets/img/project-books/b-8.png" alt="Yifan Portfolio">
