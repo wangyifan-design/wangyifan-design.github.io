@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="assets/css/aurora-theme-base.min.css">
     <link rel="stylesheet" href="assets/css/yf.css">
     <style>
+      h4 {
+            scroll-margin-top: 150px; /* 设置偏移量，例如50px */
+        }
       #slideshow {
           width: 100%; /* 你可以根据需要调整宽度 */
           height: 400px; /* 你可以根据需要调整高度 */
           overflow: hidden;
           position: relative;
-          padding-bottom: 69%; 
+          padding-bottom: 67%; 
       }
       .slide {
           position: absolute;
@@ -26,7 +29,22 @@
       .active {
           opacity: 1;
       }
-  </style>
+      .suoyin {
+          /* margin: 10px 0; */
+          padding: 10px 10px;
+          border-top: 1px solid #ccc;
+          /* border-bottom: 1px solid #ccc; */
+          transition: background-color 0.3s;
+          display: flex;
+          justify-content: space-between; /* 使标题和年份分布在两端 */
+          align-items: center; /* 垂直居中对齐 */
+      }
+      .suoyin:hover {
+            background-color: #f0f0f0; /* 悬浮时的背景色 */
+        }
+
+    </style>
+
   </head>
   <body class="top-fixed">
     <header class="ae-container-fluid ae-container-fluid--full rk-header ">
@@ -71,42 +89,76 @@
           <h1 class="ae-u-bolder rk-portfolio-title item-lg-10 ">Books</h1>
         </div>
       </header> -->
-        <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
-            <h1 class="ae-u-bolder rk-portfolio-title" >Typography</h1>
-            <h2 class="ae-theta rk-portfolio-category" >Compilation</h2>
-        </div>
+      <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
+        <h1 class="ae-u-bolder rk-portfolio-title" >Typography</h1>
+        <h2 class="ae-theta rk-portfolio-category" >Compilation</h2>
+      </div>
+
+      <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
+          <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
+
+            <div class="item-lg-4"></div>
+              <div class="item-lg-8">
+                <div class="suoyin rk-item">
+                  <p class="ae-u-bolder" style="font-size: 1.5em;">
+                    <a href="#philosophy">Philosophy Drama Festival</a></p>
+                  <p>2024</p>
+                </div>
+                <div class="suoyin rk-item">
+                  <p class="ae-u-bolder" style="font-size: 1.5em;">
+                    <a href="#stamp">Chinese Stamp Designer - Chen Nan</a></p>
+                  <p>2022</p>
+                </div>
+                <div class="suoyin rk-item">
+                  <p class="ae-u-bolder" style="font-size: 1.5em;"><a href="#thinking">Design Thinking & Methodology</a></p>
+                  <p>2021</p>
+                </div>
+                <div class="suoyin rk-item" style="border-bottom: 1px solid #ccc;">
+                  <p class="ae-u-bolder" style="font-size: 1.5em;"><a href="#bear">Bear and Fairy Tales</a></p>
+                  <p>2015</p>
+                </div>
+              </div>
+
+          </div>
+      </div>
+
+
 
       <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">01 ｜ Philosophy Drama Festival</h4>
-          <p class="ae-lambda item-lg-10">Visual Coordination: Lin Xia<br>Designer: <b>Wang Yifan</b><br>Company: Yanwai Studio<br>2 Months · Sep - Oct, 2024</p>
-          <p  class="item-lg-10">I designed a series of manuals for the Philosophy Drama Festival. This year's theme is <b style="color: MediumPurple;">Pata? Pata! Something is happening!</b> The drama festival opens on November 12th at Tsinghua University and lasts nearly two months.</p>
+        <div class="item-lg-5">
+          <h4 id="philosophy" class="ae-u-bolder" style="color: mediumpurple; font-size: 2em;">Philosophy Drama Festival</h4>
+          <p class="ae-lambda">Visual Coordination: Lin Xia<br>Designer: <b>Wang Yifan</b><br>Company: Yanwai Studio<br>2 Months · Sep - Oct, 2024</p>
+        </div>
+          <p class="item-lg-6 item-lg--offset-1">I designed a series of manuals for the Philosophy Drama Festival. This year's theme is <b style="color: MediumPurple;">Pata? Pata! Something is happening!</b> The drama festival opens on November 12th at Tsinghua University and lasts nearly two months.</p>
 
-          <div class="item-lg-6">
-            <img src="assets/img/project-books/pdf-1.jpg" alt="cover"></div>
-          <div class="item-lg-6">
-            <img src="assets/img/project-books/pdf-2.jpg" alt="inner"></div>
-          <div class="item-lg-12">
-            <img src="assets/img/project-books/pdf-3.jpg" alt="issue01">
-            <img src="assets/img/project-books/pdf-3b.jpg" alt="issue02"></div>
+          <div class="ae-grid">
+            <div class="ae-grid__item item-lg-6"><a class="rk-item">
+              <img src="assets/img/project-books/pdf-1.jpg" alt="cover"></a></div>
+            <div class="ae-grid__item item-lg-6"><a class="rk-item">
+              <img src="assets/img/project-books/pdf-2.jpg" alt="inner"></a></div>
+            <div class="ae-grid__item item-lg-12"><a class="rk-item">
+              <img src="assets/img/project-books/pdf-3.jpg" alt="issue01"></a></div>
+            <div class="ae-grid__item item-lg-12"><a class="rk-item">
+              <img src="assets/img/project-books/pdf-3b.jpg" alt="issue02"></a></div>
+          </div>
+
 
         </div>
 
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">02 ｜ Design Thinking & Methodology</h4>
-          <p class="ae-lambda item-lg-12">Supervisor: Chen Nan<br>June, 2021</p>
-          <p  class="item-lg-10">"Design Thinking & Methodology" is a textbook designed by Mr. Chen Nan for the design thinking series of courses. I participated in the organization and layout of the book, and also designed a brain pattern for the textbook.<br>
-          The feature of this book in layout design is that it places the images mentioned in the main text next to the text and uses colored dots as the indexing method.</p>
+          <div class="item-lg-5">
+            <h4 id="thinking" class="ae-u-bolder" style="font-size: 2em;">Design Thinking & Methodology</h4>
+          <p class="ae-lambda item-lg-12">Supervisor: Chen Nan<br>Designer: <b>Wang Yifan</b>, Bi Wenli, Zhang Yixin<br>June, 2021</p>
+          </div>
+          <p class="item-lg-6 item-lg--offset-1"><i>Design Thinking & Methodology</i> is a textbook designed by Mr. Chen Nan for the design thinking series of courses. I participated in the organization and layout of the book, and also designed a brain pattern for the textbook.<br>
+            A feature of this book's layout design is that it places the images mentioned within the text in the margins and uses colored dots as an indexing method.</p>
 
-          <!-- <div class="item-lg-3">
-            <img src="assets/img/project-books/b-2.jpg" alt="Yifan Portfolio"></div>
-          <div class="ae-grid__item item-lg-3">
-            <img src="assets/img/project-books/b-3.jpg" alt="Yifan Portfolio"></div>
-          <div class="ae-grid__item item-lg-3">
-            <img src="assets/img/project-books/b-5.jpg" alt="Yifan Portfolio"></div>
-          <div class="ae-grid__item item-lg-3">
-            <img src="assets/img/project-books/b-6.jpg" alt="Yifan Portfolio"></div>
-        </div> -->
+
+        <div class="ae-grid">
+          <div class="ae-grid__item item-lg-6"><a class="rk-item"><img src="assets/img/project-books/b-1.jpg" alt=""></a></div>
+          <div class="ae-grid__item item-lg-6"><a class="rk-item"><img src="assets/img/project-books/b-0.jpg" alt=""></a></div>
+          </div>
 
         <div id="slideshow">
           <img src="assets/img/project-books/b-2.jpg" class="slide active" alt="page1">
@@ -124,37 +176,55 @@
               slides[currentIndex].classList.remove('active');
               currentIndex = (currentIndex + 1) % totalSlides;
               slides[currentIndex].classList.add('active');
-          }, 2000); // 1秒切换一次
+          }, 1500); // 1秒切换一次
         </script>
 
 
-        <div class="item-lg-6">
-          <img src="assets/img/project-books/b-1.jpg" alt="Yifan Portfolio"></div>
-        <div class="item-lg-6">
-          <img src="assets/img/project-books/b-0.jpg" alt="Yifan Portfolio"></div>
-
-
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">03 ｜ Chinese Stamp Designer - Chen Nan</h4>
-          <p class="ae-lambda item-lg-12">Supervisor: Chen Nan<br>June, 2022</p>
-          <p  class="item-lg-10">This stamp album organizes Professor Chen Nan's stamp designs, including "Tsinghua University" personalized service special stamp, New Year blessings, China Dream and other 10 groups of theme stamps. I participated in the design of the stamp album.</p>
+          <div class="item-lg-5">
+            <h4 id="stamp" class="ae-u-bolder" style="color:goldenrod; font-size:2em;">Chinese Stamp Designer - Chen Nan</h4>
+          <p class="ae-lambda item-lg-12">Supervisor: Chen Nan<br>Designer: Yang Jin, Lv You, <b>Wang Yifan</b><br>June, 2022</p></div>
+          <p class="item-lg-6 item-lg--offset-1">This stamp album organizes Professor Chen Nan's stamp designs, including "Tsinghua University" personalized service special stamp, New Year blessings, China Dream and other 10 groups of theme stamps. I participated in the design of the stamp album.</p>
 
-          <img src="assets/img/project-books/b-7.png" alt="Yifan Portfolio">
+          <!-- <img src="assets/img/project-books/b-7.png" alt="Yifan Portfolio"> -->
+
+          <div class="ae-grid">
+            <div class="ae-grid__item item-lg-8"><a class="rk-item">
+              <img src="assets/img/project-books/stamp3.jpg" alt="cover"></a></div>
+            <div class="ae-grid__item item-lg-4">
+              <a class="rk-item rk-landscape">
+              <img src="assets/img/project-books/stamp2.jpg"></a>
+              <a class="rk-item rk-landscape">
+              <img src="assets/img/project-books/stamp1.jpg"></a></div>
+          </div>
+
         </div>
 
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">04 ｜ The Star of the Polar Bear</h4>
-          <p class="ae-lambda item-lg-12">October, 2015</p>
-          <div>
-            <img src="assets/img/project-books/b-8.png" alt="Yifan Portfolio">
-            <img src="assets/img/project-books/b-9.png" alt="Yifan Portfolio"></div>
-          
+          <div class="item-lg-5">
+            <h4 id="bear" class="ae-u-bolder" style="font-size: 2em;">Bear and Fairy Tales</h4>
+          <p class="ae-lambda item-lg-12">Designer: <b>Wang Yifan</b><br>October, 2015</p>
+          </div>
+          <p class="item-lg-6 item-lg--offset-1">This is the overall design of a fairy tale book that I am responsible for. The main character is a polar bear, and through a combination of comics and illustrations, it tells four fairy tales about love.</p>
+
+          <div class="ae-grid">
+            <div class="ae-grid__item item-lg-7"><a class="rk-item">
+              <img src="assets/img/project-books/bear1.jpg" alt="cover"></a></div>
+            <div class="ae-grid__item item-lg-5">
+              <a class="rk-item">
+              <img src="assets/img/project-books/bear2.jpg"></a>
+              <a class="rk-item">
+              <img src="assets/img/project-books/bear3.jpg"></a></div>
+            <div class="ae-grid__item item-lg-12"><a class="rk-item">
+              <img src="assets/img/project-books/b-9.png" alt="cover"></a></div>
+          </div>
+
         </div>
       </div>
       </div>
           
         <div class="ae-container-fluid au-pt-4 au-pb-4">
-        <div class="group-buttons"><a href="project_posters.html" class="au-mt-2 arrow-button arrow-button--right">Next Project: Poster Compilation<span class="arrow-cont">
+        <div class="group-buttons"><a href="portfolio.html" class="au-mt-2 arrow-button arrow-button--right">Portfolio<span class="arrow-cont">
               <svg>
                 <use xlink:href="assets/img/symbols.svg#arrow"></use>
               </svg></span></a></div>
@@ -162,6 +232,19 @@
 
 
     </section>
+
+    <!-- <script>
+      // 使用JavaScript平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+              e.preventDefault();
+              const targetId = this.getAttribute('href').substring(1);
+              const targetElement = document.getElementById(targetId);
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+      });
+    </script> -->
+
     <footer class="ae-container-fluid rk-footer ">
       <div class="ae-grid ae-grid--collapse">
         <div class="ae-grid__item item-lg-4 au-xs-ta-center au-lg-ta-left">

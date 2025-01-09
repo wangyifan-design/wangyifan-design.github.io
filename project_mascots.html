@@ -8,6 +8,24 @@
     <link rel="stylesheet" href="assets/css/aurora-pack.min.css">
     <link rel="stylesheet" href="assets/css/aurora-theme-base.min.css">
     <link rel="stylesheet" href="assets/css/yf.css">
+    <style>
+      h4 {
+            scroll-margin-top: 150px; /* 设置偏移量，例如50px */
+        }
+      .content {
+          /* margin: 10px 0; */
+          padding: 10px 10px;
+          border-top: 1px solid #ccc;
+          /* border-bottom: 1px solid #ccc; */
+          transition: background-color 0.3s;
+          display: flex;
+          justify-content: space-between; /* 使标题和年份分布在两端 */
+          align-items: center; /* 垂直居中对齐 */
+      }
+      .content:hover {
+            background-color: #f0f0f0; /* 悬浮时的背景色 */
+        }
+    </style>
   </head>
   <body class="top-fixed">
     <header class="ae-container-fluid ae-container-fluid--full rk-header ">
@@ -57,13 +75,41 @@
         <h1 class="ae-u-bolder rk-portfolio-title" >Mascot</h1>
         <h2 class="ae-theta rk-portfolio-category" >Compilation</h2>
       </div>
+
+      <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
+        <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
+
+          <div class="item-lg-4"></div>
+            <div class="item-lg-8">
+              <div class="content rk-item">
+                <p class="ae-u-bolder" style="font-size: 1.5em;">
+                  <a href="#renmin">The mascot of Renmin University Affiliated Middle Schooll</a></p>
+                <p>2023</p>
+              </div>
+              <div class="content rk-item">
+                <p class="ae-u-bolder" style="font-size: 1.5em;">
+                  <a href="#costaco">COSTACO Mascot Benben</a></p>
+                <p>2021</p>
+              </div>
+              <div class="content rk-item" style="border-bottom: 1px solid #ccc;">
+                <p class="ae-u-bolder" style="font-size: 1.5em;">
+                  <a href="#post">China Post Cultural Creativity Mascot and Derivative Product Development</a></p>
+                <p>2020</p>
+              </div>
+            </div>
+
+        </div>
+      </div>
       
 
       <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">01 ｜ The mascot of Renmin University Affiliated Middle School</h4>
-          <p class="ae-lambda item-lg-12">Designer: <b>Wang Yifan</b>, Li Yangfan<br>Client: People's University Affiliated Elementary School<br>December, 2023</p>
-          <p class="ae-grid__item item-lg-10">The mascot designed for the People's University Affiliated Elementary School in Aerospace City, including a boy and a girl. The actions include daily themes, aerospace themes, and themes of moral, intellectual, physical, aesthetic, and labor education, totaling 9 images.</p>
+
+          <div class="item-lg-5">
+            <h4 id="renmin" class="ae-u-bolder" style="color: firebrick; font-size: 2em;">The mascot of Renmin University Affiliated Middle School</h4>
+            <p class="ae-lambda">Designer: <b>Wang Yifan</b>, Li Yangfan<br>Client: People's University Affiliated Elementary School<br>December, 2023</p>
+          </div>
+            <p class="item-lg-6 item-lg--offset-1">The mascot designed for the People's University Affiliated Elementary School in Aerospace City, including a boy and a girl. The actions include daily themes, aerospace themes, and themes of moral, intellectual, physical, aesthetic, and labor education, totaling 9 images.</p>
 
           <div class="ae-grid__item item-lg-12">
             <img src="assets/img/project-mascots/m-1.jpg" alt="Yifan Portfolio"></div>
@@ -72,9 +118,12 @@
 
       <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">02 ｜ COSTACO Mascot Benben</h4>
-          <p class="ae-lambda item-lg-12">Designer: <b>Wang Yifan</b>, Zhang Bo<br>Client: COSTACO<br>September, 2021</p>
-          <p class="ae-grid__item item-lg-10">This is the mascot Little Bull Benben that Zhang Bo and I designed for China Ocean Shipping Tally Company Limited. 2021 marks the 60th anniversary of the establishment of COSTACO. The main image is a calf wearing a COSTACO uniform, our design covers both 2D and 3D images.</p>
+
+          <div class="item-lg-5">
+            <h4 id="costaco" class="ae-u-bolder" style="color: navy; font-size: 2em;">COSTACO Mascot Benben</h4>
+            <p class="ae-lambda">Designer: <b>Wang Yifan</b>, Zhang Bo<br>Client: COSTACO<br>September, 2021</p>
+          </div>
+            <p class="item-lg-6 item-lg--offset-1">This is the mascot Little Bull Benben that Zhang Bo and I designed for China Ocean Shipping Tally Company Limited. 2021 marks the 60th anniversary of the establishment of COSTACO. The main image is a calf wearing a COSTACO uniform, our design covers both 2D and 3D images.</p>
 
           <div class="ae-grid__item item-lg-12">
             <img src="assets/img/project-mascots/m-2.jpg" alt="Yifan Portfolio"></div>
@@ -83,9 +132,12 @@
 
       <div class="ae-container-fluid ae-container-fluid--inner rk-portfolio--inner">
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
-          <h4 class="ae-u-bolder ae-grid__item item-lg-12">03 ｜ China Post Cultural Creativity Mascot and Derivative Product Development</h4>
-          <p class="ae-lambda item-lg-12">Designer: <b>Wang Yifan</b>, Zhang Bo<br>Client: China Post<br>June, 2020</p>
-          <p class="ae-grid__item item-lg-10">This work is the design of the mascot for China Post Cultural Creativity, completed in collaboration with my friend Zhang Bo. The design of the mascot combines the characteristics of a postman and a mailbox, creating a plump, anthropomorphic IP image with a postman's hat on its head. We named him Youyou, the name comes from the fact that as a postman, he is honest, hardworking, not only does he deliver letters and packages to students, but he also takes this opportunity to travel around, he is a messenger who travels between cities and campuses. This work won the "Best Creativity" award in the China Post Cultural Creativity Campus Product Design Competition.</p>
+
+          <div class="item-lg-5">
+            <h4 id="post" class="ae-u-bolder" style="color: seagreen; font-size: 2em;">China Post Cultural Creativity Mascot and Derivative Product Development</h4>
+            <p class="ae-lambda">Designer: <b>Wang Yifan</b>, Zhang Bo<br>Client: China Post<br>June, 2020</p>
+          </div>
+            <p class="item-lg-6 item-lg--offset-1">This work is the design of the mascot for China Post Cultural Creativity, completed in collaboration with my friend Zhang Bo. The design of the mascot combines the characteristics of a postman and a mailbox, creating a plump, anthropomorphic IP image with a postman's hat on its head. We named him Youyou, the name comes from the fact that as a postman, he is honest, hardworking, not only does he deliver letters and packages to students, but he also takes this opportunity to travel around, he is a messenger who travels between cities and campuses. <br>This work won the <b style="color: seagreen;">Best Creativity</b> award in the China Post Cultural Creativity Campus Product Design Competition.</p>
 
           <img src="assets/img/project-mascots/m-3.jpg" alt="Yifan Portfolio">
           <img src="assets/img/project-mascots/m-4.jpg" alt="Yifan Portfolio">
@@ -93,7 +145,7 @@
       </div>
 
       <div class="ae-container-fluid au-pt-4 au-pb-4">
-        <div class="group-buttons"><a href="project_activities.html" class="au-mt-2 arrow-button arrow-button--right">Next Project: Event Visual Compilation<span class="arrow-cont">
+        <div class="group-buttons"><a href="portfolio.html" class="au-mt-2 arrow-button arrow-button--right">Portfolio<span class="arrow-cont">
               <svg>
                 <use xlink:href="assets/img/symbols.svg#arrow"></use>
               </svg></span></a></div>
