@@ -9,38 +9,22 @@
     <link rel="stylesheet" href="assets/css/aurora-theme-base.min.css">
     <link rel="stylesheet" href="assets/css/yf.css">
     <style>
-      h4 {
-            scroll-margin-top: 150px; /* 设置偏移量，例如50px */
+
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+            overflow: hidden;
         }
-      #slideshow {
-          width: 100%; /* 你可以根据需要调整宽度 */
-          height: 400px; /* 你可以根据需要调整高度 */
-          overflow: hidden;
-          position: relative;
-          padding-bottom: 67%; 
-      }
-      .slide {
-          position: absolute;
-          width: 100%;
-          height: auto;
-          opacity: 0;
-          transition: opacity 1s;
-      }
-      .active {
-          opacity: 1;
-      }
-      .suoyin {
-          /* margin: 10px 0; */
-          padding: 10px 10px;
-          border-top: 1px solid #ccc;
-          /* border-bottom: 1px solid #ccc; */
-          transition: background-color 0.3s;
-          display: flex;
-          justify-content: space-between; /* 使标题和年份分布在两端 */
-          align-items: center; /* 垂直居中对齐 */
-      }
-      .suoyin:hover {
-            background-color: #f0f0f0; /* 悬浮时的背景色 */
+
+        .slide {
+            display: none;
+            width: 100%;
+            /* 高度不设置 */
+        }
+
+        .active {
+            display: block;
         }
 
     </style>
@@ -99,21 +83,21 @@
 
             <div class="item-lg-4"></div>
               <div class="item-lg-8">
-                <div class="suoyin rk-item">
+                <div class="content rk-item">
                   <p class="ae-u-bolder" style="font-size: 1.5em;">
                     <a href="#philosophy">Philosophy Drama Festival</a></p>
                   <p>2024</p>
                 </div>
-                <div class="suoyin rk-item">
+                <div class="content rk-item">
                   <p class="ae-u-bolder" style="font-size: 1.5em;">
                     <a href="#stamp">Chinese Stamp Designer - Chen Nan</a></p>
                   <p>2022</p>
                 </div>
-                <div class="suoyin rk-item">
+                <div class="content rk-item">
                   <p class="ae-u-bolder" style="font-size: 1.5em;"><a href="#thinking">Design Thinking & Methodology</a></p>
                   <p>2021</p>
                 </div>
-                <div class="suoyin rk-item" style="border-bottom: 1px solid #ccc;">
+                <div class="content rk-item" style="border-bottom: 1px solid #ccc;">
                   <p class="ae-u-bolder" style="font-size: 1.5em;"><a href="#bear">Bear and Fairy Tales</a></p>
                   <p>2015</p>
                 </div>
@@ -158,27 +142,14 @@
         <div class="ae-grid">
           <div class="ae-grid__item item-lg-6"><a class="rk-item"><img src="assets/img/project-books/b-1.jpg" alt=""></a></div>
           <div class="ae-grid__item item-lg-6"><a class="rk-item"><img src="assets/img/project-books/b-0.jpg" alt=""></a></div>
-          </div>
+        </div>
 
-        <div id="slideshow">
+        <div class="slideshow-container" id="slideshow1">
           <img src="assets/img/project-books/b-2.jpg" class="slide active" alt="page1">
           <img src="assets/img/project-books/b-3.jpg" class="slide" alt="page2">
           <img src="assets/img/project-books/b-5.jpg" class="slide" alt="page3">
           <img src="assets/img/project-books/b-6.jpg" class="slide" alt="page4">
         </div>
-
-        <script>
-          let currentIndex = 0;
-          const slides = document.querySelectorAll('.slide');
-          const totalSlides = slides.length;
-      
-          setInterval(() => {
-              slides[currentIndex].classList.remove('active');
-              currentIndex = (currentIndex + 1) % totalSlides;
-              slides[currentIndex].classList.add('active');
-          }, 1500); // 1秒切换一次
-        </script>
-
 
         <div class="ae-grid ae-grid--collapse au-xs-ptp-1">
           <div class="item-lg-5">
@@ -230,20 +201,30 @@
               </svg></span></a></div>
         </div>
 
+        <script>
+          function initSlideshow(containerId) {
+              let slideIndex = 0;
+              const container = document.getElementById(containerId);
+              const slides = container.querySelectorAll('.slide');
+      
+              function showSlides() {
+                  slides.forEach(slide => slide.classList.remove('active'));
+                  slideIndex++;
+                  if (slideIndex > slides.length) { slideIndex = 1 }
+                  slides[slideIndex - 1].classList.add('active');
+                  setTimeout(showSlides, 1000); // 每秒切换一次
+              }
+      
+              showSlides();
+          }
+      
+          // 初始化每一个幻灯片容器
+          initSlideshow('slideshow1');
+          initSlideshow('slideshow2');
+          // 可以继续初始化其他幻灯片容器
+      </script>
 
     </section>
-
-    <!-- <script>
-      // 使用JavaScript平滑滚动
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-          anchor.addEventListener('click', function(e) {
-              e.preventDefault();
-              const targetId = this.getAttribute('href').substring(1);
-              const targetElement = document.getElementById(targetId);
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          });
-      });
-    </script> -->
 
     <footer class="ae-container-fluid rk-footer ">
       <div class="ae-grid ae-grid--collapse">
