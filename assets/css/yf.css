@@ -2319,15 +2319,32 @@ h4 {
 }
 
 .content {
-  /* margin: 10px 0; */
+  position: relative;
   padding: 10px 10px;
   border-top: 1px solid #ccc;
-  /* border-bottom: 1px solid #ccc; */
   transition: background-color 0.3s;
   display: flex;
-  justify-content: space-between; /* 使标题和年份分布在两端 */
-  align-items: center; /* 垂直居中对齐 */
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
-.content:hover {
-    background-color: #f0f0f0; /* 悬浮时的背景色 */
-}
+
+.content .hover-text {
+  position: relative;
+  display: inline-block;
+  }
+  
+  .content .hover-image {
+    position: absolute;
+    left: -400px; /* 调整图片的水平位置 */
+    top: -50px; /* 调整图片的垂直位置 */
+    width: 280px; /* 固定宽度 */
+    height: auto;
+    max-height: 200px;
+    display: none;
+    z-index: 10;
+  }
+  
+  .content:hover .hover-image {
+    display: block;
+  }
