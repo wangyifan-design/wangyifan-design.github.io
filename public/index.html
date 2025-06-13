@@ -507,6 +507,7 @@
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const text = input.value.trim();
+        console.log('User input:', text);  // 确认用户输入的内容
         if (text) {
           clickedQuestions.add(-1); // 记录手动提问
           renderPresetQuestions();
@@ -518,6 +519,7 @@
   
     // ✅ 发送到 OpenAI 的函数
     async function fetchFromOpenAI(userInput) {
+      console.log("Sending request to OpenAI API...");  // 确认是否触发了请求
       try {
         // 动态选择 API URL，依据环境决定
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/assistant';  // 默认回退到本地环境
