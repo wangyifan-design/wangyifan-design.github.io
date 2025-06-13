@@ -519,7 +519,13 @@
     // ✅ 发送到 OpenAI 的函数
     async function fetchFromOpenAI(userInput) {
       try {
-        const response = await fetch('http://localhost:3000/api/assistant', {
+        // 动态选择 API URL，依据环境决定
+        const apiUrl = process.env.NODE_ENV === 'production'
+          ? 'https://wangyifan-design-github-io.vercel.app/api/assistant'  // 在生产环境中使用 Vercel URL
+          : 'http://localhost:3000/api/assistant';  // 在开发环境中使用 localhost
+
+        // 发送请求到 API
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: userInput })
@@ -529,12 +535,14 @@
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
+        // 解析返回的数据
         const data = await response.json();
         return data.reply;
       } catch (error) {
         return `Error: ${error.message}`;
       }
     }
+
 
     function addUserMessage(text) {
       const userMsg = document.createElement('div');
