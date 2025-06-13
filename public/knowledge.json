@@ -1,0 +1,58 @@
+[
+    {
+        "q": "你是谁？",
+        "keywords": ["你是谁", "你是什么", "who are you"],
+        "a": {
+            "en": "My name is Yifan, nice to meet you!",
+            "zh": "我是王一帆，很高兴认识你！"
+        }
+    },
+    {
+        "q": "你最喜欢的项目？",
+        "keywords": ["最喜欢的项目", "favorite project", "代表作"],
+        "a": {
+            "en": "One of my favorite projects is the 'Shengqinyuan - Virtual Zoo Design', which originated from my master's research and was further refined in 2025.",
+            "zh": "我最喜欢的项目之一是“圣禽苑虚拟动物园设计”，这个项目起源于硕士期间的研究，2025年我又重新整理优化了。"
+        }
+    },
+    {
+        "q": "你有哪些研究？",
+        "keywords": ["研究", "research", "论文"],
+        "a": {
+            "en": "My research focuses primarily on visual communication design thinking and methods, intelligent design theory and methods, and the activation and dissemination of Chinese traditional culture.",
+            "zh": "我的研究方向主要包括视觉传达设计思维与方法、智能设计理论与方法、中国传统文化的活化与传播设计研究。"
+        }
+    },
+    {
+        "q": "What kind of designer are you?",
+        "keywords": ["设计师类型", "kind of designer", "设计风格", "设计理念"],
+        "a": {
+            "en": "I'm a research-driven designer who values visuals, but I'm even more interested in the cultural and conceptual layers behind design. I aim to create works that are timeless, full of vitality, and rooted in cultural richness. My design approach balances artistic expression with structured thinking.",
+            "zh": "我是一名注重研究的设计师，重视视觉效果，但我对设计背后的文化和概念层面更感兴趣。我致力于创作出永恒的、充满活力的、植根于文化丰富性的作品。我的设计方法在艺术表现与结构化思维之间取得平衡。"
+        }
+    },
+    {
+        "q": "What inspires your design?",
+        "keywords": ["设计灵感", "inspires", "灵感来源", "创作灵感"],
+        "a": {
+            "en": "Both nature and humanity. I find inspiration in the calm order of the natural world and the wisdom of ancient creators. Old photographs, artifacts, and the rhythms of life often influence how I observe and create.",
+            "zh": "我喜欢在自然中感受生命，感受万物的平静和有序。我也喜欢吸收来自于古人的创造性和智慧，学习他们观察世界、创造的方法。"
+        }
+    },
+    {
+        "q": "Can you recommend a project?",
+        "keywords": ["推荐项目", "recommend project", "项目建议", "项目推荐"],
+        "a": {
+            "en": "Yes! 'Shengqinyuan - Virtual Zoo' is one of my favorite projects. It's an independent work from my master's program that reimagines traditional Chinese animal symbolism in a playful, accessible way. I did everything from research to design execution on my own.",
+            "zh": "你应该看看“盛禽苑虚拟动物园设计”。这是我最喜欢的项目之一。这是我硕士课程中的一个独立作品，通过一种有趣且易于理解的方式重新构想了传统的中国动物象征。我从研究到设计执行的所有工作都是自己完成的。"
+        }
+    },
+    {
+        "q": "How do you use AI in your design?",
+        "keywords": ["AI在设计中的应用", "use AI", "人工智能设计", "AI设计"],
+        "a": {
+            "en": "AI helps me speed up tedious steps in the design process and explore ideas faster. But I'm also aware of its potential drawbacks for creatives. I explored this topic deeply in my project 'Heidegger’s Heaps of Brocade and Ash'. Check it out!",
+            "zh": "AI帮助加速我的设计过程，同时我也在工作中反思其文化影响。我在我的项目《海德格尔的锦灰堆》中深入探讨了这个话题。可以去看看！"
+        }
+    }
+]

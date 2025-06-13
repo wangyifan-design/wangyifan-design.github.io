@@ -1,0 +1,636 @@
+<!-- 修改后的代码 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link 
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" 
+  rel="stylesheet">
+
+  <title>Yifan Portfolio Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      background: #fff;
+      color: #000;
+      line-height: 1.6;
+      cursor: none;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      transition: top 0.3s;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      height: 30px;
+    }
+
+    .site-title {
+      font-weight: bold;
+    }
+
+    .nav-right a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #000;
+      font-weight: 500;
+    }
+
+    .intro-with-chat {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 100px 5vw 5vw 5vw; /* 间距增大 */
+      justify-content: center;
+      align-items: flex-end;
+      gap: 4rem; /* 间距增大 */
+    }
+
+    .intro {
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      color: #555;
+      text-align: center;
+    }
+
+    .chat-container {
+      flex: 1;
+      min-width: 300px;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .chat-box {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-content {
+      padding-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message {
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 16px;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-width: 75%;
+    }
+
+    .chat-message.user {
+      align-self: flex-end;
+      background: #000;
+      color: #fff;
+      display: inline-block;
+      max-width: 75%;
+      min-width: 50px;
+      border-radius: 16px 0 16px 16px;
+    }
+
+    .chat-message.ai {
+      align-self: flex-start;
+      background: #f0f0f0;
+      color: #000;
+      border-radius: 16px 16px 16px 0;
+    }
+
+    .chat-input {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preset-questions {
+      text-align: right;
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 6px;
+      user-select: none;
+    }
+
+    .preset-questions span {
+      display: block;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+
+    .preset-questions span:hover {
+      color: #000;
+      /* text-decoration: underline; */
+    }
+
+    .chat-input input {
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: none;
+      background: #f0f0f0;
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .intro-with-chat {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .chat-container {
+        max-width: 100%;
+      }
+    }
+
+    .projects {
+      column-count: 2;
+      column-gap: 0.5rem;
+      padding: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .projects {
+        column-count: 1;
+      }
+    }
+
+    .project {
+      break-inside: avoid;
+      margin-bottom: 0.5rem;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .project-labels {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      display: flex;
+      gap: 12px;
+      background: white;
+      color: black;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: normal;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .project:hover .project-labels {
+      opacity: 1;
+    }
+
+    .project:hover h3 {
+      opacity: 1;
+    }
+
+    .project img,.project video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+      /* transition: transform 0.3s ease; */
+      transition: transform 0.3s ease, opacity 0.5s ease;  /* 图片的过渡效果 */
+      opacity: 0;  /* 初始时图片不可见 */
+      transform: translateY(50px);  /* 初始位置在下方 */
+    }
+    .project img.visible,.project video.visible {
+      opacity: 1;
+      transform: translateY(0);  /* 图片上浮回原位置 */
+    }
+
+    .project:hover img, .project:hover video {
+      transform: scale(1.05); /* 可微调 */
+    }
+
+    .hover-underline {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hover-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      height: 2px;
+      width: 100%;
+      background: #000;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .hover-underline:hover::after {
+      transform: scaleX(1);
+    }
+
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      background-color: black;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+    }
+
+    /* 样式化箭头 */
+    .scroll-arrow {
+      position: fixed;
+      bottom: 20px;  /* 距离页面底部一定的距离 */
+      left: 50%;
+      transform: translateX(-50%);  /* 水平居中 */
+      font-size: 2rem;  /* 设置箭头的大小 */
+      color: #000;  /* 箭头颜色 */
+      cursor: pointer;
+      opacity: 1;  /* 默认可见 */
+      transition: opacity 0.3s ease-in-out;  /* 设置箭头消失的过渡效果 */
+    }
+
+    .scroll-arrow.hidden {
+      opacity: 0;  /* 滚动时箭头隐藏 */
+    }
+
+  </style>
+</head>
+<body>
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div id="navbar">
+    <div class="nav-left">
+      <img src="img/logo.svg" alt="Logo" class="logo" />
+      <span class="site-title">Wang Yifan Design Portfolio</span>
+    </div>
+    <div class="nav-right">
+      <a href="#work" class="hover-underline">Work</a>
+      <a href="#play" class="hover-underline">Play</a>
+      <a href="#About" class="hover-underline">About</a>
+    </div>
+  </div>
+
+  <div class="scroll-arrow" id="scroll-arrow">
+  &#8595; <!-- 向下的箭头符号 -->
+  </div>
+
+  <div class="intro-with-chat">
+    <div class="intro">
+      <img id="illustration" src="img/illustration/1.jpg" alt="Illustration" class="avatar" />
+      <h1>Wang Yifan</h1>
+      <p class="subtitle">Visual Designer | UX/UI Designer | Design Researcher</p>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-box">
+        <div id="chat-content" class="chat-content"></div>
+        <div class="chat-input">
+          <div class="preset-questions" id="preset-questions">
+            <!-- 预设问题由JS插入 -->
+          </div>
+          <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="projects">
+    <div class="project">
+      <video  class="project-image" src="videos/cover1.mp4" autoplay muted loop playsinline></video>
+      <div class="project-labels">
+        <span>Heidegger’s Heaps of Brocade and Ash</span>
+        <span>2023</span>
+      </div>
+    </div>
+    <div class="project">
+      <img class="project-image" src="img/project-2.jpg" alt="Project 2" />
+      <div class="project-labels">
+        <span>Shengqinyuan - Virtual Zoo</span>
+        <span>2025</span>
+      </div>
+    </div>
+    <div class="project">
+      <img class="project-image" src="img/project-3.jpg" alt="Project 3" />
+      <div class="project-labels">
+        <span>Popular Phrase</span>
+        <span>2023</span>
+      </div>
+    </div>
+    <div class="project">
+      <video class="project-image" src="videos/cover4.mp4" autoplay muted loop playsinline></video>
+      <div class="project-labels">
+        <span>Philosophy Drama Festival</span>
+        <span>2024</span>
+      </div>
+    </div>
+    <div class="project">
+      <video class="project-image" src="videos/cover5.mp4" autoplay muted loop playsinline></video>
+      <div class="project-labels">
+        <span>Living Jiagu</span>
+        <span>2019</span>
+      </div>
+    </div>
+    <div class="project">
+      <img class="project-image" src="img/project-6.jpg" alt="Project 6" />
+      <div class="project-labels">
+        <span>Online Museum of Bird and Insect Pattern</span>
+        <span>2020</span>
+      </div>
+    </div>
+    <div class="project">
+      <img class="project-image" src="img/project-7.jpg" alt="Project 7" />
+      <div class="project-labels">
+        <span>Art Criticism Professional Committee</span>
+        <span>2024</span>
+      </div>
+    </div>
+    <div class="project">
+      <img class="project-image" src="img/project-8.jpg" alt="Project 8" />
+      <div class="project-labels">
+        <span>The mascot of RAM</span>
+        <span>2024</span>
+      </div>
+    </div>
+
+
+    <!-- 更多项目 -->
+  </section>
+  <script>
+    let isRequesting = false;
+    let thinkingMessage = null;  // 用于保存 "Thinking..." 消息元素
+  
+    const illustrations = [
+      'img/illustration/1.jpg',
+      'img/illustration/2.jpg',
+      'img/illustration/3.jpg',
+      'img/illustration/4.jpg',
+      'img/illustration/5.jpg',
+      'img/illustration/6.jpg',
+      'img/illustration/7.jpg',
+      'img/illustration/8.jpg',
+      'img/illustration/9.jpg',
+      'img/illustration/10.jpg',
+      'img/illustration/11.jpg'
+    ];
+    let illustrationIndex = 0;
+  
+    const input = document.getElementById('user-input');
+    const chat = document.getElementById('chat-content');
+    const illustration = document.getElementById('illustration');
+    const presetQuestionsContainer = document.getElementById('preset-questions');
+  
+    const presetQuestions = [
+      "What kind of designer are you?",
+      "What inspires your work?",
+      "Can you recommend a project?",
+      "How do you use AI in your design?"
+    ];
+  
+    const clickedQuestions = new Set();
+  
+    function renderPresetQuestions() {
+      presetQuestionsContainer.innerHTML = '';
+      presetQuestions.forEach((q, i) => {
+        if (!clickedQuestions.has(i)) {
+          const span = document.createElement('span');
+          span.textContent = q;
+          span.title = 'Click to ask';
+          span.addEventListener('click', () => {
+            clickedQuestions.add(i);
+            renderPresetQuestions();
+            startConversation(q);
+          });
+          presetQuestionsContainer.appendChild(span);
+        }
+      });
+      presetQuestionsContainer.style.display = presetQuestionsContainer.children.length ? 'block' : 'none';
+    }
+  
+    renderPresetQuestions();
+  
+    // ✅ 核心入口：统一处理所有输入来源
+    async function startConversation(message) {
+      if (isRequesting) return;
+      isRequesting = true;
+  
+      chat.innerHTML = '';           // 清空旧对话
+      addUserMessage(message);      // 添加用户问题
+  
+      const isChinese = /[\u4e00-\u9fa5]/.test(message);
+  
+      // 显示 "Thinking..." 消息
+      displayThinking();
+  
+      try {
+        const knowledge = await fetch('/knowledge.json').then(res => res.json());
+  
+        let answer = null;
+        for (let item of knowledge) {
+          if (!item.keywords || !Array.isArray(item.keywords)) continue;
+          for (let keyword of item.keywords) {
+            if (message.toLowerCase().includes(keyword.toLowerCase())) {
+              answer = isChinese ? item.a.zh : item.a.en;
+              break;
+            }
+          }
+          if (answer) break;
+        }
+
+        if (!answer) {
+          answer = await fetchFromOpenAI(message);
+        }
+  
+        displayAnswer(answer);
+        switchIllustration();
+      } catch (err) {
+        displayAnswer(`Error: ${err.message}`);
+      } finally {
+        isRequesting = false;
+      }
+    }
+  
+    // ✅ 手动输入绑定统一函数
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const text = input.value.trim();
+        if (text) {
+          clickedQuestions.add(-1); // 记录手动提问
+          renderPresetQuestions();
+          startConversation(text);
+          input.value = '';
+        }
+      }
+    });
+  
+    // ✅ 发送到 OpenAI 的函数
+    async function fetchFromOpenAI(userInput) {
+      try {
+        const response = await fetch('http://localhost:3000/api/assistant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userInput })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.reply;
+      } catch (error) {
+        return `Error: ${error.message}`;
+      }
+    }
+
+    function addUserMessage(text) {
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-message user';
+      userMsg.textContent = text;
+      chat.appendChild(userMsg);
+    }
+  
+    // 显示 "Thinking..." 消息
+    function displayThinking() {
+      thinkingMessage = document.createElement('div');
+      thinkingMessage.className = 'chat-message ai';
+      thinkingMessage.textContent = 'Thinking...';
+      chat.appendChild(thinkingMessage);
+    }
+
+    // 显示 AI 的回答，并移除 "Thinking..." 消息
+    function displayAnswer(answer) {
+      if (thinkingMessage) {
+        chat.removeChild(thinkingMessage);  // 移除 "Thinking..." 消息
+      }
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'chat-message ai';
+      aiMsg.textContent = answer;  // 更新为实际的答案
+      chat.appendChild(aiMsg);
+    }
+  
+    function switchIllustration() {
+      illustrationIndex = (illustrationIndex + 1) % illustrations.length;
+      illustration.src = illustrations[illustrationIndex];
+    }
+  
+    // navbar 滚动隐藏逻辑
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const navbar = document.getElementById('navbar');
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const delta = scrollTop - lastScrollTop;
+
+          if (Math.abs(delta) < 5) {
+            // 忽略轻微滚动
+          } else if (delta > 0) {
+            // 向下滚动 → 隐藏
+            navbar.style.top = '-70px';
+          } else {
+            // 向上滚动 → 显示
+            navbar.style.top = '0';
+          }
+
+          lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // 监听滚动事件来检查图片是否进入视口
+    window.addEventListener('scroll', () => {
+      const images = document.querySelectorAll('.project-image');  // 获取所有项目图片
+
+      images.forEach((image) => {
+        const imagePosition = image.getBoundingClientRect().top;  // 获取图片的相对位置
+        const windowHeight = window.innerHeight;  // 获取窗口的高度
+
+        // 如果图片进入视口（可见部分达到90%），则添加 'visible' 类来启动动画
+        if (imagePosition < windowHeight * 0.95) {  // 90%可见时触发
+          image.classList.add('visible');
+        }
+      });
+    });
+
+    // 监听滚动事件
+    window.addEventListener('scroll', () => {
+      const scrollArrow = document.getElementById('scroll-arrow');
+
+      // 如果页面滚动超过一定的高度，隐藏箭头
+      if (window.scrollY > 10) {  // 滚动超过10px时隐藏箭头
+        scrollArrow.classList.add('hidden');  // 添加hidden类来隐藏箭头
+      } 
+    });
+
+
+    // 自定义鼠标动画
+    const cursorDot = document.getElementById('cursor-dot');
+    document.addEventListener('mousemove', (e) => {
+      cursorDot.style.top = `${e.clientY}px`;
+      cursorDot.style.left = `${e.clientX}px`;
+    });
+
+    
+</script>
+
+  
+</body>
+</html>
