@@ -1,6 +1,3 @@
-const fetch = require('node-fetch');
-require('dotenv').config();
-
 export default async function handler(req, res) {
   console.log("Received request:", req.body);  // 确认请求是否到达
 
@@ -9,7 +6,7 @@ export default async function handler(req, res) {
   const assistantId = process.env.ASSISTANT_ID;
 
   if (!apiKey || !assistantId) {
-    return res.status(500).json({ error: 'API key or Assistant ID missing in .env file' });
+    return res.status(500).json({ error: 'API key or Assistant ID missing in environment variables' });
   }
 
   try {
