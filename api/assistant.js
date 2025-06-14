@@ -2,6 +2,8 @@ const fetch = require('node-fetch');
 require('dotenv').config();
 
 export default async function handler(req, res) {
+  console.log("Received request:", req.body);  // 确认请求是否到达
+
   const userMessage = req.body.message;
   const apiKey = process.env.OPENAI_API_KEY;
   const assistantId = process.env.ASSISTANT_ID;
