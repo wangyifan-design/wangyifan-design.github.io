@@ -523,7 +523,7 @@
     async function fetchFromOpenAI(userInput) {
       try {
         console.log("Sending request to OpenAI API...");  // 调试：检查是否发送请求
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/assistant';
+        const apiUrl = '/api/assistant' || 'http://localhost:3000/api/assistant';
         console.log(apiUrl)
         
         const response = await fetch(apiUrl, {
