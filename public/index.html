@@ -477,7 +477,7 @@
   
       try {
         const knowledge = await fetch('/knowledge.json').then(res => res.json());
-  
+
         let answer = null;
         for (let item of knowledge) {
           if (!item.keywords || !Array.isArray(item.keywords)) continue;
@@ -490,10 +490,12 @@
           if (answer) break;
         }
 
+        // 如果没有在 knowledge.json 中找到答案，则调用 OpenAI API
         if (!answer) {
-          answer = await fetchFromOpenAI(message);
+          console.log("Fetching answer from OpenAI...");  // 确认是否调用 OpenAI API
+          answer = await fetchFromOpenAI(message);  // 调用 OpenAI API
         }
-  
+
         displayAnswer(answer);
         switchIllustration();
       } catch (err) {
@@ -519,11 +521,11 @@
   
     // ✅ 发送到 OpenAI 的函数
     async function fetchFromOpenAI(userInput) {
-      console.log("Sending request to OpenAI API...");  // 确认是否触发了请求
       try {
-        // 动态选择 API URL，依据环境决定
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/assistant';  // 默认回退到本地环境
-
+        console.log("Sending request to OpenAI API...");  // 调试：检查是否发送请求
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/assistant';
+        console.log(apiUrl)
+        
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -534,10 +536,10 @@
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
-        // 解析返回的数据
         const data = await response.json();
         return data.reply;
       } catch (error) {
+        console.log("Error during fetch:", error);  // 调试：输出错误信息
         return `Error: ${error.message}`;
       }
     }
