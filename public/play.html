@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link 
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" 
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>Wang Yifan Design Portfolio</title>
+
+</head>
+
+<body>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div id="navbar">
+        <div class="nav-left">
+        <img src="img/logo.svg" alt="Logo" class="logo" />
+        <span class="site-title">Wang Yifan Design Portfolio</span>
+        </div>
+        <div class="nav-right">
+        <a href="index.html" class="hover-underline">Work</a>
+        <a href="play.html" class="hover-underline">Play</a>
+        <a href="about.html" class="hover-underline">About</a>
+        </div>
+    </div>
+
+    <section class="projects play">
+        <div class="project">
+            <img class="project-image" src="img/play/zhenzhen-2025.jpg" alt="zhenzhen" />
+            <div class="project-labels">
+                <span>zhenzhen</span>
+                <span>acrylic</span>
+            </div>
+        </div>
+        <div class="project">
+            <img class="project-image" src="img/play/above the body-1.jpg" alt="body1" />
+            <div class="project-labels">
+                <span>above the body-1</span>
+                <span>poster</span>
+            </div>
+        </div>
+        <div class="project">
+            <img class="project-image" src="img/play/above the body-2.jpg" alt="body1" />
+            <div class="project-labels">
+                <span>above the body-2</span>
+                <span>poster</span>
+            </div>
+        </div>
+        <div class="project">
+            <img class="project-image" src="img/play/history.jpg" alt="history" />
+            <div class="project-labels">
+                <span>history</span>
+                <span>acrylic</span>
+            </div>
+        </div>
+        <div class="project">
+            <img class="project-image" src="img/play/doctress.jpg" alt="doctress" />
+            <div class="project-labels">
+                <span>doctress</span>
+                <span>acrylic</span>
+            </div>
+        </div>
+        <div class="project">
+            <img class="project-image" src="img/play/apple.gif" alt="apple" />
+            <div class="project-labels">
+                <span>aapple</span>
+                <span>crayon</span>
+            </div>
+        </div>
+        
+
+    <!-- 更多项目 -->
+  </section>
+
+  <footer style="text-align: center; padding: 2rem 0; font-size: 0.9rem; color: #666;">
+    © 2025 Wang Yifan. All rights reserved.
+  </footer>
+
+  <!-- 弹出层 -->
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" class="lightbox-content" />
+  </div>
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>
