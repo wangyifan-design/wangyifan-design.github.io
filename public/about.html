@@ -10,6 +10,60 @@
   <link rel="stylesheet" href="css/style.css">
 
   <title>Wang Yifan Design Portfolio</title>
+  <link rel="icon" type="image/png" href="img/logo.svg">
+
+  <style>
+    .about-intro{
+       margin-top: 100px; 
+       padding: 2rem;
+       max-width: 800px; font-size: 1.1em; line-height: 1.8;
+    }
+
+    .about-text{
+       margin-top: 100px; 
+       padding: 2rem;
+    }
+
+    .photo-strip-wrapper {
+    overflow: hidden;
+    background-color: #fff;
+    }
+
+    .photo-strip {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: scrollPhotos 60s linear infinite;
+    }
+
+    .photo-strip img {
+    height: 10rem;
+    flex-shrink: 0;
+    filter: grayscale(100%);
+    border-radius: 8px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .photo-strip-wrapper:hover .photo-strip {
+    animation-play-state: paused;
+    }
+
+    .photo-strip img:hover {
+    /* transform: scale(1.05); */
+    filter: grayscale(0%);
+    animation-play-state: paused;
+    }
+
+    @keyframes scrollPhotos {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+    }
+
+  </style>
 
 </head>
 
@@ -27,12 +81,91 @@
         </div>
     </div>
 
+    <section class="about-intro">
+    <h1>About Me</h1>
+    <p>I'm Yifan, a designer focused on interface design for AI-driven tools and systems. My recent work explores how intelligent technologies can shape new forms of visual interaction.
+    </p>
+    <p>I create user experiences that help people navigate complexity—whether it's research interfaces, speculative design, or tools for creative collaboration with AI.
+    </p>
 
-  <footer style="text-align: center; padding: 2rem 0; font-size: 0.9rem; color: #666;">
-    © 2025 Wang Yifan. All rights reserved.
-  </footer>
+    </section>
 
-  <script src="js/script.js"></script>
+    <!-- ✅ 中间滚动带 -->
+    <section class="photo-strip-wrapper">
+        <div class="photo-strip">
+        <img src="img/strip/strip-1.jpg" />
+        <img src="img/strip/strip-2.jpg" />
+        <img src="img/strip/strip-3.jpg" />
+        <img src="img/strip/strip-4.jpg" />
+        <img src="img/strip/strip-5.jpg" />
+        <img src="img/strip/strip-6.jpg" />
+        <!-- 复制一轮增强滚动视觉 -->
+        <img src="img/strip/strip-1.jpg" />
+        <img src="img/strip/strip-2.jpg" />
+        <img src="img/strip/strip-3.jpg" />
+        <img src="img/strip/strip-4.jpg" />
+        <img src="img/strip/strip-5.jpg" />
+        <img src="img/strip/strip-6.jpg" />
+        </div>
+    </section>
+
+    <section class="about-text">
+        <div style="display: flex; flex-wrap: wrap; gap: 4vw;">
+    
+    <!-- Work -->
+    <div style="flex: 1; min-width: 280px;">
+      <h2 style="font-size: 1.5em; font-weight: bold;">Work</h2>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="margin-bottom: 1.5em;">
+          <div style="font-weight: bold;">Product Designer, Rockhood.ai</div>
+          <div style="color: gray;">Feb 2025 – Now</div>
+          <div>Leading brand, UI, and product design for an AI-powered conversational real estate platform.</div>
+        </li>
+        <li style="margin-bottom: 1.5em;">
+          <div style="font-weight: bold;">UX Designer, Tsinghua Future Lab</div>
+          <div style="color: gray;">2024 – Now</div>
+          <div>Designed user journey maps and AI tools for senior care and natural language interaction.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Education -->
+    <div style="flex: 1; min-width: 280px;">
+      <h2 style="font-size: 1.5em; font-weight: bold;">Education</h2>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="margin-bottom: 1.5em;">
+          <div style="font-weight: bold;">PhD in Visual Communication</div>
+          <div style="color: gray;">2020 – 2024, Tsinghua University</div>
+          <div>Research in intelligent design, ancient character innovation, and speculative AI interfaces.</div>
+        </li>
+        <li style="margin-bottom: 1.5em;">
+          <div style="font-weight: bold;">MA in Visual Communication</div>
+          <div style="color: gray;">2016 – 2019, Tsinghua University</div>
+          <div>Focus on revitalizing traditional culture through virtual exhibitions and visual systems.</div>
+        </li>
+        <li style="margin-bottom: 1.5em;">
+          <div style="font-weight: bold;">BA in Visual Communication</div>
+          <div style="color: gray;">2012 – 2016, Tsinghua University</div>
+          <div>Trained in fundamental design skills: logo design, typography, packaging, and motion graphics.</div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+    </section>
+
+    <footer style="text-align: center; padding: 2rem 0; font-size: 0.9rem; color: #666;">
+    <div style="margin-bottom: 0.5rem;">
+        © 2025 Wang Yifan. All rights reserved.
+    </div>
+    <div>
+        <a href="mailto:vegdogzhenzhen@gmail.com" style="margin: 0 1rem; color: inherit; text-decoration: none;">Email</a>
+        <a href="www.linkedin.com/in/yifanwang-design" target="_blank" style="margin: 0 1rem; color: inherit; text-decoration: none;">LinkedIn</a>
+    </div>
+    </footer>
+
+
+    <script src="js/script.js"></script>
 
 </body>
 </html>
