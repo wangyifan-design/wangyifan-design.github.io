@@ -8,16 +8,15 @@
         }
     },
     {
-        "q": "你最喜欢的项目？",
-        "keywords": ["最喜欢的项目", "favorite project", "代表作"],
+        "keywords": ["which project", "check out", "recommend", "project to start", "推荐的项目"],
         "a": {
-            "en": "One of my favorite projects is the 'Shengqinyuan - Virtual Zoo Design', which originated from my master's research and was further refined in 2025.",
-            "zh": "我最喜欢的项目之一是“圣禽苑虚拟动物园设计”，这个项目起源于硕士期间的研究，2025年我又重新整理优化了。"
+        "en": "Try 'Shengqinyuan' – it’s a virtual zoo inspired by Chinese mythology. Or if you're into UI, check out my recent work on AI interfaces at rockhood.ai.",
+        "zh": "可以看看《盛禽苑》，它是一个基于中国传统动物艺术形象的虚拟动物园。如果你对 UI 感兴趣，也可以看看我在rockhood.ai做的 AI 界面设计项目。"
         }
     },
     {
         "q": "你有哪些研究？",
-        "keywords": ["研究", "research", "论文"],
+        "keywords": ["research", "studying", "设计研究", "研究方向"],
         "a": {
             "en": "My research focuses primarily on visual communication design thinking and methods, intelligent design theory and methods, and the activation and dissemination of Chinese traditional culture.",
             "zh": "我的研究方向主要包括视觉传达设计思维与方法、智能设计理论与方法、中国传统文化的活化与传播设计研究。"
@@ -40,11 +39,10 @@
         }
     },
     {
-        "q": "Can you recommend a project?",
-        "keywords": ["推荐项目", "recommend project", "项目建议", "项目推荐"],
+        "keywords": ["dog", "pet", "tell me about your dog", "介绍一下你的狗", "狗狗"],
         "a": {
-            "en": "Yes! 'Shengqinyuan - Virtual Zoo' is one of my favorite projects. It's an independent work from my master's program that reimagines traditional Chinese animal symbolism in a playful, accessible way. I did everything from research to design execution on my own.",
-            "zh": "你应该看看“盛禽苑虚拟动物园设计”。这是我最喜欢的项目之一。这是我硕士课程中的一个独立作品，通过一种有趣且易于理解的方式重新构想了传统的中国动物象征。我从研究到设计执行的所有工作都是自己完成的。"
+            "en": "Her name is Zhenzhen — a white Labrador with an impressive appetite. She also acts as my personal wellness coach, making sure I take breaks when I'm too deep into work.",
+            "zh": "我家狗狗叫真真，是一只白色的拉布拉多，非常贪吃。在我工作太投入的时候，她还会提醒我该站起来活动一下，是我最贴心的健康小助理。"
         }
     },
     {
@@ -54,5 +52,34 @@
             "en": "AI helps me speed up tedious steps in the design process and explore ideas faster. But I'm also aware of its potential drawbacks for creatives. I explored this topic deeply in my project 'Heidegger’s Heaps of Brocade and Ash'. Check it out!",
             "zh": "AI帮助加速我的设计过程，同时我也在工作中反思其文化影响。我在我的项目《海德格尔的锦灰堆》中深入探讨了这个话题。可以去看看！"
         }
+    },
+    {
+        "keywords": ["team", "collaborate", "合作方式", "团队", "一起工作"],
+        "a": {
+            "en": "In a team, I often take on the role of a planner — someone who connects ideas, people, and goals. I enjoy working with a sense of purpose, and I feel most energized when I can help shape a project’s direction while contributing visually and conceptually.",
+            "zh": "在团队中我常常担任策划者的角色，喜欢将想法、人和目标连接起来。我热衷于带着使命感推进项目，既关注设计细节，也希望参与方向规划与价值建构。"
+        }
+    },
+    {
+        "keywords": ["tools", "workflow", "常用工具", "软件", "设计工具"],
+        "a": {
+            "en": "I use Figma, Illustrator, After Effects, and Notion in my regular workflow. I’m also exploring creative collaboration with AI tools like Midjourney, ChatGPT, and JiMeng — experimenting with new ways to ideate and express through hybrid intelligence.",
+            "zh": "我常用 Figma、Illustrator、After Effects 和 Notion 来完成设计工作。目前我也在积极探索与 AI 工具的协作方式，比如 Midjourney、ChatGPT 和即梦，尝试用“人机共创”的方式打开创作的新可能。"
+        }
+    },
+    {
+        "keywords": ["Seattle", "西雅图", "why Seattle", "搬来", "来美国"],
+        "a": {
+            "en": "I came to Seattle because I want to experience different cultures and work in a globally connected design environment. I’m particularly interested in how technology can interact with culture — not replace it, but amplify its richness.",
+            "zh": "我来到西雅图，是为了体验不同的文化，并希望在更全球化的设计环境中工作。我尤其关注技术如何与文化发生关系——不是取代文化，而是放大它的多样性与深度。"
+        }
+    },
+    {
+        "keywords": ["Heidegger","Heaps of Brocade and Ash","锦灰堆","海德格尔"],
+        "a": {
+            "en": "This digital interactive video artwork examines how AI reshapes the meaning of images. Drawing on Heidegger’s notion of technology as a “framework,” it explores the process of visual decay and reinterpretation. Inspired by the traditional Chinese aesthetic of “Heaps of Brocade and Ash” (锦灰堆), the piece constructs a layered visual composition that reflects the tension between machine logic and cultural memory.",
+            "zh": "这是一件数字影像交互作品，探讨人工智能如何重塑图像的意义。作品借鉴了海德格尔关于技术是一种“框架”（Enframing）的哲学观念，模拟AI生成的图像衰变过程。视觉形式受中国传统艺术风格“锦灰堆”的启发，通过层叠图像和文化符号的堆叠，呈现出机器逻辑与文化记忆之间的张力。"
+        }
     }
+
 ]

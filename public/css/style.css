@@ -289,12 +289,15 @@
       left: 0;
       width: 20px;
       height: 20px;
-      background-color: black;
+      background-color: white;
       border-radius: 50%;
       pointer-events: none;
       z-index: 10000;
       transform: translate(-50%, -50%);
+      mix-blend-mode: difference; /* ✅ 关键！ */
+      transition: width 0.2s ease, height 0.2s ease;
     }
+
 
     /* 样式化箭头 */
     .scroll-arrow {

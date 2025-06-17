@@ -28,10 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let illustrationIndex = 0;
 
     const presetQuestions = [
-      "What kind of designer are you?",
-      "What inspires your work?",
-      "Can you recommend a project?",
-      "How do you use AI in your design?"
+      "What are you up to these days?",
+      "Which project should I check out first?",
+      "What’s something you're researching lately?",
+      "Tell me about your dog!"
     ];
     const clickedQuestions = new Set();
 
@@ -199,12 +199,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 自定义鼠标跟随
   const cursorDot = document.getElementById('cursor-dot');
-  if (cursorDot) {
-    document.addEventListener('mousemove', (e) => {
-      cursorDot.style.top = `${e.clientY}px`;
-      cursorDot.style.left = `${e.clientX}px`;
-    });
-  }
+
+  document.addEventListener('mousemove', (e) => {
+    cursorDot.style.top = `${e.clientY}px`;
+    cursorDot.style.left = `${e.clientX}px`;
+
+    // 检查是否 hover 在可点击元素上
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    if (target && (target.tagName === 'A' || target.tagName === 'BUTTON' || target.onclick)) {
+      cursorDot.style.width = '36px';
+      cursorDot.style.height = '36px';
+    } else {
+      cursorDot.style.width = '20px';
+      cursorDot.style.height = '20px';
+    }
+  });
+
+
 
   //   play点击全屏
   document.querySelectorAll('.project-image').forEach(img => {
