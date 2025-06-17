@@ -8,6 +8,13 @@
         }
     },
     {
+        "keywords": ["what are you up to", "these days", "working on", "最近在做什么"],
+        "a": {
+        "en": "I've been working at Rockhood.ai, designing conversational tools for real estate. It’s all about blending brand, UI, and product thinking into one smooth AI-driven experience.",
+        "zh": "我最近在 Rockhood.ai 做产品设计，主要负责一个对话式地产销售平台的品牌、界面和整体产品设计。把 AI 和设计整合起来，是件很有意思的事！"
+        }
+    },
+    {
         "keywords": ["which project", "check out", "recommend", "project to start", "推荐的项目"],
         "a": {
         "en": "Try 'Shengqinyuan' – it’s a virtual zoo inspired by Chinese mythology. Or if you're into UI, check out my recent work on AI interfaces at rockhood.ai.",
