@@ -23,7 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
       'img/illustration/8.jpg',
       'img/illustration/9.jpg',
       'img/illustration/10.jpg',
-      'img/illustration/11.jpg'
+      'img/illustration/11.jpg',
+      'img/illustration/12.jpg',
+      'img/illustration/13.jpg',
+      'img/illustration/14.jpg',
+      'img/illustration/15.jpg',
     ];
     let illustrationIndex = 0;
 
