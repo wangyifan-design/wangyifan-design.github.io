@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const aiMsg = document.createElement('div');
       aiMsg.className = 'chat-message ai';
-      aiMsg.textContent = answer;
+      aiMsg.innerHTML = answer;
       chat.appendChild(aiMsg);
     }
 
