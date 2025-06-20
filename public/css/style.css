@@ -206,6 +206,18 @@
     transition: transform 0.3s ease, opacity 0.5s ease;
     }
 
+    /* ✅ 修复 Play 页面初始跳动问题：不需要滚动也默认 visible */
+    .projects.play .project img,
+    .projects.play .project video {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .projects.play .project:hover img,
+    .projects.play .project:hover video {
+      transform: translateY(0) scale(1.05); /* ✅ 注意必须保留 translateY(0) 否则会被覆盖 */
+    }
+
 
     .project {
       break-inside: avoid;

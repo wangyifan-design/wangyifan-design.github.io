@@ -30,7 +30,7 @@ body {
     /* intro wrapper 保持最大宽度和居中 */
     .project-intro-wrapper {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 400px 1fr;
     align-items: start;
     gap: 2rem;
     }
@@ -152,3 +152,22 @@ body {
       flex: 1;
       max-width: 48%;
     }
+
+    @media (max-width: 768px) {
+    .project-intro-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .project-intro-left,
+    .project-intro-right {
+      text-align: left;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .project-intro-right p,
+    .project-intro-right h3 {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
