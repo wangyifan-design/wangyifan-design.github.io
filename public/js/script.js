@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
           answer = await fetchFromOpenAI(message);
         }
 
-        if (!answer|| hallucinationDetected(answer, message)) {
+        if (!answer || answer.includes("无法") || answer.includes("couldn't find any") || hallucinationDetected(answer, message)) {
           console.log("No answer from OpenAI. Using fallback.");
           answer = getFallbackReply(message); // ⬅️ 来自 fallback.js
         }
