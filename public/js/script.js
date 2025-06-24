@@ -88,16 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
           answer = await fetchFromOpenAI(message);
         }
 
-        // 检查是否是幻觉内容或拒绝模板
-        if (
-          !answer ||
-          looksHallucinated(answer, message) ||
-          isDefaultOpenAIRefusal(answer)
-        ) {
-          console.log("⚠️ Falling back to friendly response...");
-          answer = getFallbackReply(message);
-        }
-
         answer = answer.replace(/【\d+:[^†]+†[^】]+】/g, '');
 
         displayAnswer(answer);
