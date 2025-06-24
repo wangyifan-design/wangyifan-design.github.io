@@ -88,9 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
           answer = await fetchFromOpenAI(message);
         }
 
-        if (!answer || answer.includes("无法") || answer.includes("couldn't find any") || hallucinationDetected(answer, message)) {
-          console.log("No answer from OpenAI. Using fallback.");
-          answer = getFallbackReply(message); // ⬅️ 来自 fallback.js
+        // 检查是否是幻觉内容或拒绝模板
+        if (
+          !answer ||
+          looksHallucinated(answer, message) ||
+          isDefaultOpenAIRefusal(answer)
+        ) {
+          console.log("⚠️ Falling back to friendly response...");
+          answer = getFallbackReply(message);
         }
 
         answer = answer.replace(/【\d+:[^†]+†[^】]+】/g, '');
