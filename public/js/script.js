@@ -88,10 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
           answer = await fetchFromOpenAI(message);
         }
 
-        if (!answer) {
+        if (!answer|| hallucinationDetected(answer, message)) {
           console.log("No answer from OpenAI. Using fallback.");
           answer = getFallbackReply(message); // ⬅️ 来自 fallback.js
         }
+
+        answer = answer.replace(/【\d+:[^†]+†[^】]+】/g, '');
 
         displayAnswer(answer);
         switchIllustration();
