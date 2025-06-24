@@ -85,7 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!answer) {
           console.log("Fetching answer from OpenAI...");
-          answer = await fetchFromOpenAI(message);
+          console.log("No match in knowledge.json, using fallback...");
+          answer = getFallbackReply(message); // ⬅️ 来自 fallback.js
         }
 
         displayAnswer(answer);
