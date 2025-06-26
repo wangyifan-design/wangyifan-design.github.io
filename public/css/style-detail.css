@@ -58,7 +58,7 @@ body {
 
     .meta-table {
         display: grid;
-        grid-template-columns: 60px 1fr;  /* 更紧凑 */
+        grid-template-columns: 80px 1fr;  /* 更紧凑 */
         row-gap: 0.5rem;
         font-size: 0.8rem;
         color: white;
