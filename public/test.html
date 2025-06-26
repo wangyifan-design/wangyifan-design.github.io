@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimal Hover Swap</title>
+  <style>
+    .hover-image-container {
+      position: relative;
+      width: 50%;
+      margin: 2rem auto;
+    }
+
+    .hover-image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .hover-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hover-image-container:hover .hover-image {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hover-image-container">
+    <img src="img/patapata/logo1.jpg" alt="Base Image">
+    <img src="img/patapata/pdf-1.jpg" class="hover-image" alt="Hover Image">
+  </div>
+
+</body>
+</html>

@@ -195,13 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 隐藏箭头
-  window.addEventListener('scroll', () => {
-    const scrollArrow = document.getElementById('scroll-arrow');
-    if (scrollArrow && window.scrollY > 10) {
-      scrollArrow.classList.add('hidden');
-    }
-  });
 
   // 自定义鼠标跟随
   const cursorDot = document.getElementById('cursor-dot');
@@ -243,3 +236,22 @@ document.addEventListener("DOMContentLoaded", () => {
     lightbox.style.display = 'none';
     }
 });
+
+// 页面加载时就检测可视区域元素并手动加上 .visible 类
+function handleVisibilityOnLoad() {
+  const elements = document.querySelectorAll('.project img, .project video');
+  const windowHeight = window.innerHeight;
+
+  elements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < windowHeight) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+// 页面加载完后立即触发一次
+window.addEventListener('load', handleVisibilityOnLoad);
+
+// 保留滚动触发，用于后续图片进入视口时添加 .visible
+window.addEventListener('scroll', handleVisibilityOnLoad);
