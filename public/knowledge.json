@@ -89,6 +89,13 @@
         }
     },
     {
+        "keywords": ["Bone Script Red Packet",  "red envelope", "Chinese New Year", "甲骨文红包", "镂空"],
+        "a": {
+            "en": "Bone Script Red Packet is a series of hollow-cut red envelopes inspired by ancient oracle bone script. Designed under the mentorship of Professor Nan Chen, the project features ten character themes such as fortune, longevity, and reunion. Each envelope combines a cut-out cover with an inner gold-printed card, creating a rich three-dimensional effect. The design reimagines traditional Chinese writing in a contemporary festive context.",
+            "zh": "《甲骨文镂空印金红包》是一组以甲骨文字为主题的红包设计，在陈楠教授指导下完成。作品包含“福、寿、吉、囍、贺、春、好合、善、恩、团圆”十种文字款式，通过镂空外壳与内置烫金卡片的结合，呈现出精致的立体视觉效果，探索传统文字在当代节庆视觉中的创新表达。"
+        }
+        },
+    {
         "keywords": ["Living Jiagu", "智绘甲骨", "Google Arts & Culture"],
         "a": {
             "en": "Living Jiagu is an interactive installation that brings ancient Chinese oracle bone script to life using machine learning. Visitors draw characters on a tablet, which are recognized by TensorFlow and transformed into animations on a large LED wall. The project connects early Chinese writing with modern AI technology, creating a cultural experience that visualizes how tradition and innovation can merge through interaction and image recognition.<a href='livingjiagu.html'>👀</a>",
