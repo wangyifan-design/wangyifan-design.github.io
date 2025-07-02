@@ -183,17 +183,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 图片滚动浮现
-  window.addEventListener('scroll', () => {
-    const images = document.querySelectorAll('.project-image');
-    images.forEach((image) => {
-      const imagePosition = image.getBoundingClientRect().top;
-      const windowHeight = window.innerHeight;
-      if (imagePosition < windowHeight * 0.95) {
-        image.classList.add('visible');
-      }
-    });
-  });
+  // // 图片滚动浮现
+  // window.addEventListener('scroll', () => {
+  //   const images = document.querySelectorAll('.project-image');
+  //   images.forEach((image) => {
+  //     const imagePosition = image.getBoundingClientRect().top;
+  //     const windowHeight = window.innerHeight;
+  //     if (imagePosition < windowHeight * 0.95) {
+  //       image.classList.add('visible');
+  //     }
+  //   });
+  // });
 
 
   // 自定义鼠标跟随
@@ -250,8 +250,24 @@ function handleVisibilityOnLoad() {
   });
 }
 
-// 页面加载完后立即触发一次
-window.addEventListener('load', handleVisibilityOnLoad);
+// // 页面加载完后立即触发一次
+// window.addEventListener('load', handleVisibilityOnLoad);
 
-// 保留滚动触发，用于后续图片进入视口时添加 .visible
-window.addEventListener('scroll', handleVisibilityOnLoad);
+// // 保留滚动触发，用于后续图片进入视口时添加 .visible
+// window.addEventListener('scroll', handleVisibilityOnLoad);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // 一旦可见就不再监听
+      }
+    });
+  }, {
+    threshold: 0.1  // 进入视口 10% 就触发
+  });
+
+  const targets = document.querySelectorAll('.project-image');
+  targets.forEach(el => observer.observe(el));
+});
