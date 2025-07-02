@@ -118,8 +118,8 @@
 
 @media (max-width: 768px) {
 
-  .projects.play .grid-sizer,
-  .projects.play .project {
+  .projects.home .grid-sizer,
+  .projects.home .project {
     width: 100%;
   }
 }
