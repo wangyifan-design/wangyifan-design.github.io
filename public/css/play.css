@@ -1,23 +1,22 @@
 .projects.play {
   margin-top: 100px;
-  column-count: 4;
-  column-gap: 0.5rem;
-  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 2rem;
+  margin-right: 1.5rem;
+  box-sizing: border-box;
+}
+
+.projects.play .grid-sizer,
+.projects.play .project {
+  width: calc(25% - 8px);
+  /* 四列 */
 }
 
 @media (max-width: 768px) {
-  .projects.play {
-    column-count: 1;
+
+  .projects.play .grid-sizer,
+  .projects.play .project {
+    width: 100%;
   }
-}
-
-.projects.play .project-image img,
-.projects.play .project-image video {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.projects.play .project:hover img,
-.projects.play .project:hover video {
-  transform: translateY(0) scale(1.05);
 }

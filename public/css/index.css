@@ -100,14 +100,26 @@
   color: #000;
 }
 
-.projects {
-  column-count: 2;
-  column-gap: 0.5rem;
-  padding: 2rem;
+.projects.home {
+  /* 使用 margin 而非 padding，避免 Masonry 误判容器宽度被挤爆 */
+  /* 右边减 0.5rem 以抵消 Masonry gutter，确保视觉对称 */
+  margin-left: 2rem;
+  margin-right: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Masonry 列宽设为 (100% - 总 gutter) / 2 */
+.projects.home .grid-sizer,
+.projects.home .project {
+  width: calc(50% - 8px);
+  /* 如果 Masonry gutter 是 16px（两列 → 每列减 8px） */
+  margin-bottom: 0.5rem;
 }
 
 @media (max-width: 768px) {
-  .projects {
-    column-count: 1;
+
+  .projects.play .grid-sizer,
+  .projects.play .project {
+    width: 100%;
   }
 }

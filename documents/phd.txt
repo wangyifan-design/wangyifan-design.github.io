@@ -1,0 +1,94 @@
+This paper primarily explores the application and impact of artificial intelligence technology in the field of visual communication design. Visual communication design, originated from graphic design, integrates various new media forms, demonstrating diverse and rich characteristics. From the original arrangement of text and images in flat space to the gradual development towards three-dimensional, dynamic, and systematic in recent years, visual communication has always been a profession actively adopting new technologies and cross-border integration. Artificial intelligence technology originated in the 1940s and 1950s and is currently in its third booming development period centered around deep learning neural networks. As artificial intelligence technology is widely penetrating various industries, visual communication design is also being affected.
+
+  This paper systematically sorts out the current application status of artificial intelligence technology in the field of visual communication design and analyzes its impact on various aspects of visual communication design. Specifically, in image generation, font design, logo design, and layout design, artificial intelligence technology has developed a series of targeted technologies and tools and has generated numerous application cases in recent years. Artificial intelligence not only greatly improves the work efficiency of designers, enabling complex large-scale personalized design projects to be completed automatically, but it also serves as a powerful analytical tool that can assist designers in exploring design trends and assisting decision-making.
+
+  Although artificial intelligence can assist designers in completing different types of design tasks, it lacks the ability to manipulate clever ideas in simple structural relationships, adjust details required for real project implementation, and create demands proactively, so it cannot replace the work of designers. However, artificial intelligence indeed profoundly influences different aspects of visual communication design and has impacts on design thinking, design methods, design practice, and the development of designers. Therefore, this paper discusses changes in the visual communication paradigm under the participation of artificial intelligence from a more macro perspective, summarizing brute-force design, fuzzy design, and ubiquitous design as three new paradigms. Among them, brute-force design replaces expert intuition by generating a large number of design schemes; fuzzy design uses machine learning iterative optimization to solve structural problems; while ubiquitous design achieves comprehensive solutions to design problems through multimodal data processing.
+
+  This paper delves into the impact of artificial intelligence technology in the field of visual communication design and systematically summarizes and sorts out the paradigms of visual communication design from a theoretical level. It not only reveals how artificial intelligence changes design practices but also provides new creative ideas and practical directions for visual communication designers facing challenges brought about by artificial intelligence. In today's era of continuous technological advancement, understanding technological characteristics and looking at the future with a forward-looking perspective is a necessary condition for us to calmly cope with technological changes and grasp the initiative of professional development.
+
+  本文主要研究人工智能技术在视觉传达设计中的应用及影响。视觉传达设计源自平面设计，融合了多种新媒体形式，展现出多元且丰富的特性。从原来对文字、图片在平面空间中进行编排，到近年来逐步向立体化、动态化、系统化发展，视觉传达一直是一个积极采用新技术、跨界融合发展的专业。人工智能技术起源于20世纪四五十年代，目前正处于以深度学习神经网络为核心的第三次蓬勃发展时期。随着人工智能技术广泛渗透到各个行业，视觉传达设计也受到影响。
+    
+  本文系统性地梳理了人工智能技术在视觉传达设计领域的应用现状，并分析了其对视觉传达设计各方面的影响。
+  具体来说，在图形、图像生成、字体设计、标志设计以及编排设计等方面，人工智能技术已经发展出了一系列具有针对性的技术和工具，并在近几年来产生了大量的应用案例。人工智能不仅极大地提高了设计师的工作效率，使得复杂的大规模个性化设计项目得以自动化完成，此外，人工智能还是功能强大的分析工具，可以辅助设计师探索设计趋势，并辅助决策。
+
+  虽然人工智能可以辅助设计师完成不同类型的设计任务，但缺少处理简单结构关系间的巧思、真实项目落地所要求的细节调整能力，以及主动创造需求的能力，因此人工智能无法代替设计师的工作。然而，人工智能确实深刻影响着视觉传达设计的不同方面，对设计思维、设计方法、设计实践、设计师的发展等方面都造成了影响，因此，本文从更宏观的角度探讨人工智能参与下视觉传达范式的变化，归纳总结出暴力设计、模糊设计、泛在设计三种新范式。其中，暴力设计通过生成大量设计方案来替代专家直觉；模糊设计则借助机器学习迭代优化，解决结构上的不合理问题；而泛在设计则通过多模态数据处理，实现对设计问题的全面解决。
+  
+  本文探讨了人工智能技术在视觉传达设计领域的影响，并从理论层面对视觉传达设计的范式进行了系统的归纳和整理。不仅揭示了人工智能如何改变设计实践，也为视觉传达设计师在面对人工智能带来的挑战时，提供了新的创作思路和实践方向。在技术不断进步的今天，理解技术特性，以前瞻性的视角审视未来，是我们从容应对技术变革、把握专业发展主动权的必要条件。
+
+
+  \chapter{结语}
+
+\section{人工智能技术全方位参与视觉传达设计}
+
+
+    人工智能技术在视觉传达设计领域的应用日益得到广泛关注。丰富而多元的技术模型使人工智能在视觉传达设计的最核心的元素图形、文字、色彩及其组织构成方式中都发挥了重要作用。其中，尤其以文字到图像技术为核心的生成式人工智能为代表，以及高的效率为设计师们提供了丰富的视觉资产。此外，伴随人工智能技术的发展，产生了一系列设计平台和工具，它们的易用性极大地便利了设计师的工作流程，并将视觉传达设计的能力得赋予了大众。人工智能技术已成为视觉传达设计中的重要工具。
+
+    % 人工智能在视觉传达设计应用中的特点
+    % 根据第三章的研究，
+    虽然人工智能技术发挥了重要作用，体现了巨大价值，但仍然无法真正完成视觉传达设计，只能作为助力的工具。本文将人工智能在视觉传达设计应用的特点总结为以下三句话：
+    可以做简单的，但不能做简洁的，因为它缺少处理简单结构关系间的巧思；
+    可以做复杂的，但不能做精细的，因为它缺少真实项目落地所要求的细节调整能力；
+    可以自动生成，但不能自主生成，因为它缺少主动创造需求的能力。
+
+    目前的研究是基于现有的技术和案例进行的分析，本研究从2021年开始到今天才经历了短短的三年时间，但技术已经取得了突飞猛进的变化。在未来技术还将有更新的突破，更多的技术可以方便地应用于视觉传达设计中，但以上三点在短期内应该不会有大的变化。第一点是因为人类对自身认知能力的理解尚不完全，我们还无法解释那些细微的巧思来自何处，更无法将其教给人工智能了。第二点是因为人类设计师面临的是真实世界的复杂性，即使人工智能在虚拟世界中已展现出无所不能的潜力，但在面对现实世界的复杂性时仍会显得力不从心。第三点是因为人工智能的本质是函数的组合，是机器的进化，即使它的内部是完备的，但是没有输入，便不会有输出。
+
+
+% \section{视觉传达设计将向人机协作发展}
+
+
+    % 人工智能参与视觉传达设计还处于技术领导阶段
+
+    在当前的学术与产业实践中，人工智能在视觉传达设计领域的应用尚处于技术引领的阶段。核心技术主要掌握在具有较高技术门槛的专业程序员群体中。因此，对于从文科培养环境下的艺术类学生而言，熟练地运用人工智能以实现深度学习和创新应用的学习成本相对较高。这导致了人工智能在视觉传达设计领域的应用大多局限于按照技术能力所允许的范围进行扩展与衍生。
+
+    大量的技术起源于大学和科研机构，但能够将这些技术能力转化为广泛应用的工具却需要一定的周期。以文生图技术为例，该技术自大约2014年开始实现突破性进展，直到2022年才逐渐进入公众视野，并在2023年实现了普及性的应用，经历了近十年的发展。
+    
+    人工智能并不等同于文生图技术，其在视觉传达设计领域的潜力远不止于图像生成，应用潜力尚未被完全挖掘。比如在视觉编排方面，如何在空间内对不同的元素进行组织，产生出更加有意义、有内涵的视觉呈现，仍存在巨大的发展空间。% 并市场化
+
+
+
+
+\section{人工智能技术多方面影响视觉传达设计}
+
+
+    人工智能对视觉传达设计的影响是学术界广泛关注的话题。本文从对设计思维的影响、对设计结果的影响、对设计师的影响、对设计教育的影响、对法律与伦理的影响这五方面展开分析。
+
+    % 设计思维
+    在设计思维方面，最显著的特点是与计算思维的融合。
+    视觉传达设计的许多新兴需求均着眼于更广泛的社会群体，并涉及大数据的处理与计算技术的应用。计算思维指导下的设计师面对着相比经典设计更加广泛的目标群体，以及需要在更短的时间内完成更大规模个性化的设计内容。在面对传统的设计需求时，融入计算思维也可以更好的使用计算工具来提升设计效率。
+    
+    % 设计结果
+    在设计结果方面，本文综合讨论了效率、创新性和多样性三个关键维度。
+    人工智能可以快速大量的积累视觉资源，但并非如预期中的高效。在处理模糊且要求不高的设计需求时，人工智能显示出较高的效率。然而，从更广泛的内容来看，由于生成的视觉资源质量不佳、成功率低，人工智能往往产生了大量廉价低质量的视觉资源，污染了视觉的同时，还需要大量的后期工作，因此没有提高设计的效率。
+    在创新性方面，普遍观点认为人工智能生成的内容缺乏原创性。但是由于人工智能在内容生成上的多样性、随机性以及多种组合可能性，它生成的内容与人类创造的内容在本质上并无差异，因此可以认为人工智能设计的内容也具有一定的创新性。
+    至于多样性，虽然人工智能生成的内容具有多样性，然而自动化的工作方法会使设计师产生惰性，不利于多样性的发展，同时人们对潮流的喜好也会使同质化的现象更强烈。
+
+    % 设计师
+    在设计师方面，本文认为人工智能在多方面展现出了与设计师相媲美的能力，因此设计师需要产生由内向外的自我提升要求。一方面，设计师应当超越专业领域的局限，以社会整体为委托人，考虑更为广泛的问题。另一方面，设计师需要提升自身的专业素养，包括提高对人工智能技术原理和应用的掌握能力、培养对数据分析和处理的能力和意识、强对艺术理论和美学知识的学习和运用。
+
+    % 设计教育
+    设计教育是培养下一代设计师的方式，现在正处于科技迅速发展的时代，仍按照传统的教育方式来培养设计师将会导致学校和社会的脱节。因此，在未来的视觉传达设计教育中，可能会在以下几方面进行调整：首先，在培养方案中可以适当增加对技术的学习与运用，让学生学会使用多种工具来完成设计目标。同时，由于现在的知识获取方式更加的多样化、便捷化，老师在传授知识方面的作用被弱化，可以使用翻转课堂的形式，将知识传授的工作放在课下，更有针对性的引导学生，从思维层面引导学生。其次，传统的视觉传达设计目标重视视觉的表现，而现在，人工智能可以完成各种形式的视觉效果。相比于形式，在设计教育中应该更加关注意义的构建，用视觉的方法解决更多社会问题。
+
+    % 法律伦理
+    在法律与伦理方面，关注的最多的是版权问题以及人工智能伦理。版权方面，当前世界各国正致力于构建针对人工智能生成内容的法律框架。我国的法律政策表现出对人工智能创作内容的版权保护立场，并且倾向于将版权归属于使用人工智能的主体。在设计伦理层面，人工智能带来的挑战包括信息安全与公平的考量，以及设计师的自主性减弱、数字垃圾产生等新问题，这需要更多的人参与到标准制定以及提出新的解决方案，共同建立向善的人工智能设计伦理。
+
+
+\section{人工智能技术带来视觉传达设计新范式}
+
+
+    根据之前的研究与分析，本文在理论的层面归纳出了人工智能技术的应用与影响下视觉传达设计的三个新范式：
+    （1）暴力设计：用大量方案代替专家直觉。
+    （2）模糊设计：用机器迭代解决结构不合理的问题。
+    （3）泛在设计：多模态数据处理促进问题的全面解决。
+
+    新范式从形式来说并非是在人工智能技术广泛应用后才出现的，而是人工智能将他们强调了。以前很复杂麻烦的、巨大工作量的工作内容现在可以使用智能工具来辅助达成。它们从一种边缘的、想象中的的状态转变为主流的、现实的状态，并且逐渐成为未来视觉传达设计的核心范式。
+
+    新范式的意义并非只存在于对设计思维、方法、实践上的指导，它们也暗含了视觉传达的进一步发展方向。
+
+    % 暴力设计
+    暴力设计隐含着对高质量视觉传达设计数据库的需求。暴力设计真正能发挥作用在于它生成的结果能够满足一定的质量标准，否则千里挑一、万里挑一的工作也将成为巨大的工作量。为了让人工智能可以生成更多高质量的设计成果，首先要训练它对好的标准的理解，而这就需要高质量的设计数据库。任何领域都需要高质量的数据库，视觉传达设计也不例外。高质量的数据库不只是视觉资产的汇集，更包括了对设计标准的约定。平面设计理论、格式塔理论、传播学理论、认知理论，这些理论和框架能够指导人类设计师工作，同样也能为人工智能在视觉传达设计的应用提供指导。难点和复杂点在于需要将这些具有指导意义的理论内容通过数学建模的方式进行转化，使之成为人工智能程序可以参考和应用的具体标准。建立高质量的设计数据库能够进一步提高智能设计的能力。
+
+    % 模糊设计
+    模糊设计是训练设计师与机器交流的过程。设计师和机器的交流是一个双向的过程，设计师需要了解如何操作机器，而机器也要学习如何理解并响应设计师的指令。设计师需要逐步地将感性的需求转化为理性的指令，将初始的、模糊的设计概念通过结构化的语言和分析，转换为机器可以理解和执行的命令。在这个过程中锻炼设计师的表达与沟通能力，以及系统化的思维能力。同时，这种交互过程还促进了高质量设计数据库的构建。这些数据库未来可作为智能人工智能程序开发的基础，用以记录和分析设计师的思考模式和创作方法。通过这样的分析，我们不仅能够更深入地理解人类的设计思维，还可能在此基础上发展出更加智能和高效的人工智能设计工具，从而推动设计领域的发展和进步。
+
+    % 泛在设计
+    泛在设计则是促进对设计权利的释放。视觉传达的发展方向不是让做视觉的能力掌握在专业设计师的手里，而是让更多的人能够参与到视觉传达设计活动中，只有当大众的审美水平和对设计的理解都上升到一个更高的层次后，视觉传达设计的内在价值方能获得广泛认可。相应地，视觉传达设计师亦将因其专业贡献而获得社会更深的尊重和肯定。

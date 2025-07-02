@@ -219,22 +219,22 @@ document.addEventListener("DOMContentLoaded", () => {
   //   play点击全屏
   document.querySelectorAll('.project-image').forEach(img => {
     if (img.tagName === 'IMG') {
-        img.addEventListener('click', () => {
+      img.addEventListener('click', () => {
         lightbox.style.display = 'block';
         lightboxImg.src = img.src;
-        });
+      });
     }
-    });
+  });
 
-    window.addEventListener('click', (e) => {
+  window.addEventListener('click', (e) => {
     if (e.target === lightbox) {
-        lightbox.style.display = 'none';
+      lightbox.style.display = 'none';
     }
-    });
+  });
 
-    function closeLightbox() {
+  function closeLightbox() {
     lightbox.style.display = 'none';
-    }
+  }
 });
 
 // 页面加载时就检测可视区域元素并手动加上 .visible 类
