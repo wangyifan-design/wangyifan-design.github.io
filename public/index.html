@@ -145,12 +145,14 @@
   <script>
     const grid = document.querySelector('.projects');
     imagesLoaded(grid, function () {
-      new Masonry(grid, {
-        itemSelector: '.project',
-        columnWidth: '.grid-sizer',
-        percentPosition: true,
-        gutter: 8
-      });
+      setTimeout(() => {
+        msnry = new Masonry(grid, {
+          itemSelector: '.project',
+          columnWidth: '.grid-sizer',
+          percentPosition: true,
+          gutter: 8
+        });
+      }, 50); // 延迟 50ms
     });
 
     let msnry;
