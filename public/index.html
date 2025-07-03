@@ -152,6 +152,23 @@
         gutter: 8
       });
     });
+
+    let msnry;
+
+    imagesLoaded(grid, function () {
+      msnry = new Masonry(grid, {
+        itemSelector: '.project',
+        columnWidth: '.grid-sizer',
+        percentPosition: true,
+        gutter: 8
+      });
+    });
+
+    // ✅ 在窗口尺寸变化时，强制重新布局
+    window.addEventListener('resize', () => {
+      if (msnry) msnry.layout();
+    });
+
   </script>
 
 </body>
