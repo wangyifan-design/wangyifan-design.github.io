@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }, {
-    threshold: 0.1  // 进入视口 10% 就触发
+    threshold: 0.2  // 进入视口 10% 就触发
   });
 
   const targets = document.querySelectorAll('.project-image');
