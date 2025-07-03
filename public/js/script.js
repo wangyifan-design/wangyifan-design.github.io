@@ -205,7 +205,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 检查是否 hover 在可点击元素上
     const target = document.elementFromPoint(e.clientX, e.clientY);
-    if (target && (target.tagName === 'A' || target.tagName === 'BUTTON' || target.onclick)) {
+    if (target && (target.tagName === 'A' ||
+      target.tagName === 'BUTTON' ||
+      target.classList.contains('preset-questions') ||
+      target.closest('.project') ||
+      typeof target.onclick === 'function')) {
       cursorDot.style.width = '36px';
       cursorDot.style.height = '36px';
     } else {

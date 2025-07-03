@@ -16,3 +16,14 @@ body {
 h1, h2, h3 {
   font-weight: 600;
 }
+
+body,
+a,
+button,
+input,
+label,
+.project-image,
+.project-labels,
+.preset-questions span {
+  cursor: none !important;
+}

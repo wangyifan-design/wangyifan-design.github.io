@@ -1,29 +1,49 @@
 [
     {
         "q": "你是谁？",
-        "keywords": ["你是谁", "你是什么", "who are you"],
+        "keywords": [
+            "你是谁",
+            "你是什么",
+            "who are you"
+        ],
         "a": {
             "en": "My name is Yifan, nice to meet you!",
             "zh": "我是王一帆，很高兴认识你！"
         }
     },
     {
-        "keywords": ["what are you up to", "these days", "working on", "最近在做什么"],
+        "keywords": [
+            "what are you up to",
+            "these days",
+            "working on",
+            "最近在做什么"
+        ],
         "a": {
-        "en": "I've been working at Rockhood.ai, designing conversational tools for real estate. It’s all about blending brand, UI, and product thinking into one smooth AI-driven experience.",
-        "zh": "我最近在 Rockhood.ai 做产品设计，主要负责一个对话式地产销售平台的品牌、界面和整体产品设计。把 AI 和设计整合起来，是件很有意思的事！"
+            "en": "I've been working at Rockhood.ai, designing conversational tools for real estate. It’s all about blending brand, UI, and product thinking into one smooth AI-driven experience.",
+            "zh": "我最近在 Rockhood.ai 做产品设计，主要负责一个对话式地产销售平台的品牌、界面和整体产品设计。把 AI 和设计整合起来，是件很有意思的事！"
         }
     },
     {
-        "keywords": ["which project", "check out", "recommend", "project to start", "推荐的项目"],
+        "keywords": [
+            "which project",
+            "check out",
+            "recommend",
+            "project to start",
+            "推荐的项目"
+        ],
         "a": {
-        "en": "Try 'Shengqinyuan' – it’s a virtual zoo inspired by Chinese mythology. Or if you're into UI, check out my recent work on AI interfaces at rockhood.ai.",
-        "zh": "可以看看《盛禽苑》，它是一个基于中国传统动物艺术形象的虚拟动物园。如果你对 UI 感兴趣，也可以看看我在rockhood.ai做的 AI 界面设计项目。"
+            "en": "Try 'Shengqinyuan' – it’s a virtual zoo inspired by Chinese mythology. Or if you're into UI, check out my recent work on AI interfaces at rockhood.ai.",
+            "zh": "可以看看《盛禽苑》，它是一个基于中国传统动物艺术形象的虚拟动物园。如果你对 UI 感兴趣，也可以看看我在rockhood.ai做的 AI 界面设计项目。"
         }
     },
     {
         "q": "你有哪些研究？",
-        "keywords": ["research", "studying", "设计研究", "研究方向"],
+        "keywords": [
+            "research",
+            "studying",
+            "设计研究",
+            "研究方向"
+        ],
         "a": {
             "en": "My research focuses primarily on visual communication design thinking and methods, intelligent design theory and methods, and the activation and dissemination of Chinese traditional culture.",
             "zh": "我的研究方向主要包括视觉传达设计思维与方法、智能设计理论与方法、中国传统文化的活化与传播设计研究。"
@@ -31,7 +51,12 @@
     },
     {
         "q": "What kind of designer are you?",
-        "keywords": ["设计师类型", "kind of designer", "设计风格", "设计理念"],
+        "keywords": [
+            "设计师类型",
+            "kind of designer",
+            "设计风格",
+            "设计理念"
+        ],
         "a": {
             "en": "I'm a research-driven designer who values visuals, but I'm even more interested in the cultural and conceptual layers behind design. I aim to create works that are timeless, full of vitality, and rooted in cultural richness. My design approach balances artistic expression with structured thinking.",
             "zh": "我是一名注重研究的设计师，重视视觉效果，但我对设计背后的文化和概念层面更感兴趣。我致力于创作出永恒的、充满活力的、植根于文化丰富性的作品。我的设计方法在艺术表现与结构化思维之间取得平衡。"
@@ -39,14 +64,25 @@
     },
     {
         "q": "What inspires your design?",
-        "keywords": ["设计灵感", "inspires", "灵感来源", "创作灵感"],
+        "keywords": [
+            "设计灵感",
+            "inspires",
+            "灵感来源",
+            "创作灵感"
+        ],
         "a": {
             "en": "I find inspiration in the calm order of the natural world and the wisdom of ancient creators. Old photographs, artifacts, and the rhythms of life often influence how I observe and create.",
             "zh": "我喜欢在自然中感受生命，感受万物的平静和有序。我也喜欢吸收来自于古人的创造性和智慧，学习他们观察世界、创造的方法。"
         }
     },
     {
-        "keywords": ["dog", "pet", "tell me about your dog", "介绍一下你的狗", "狗狗"],
+        "keywords": [
+            "dog",
+            "pet",
+            "tell me about your dog",
+            "介绍一下你的狗",
+            "狗狗"
+        ],
         "a": {
             "en": "Her name is Zhenzhen — a white Labrador with an impressive appetite. She also acts as my personal wellness coach, making sure I take breaks when I'm too deep into work.",
             "zh": "我家狗狗叫真真，是一只白色的拉布拉多，非常贪吃。在我工作太投入的时候，她还会提醒我该站起来活动一下，是我最贴心的健康小助理。"
@@ -54,66 +90,131 @@
     },
     {
         "q": "How do you use AI in your design?",
-        "keywords": ["AI在设计中的应用", "use AI", "人工智能设计", "AI设计"],
+        "keywords": [
+            "AI在设计中的应用",
+            "use AI",
+            "人工智能设计",
+            "AI设计"
+        ],
         "a": {
             "en": "AI helps me speed up tedious steps in the design process and explore ideas faster. But I'm also aware of its potential drawbacks for creatives. I explored this topic deeply in my project 'Heidegger’s Heaps of Brocade and Ash'. Check it out!",
             "zh": "AI帮助加速我的设计过程，同时我也在工作中反思其文化影响。我在我的项目《海德格尔的锦灰堆》中深入探讨了这个话题。可以去看看！"
         }
     },
     {
-        "keywords": ["team", "collaborate", "合作方式", "团队", "一起工作"],
+        "keywords": [
+            "team",
+            "collaborate",
+            "合作方式",
+            "团队",
+            "一起工作"
+        ],
         "a": {
             "en": "In a team, I often take on the role of a planner — someone who connects ideas, people, and goals. I enjoy working with a sense of purpose, and I feel most energized when I can help shape a project’s direction while contributing visually and conceptually.",
             "zh": "在团队中我常常担任策划者的角色，喜欢将想法、人和目标连接起来。我热衷于带着使命感推进项目，既关注设计细节，也希望参与方向规划与价值建构。"
         }
     },
     {
-        "keywords": ["tools", "workflow", "常用工具", "软件", "设计工具"],
+        "keywords": [
+            "tools",
+            "workflow",
+            "常用工具",
+            "软件",
+            "设计工具"
+        ],
         "a": {
             "en": "I use Figma, Illustrator, After Effects, and Notion in my regular workflow. I’m also exploring creative collaboration with AI tools like Midjourney, ChatGPT, and JiMeng — experimenting with new ways to ideate and express through hybrid intelligence.",
             "zh": "我常用 Figma、Illustrator、After Effects 和 Notion 来完成设计工作。目前我也在积极探索与 AI 工具的协作方式，比如 Midjourney、ChatGPT 和即梦，尝试用“人机共创”的方式打开创作的新可能。"
         }
     },
     {
-        "keywords": ["Seattle", "西雅图", "why Seattle", "搬来", "来美国"],
+        "keywords": [
+            "Seattle",
+            "西雅图",
+            "why Seattle",
+            "搬来",
+            "来美国"
+        ],
         "a": {
             "en": "I came to Seattle because I want to experience different cultures and work in a globally connected design environment. I’m particularly interested in how technology can interact with culture — not replace it, but amplify its richness.",
             "zh": "我来到西雅图，是为了体验不同的文化，并希望在更全球化的设计环境中工作。我尤其关注技术如何与文化发生关系——不是取代文化，而是放大它的多样性与深度。"
         }
     },
     {
-        "keywords": ["Heidegger","Heaps of Brocade and Ash","锦灰堆","海德格尔"],
+        "keywords": [
+            "Heidegger",
+            "Heaps of Brocade and Ash",
+            "锦灰堆",
+            "海德格尔"
+        ],
         "a": {
             "en": "This digital interactive video artwork examines how AI reshapes the meaning of images. Drawing on Heidegger’s notion of technology as a “framework,” it explores the process of visual decay and reinterpretation. Inspired by the traditional Chinese aesthetic of “Heaps of Brocade and Ash” (锦灰堆), the piece constructs a layered visual composition that reflects the tension between machine logic and cultural memory.<a href='heidegger.html'>👀</a>",
             "zh": "这是一件数字影像交互作品，探讨人工智能如何重塑图像的意义。作品借鉴了海德格尔关于技术是一种“框架”（Enframing）的哲学观念，模拟AI生成的图像衰变过程。视觉形式受中国传统艺术风格“锦灰堆”的启发，通过层叠图像和文化符号的堆叠，呈现出机器逻辑与文化记忆之间的张力。<a href='heidegger.html'>👀</a>"
         }
     },
     {
-        "keywords": ["Bone Script Red Packet",  "red envelope", "Chinese New Year", "甲骨文红包", "镂空"],
+        "keywords": [
+            "Bone Script Red Packet",
+            "red envelope",
+            "Chinese New Year",
+            "甲骨文红包",
+            "镂空"
+        ],
         "a": {
             "en": "Bone Script Red Packet is a series of hollow-cut red envelopes inspired by ancient oracle bone script. Designed under the mentorship of Professor Nan Chen, the project features ten character themes such as fortune, longevity, and reunion. Each envelope combines a cut-out cover with an inner gold-printed card, creating a rich three-dimensional effect. The design reimagines traditional Chinese writing in a contemporary festive context.",
             "zh": "《甲骨文镂空印金红包》是一组以甲骨文字为主题的红包设计，在陈楠教授指导下完成。作品包含“福、寿、吉、囍、贺、春、好合、善、恩、团圆”十种文字款式，通过镂空外壳与内置烫金卡片的结合，呈现出精致的立体视觉效果，探索传统文字在当代节庆视觉中的创新表达。"
         }
-        },
-        {
-        "keywords": ["Philosophy Drama","Drama Festival", "戏剧节", "哲学戏剧节", "活动视觉"],
+    },
+    {
+        "keywords": [
+            "Philosophy Drama",
+            "Drama Festival",
+            "戏剧节",
+            "哲学戏剧节",
+            "活动视觉"
+        ],
         "a": {
             "en": "The Philosophy Drama Festival is an interdisciplinary campus event organized by Tsinghua University, combining philosophy with theatrical performance. I served as the visual designer for its second edition, creating a new logo, main visual posters, conference handbooks, and derivative products. The visual system aimed to express abstract thought in dynamic, theatrical forms, guided by the theme 'Pata? Pata! Something is happening!'",
             "zh": "哲学戏剧节是由清华大学哲学班与艺术教育中心联合发起的跨学科校园艺术活动，将哲学探索与戏剧实践结合。我作为第二届戏剧节的视觉设计师，重新设计了节日标志，制作了主视觉海报、活动手册以及衍生品等，尝试将抽象思维转化为具象而充满张力的视觉表达。今年的主题为“Pata? Pata! 有事发生！”，设计语言围绕声音的节奏感与突变展开。"
         }
-        },
-        {
-        "keywords": ["Renmin University", "mascot", "figure design", "人大吉祥物", "航天城", "角色设计"],
+    },
+    {
+        "keywords": [
+            "Renmin University",
+            "mascot",
+            "figure design",
+            "人大吉祥物",
+            "航天城",
+            "角色设计"
+        ],
         "a": {
             "en": "This project features a pair of mascots designed for the People's University Affiliated Elementary School in Aerospace City. The figures — a boy and a girl — appear in nine different poses, covering daily life, aerospace themes, and the five pillars of moral, intellectual, physical, aesthetic, and labor education. The mascots were created to support student engagement and school identity through character-based storytelling and product-friendly design.",
             "zh": "本项目为人大附属航天城小学设计了一对校园吉祥物手办，包括男孩与女孩形象，涵盖日常生活、航天主题以及德、智、体、美、劳五育内容，共计九种场景。吉祥物旨在通过角色化视觉语言强化校园文化认同，同时具备实体产品开发的适配性，兼顾教育理念与造型趣味性。"
         }
-        },
+    },
     {
-        "keywords": ["Living Jiagu", "智绘甲骨", "Google Arts & Culture"],
+        "keywords": [
+            "Living Jiagu",
+            "智绘甲骨",
+            "Google Arts & Culture"
+        ],
         "a": {
             "en": "Living Jiagu is an interactive installation that brings ancient Chinese oracle bone script to life using machine learning. Visitors draw characters on a tablet, which are recognized by TensorFlow and transformed into animations on a large LED wall. The project connects early Chinese writing with modern AI technology, creating a cultural experience that visualizes how tradition and innovation can merge through interaction and image recognition.<a href='livingjiagu.html'>👀</a>",
             "zh": "《智绘甲骨》是一件结合甲骨文与人工智能的交互装置作品。观众在平板上书写甲骨文字符，系统通过 TensorFlow 图像识别技术进行识别，并将其转化为动画呈现在大型 LED 屏幕上。该项目融合古老文字与现代科技，探索传统文化与机器学习在交互艺术中的新可能。<a href='livingjiagu.html'>👀</a>"
+        }
+    },
+    {
+        "keywords": [
+            "Chinese character design",
+            "poster",
+            "popular phrase",
+            "流行语",
+            "字体设计",
+            "海报设计"
+        ],
+        "a": {
+            "en": "This is a poster series that reinterprets popular phrases through the lens of Chinese character design. Created with the BIFF student group from Tsinghua University, the project transforms selected characters into expressive typographic visuals, blending contemporary language with traditional structure to explore how characters carry both meaning and emotion.",
+            "zh": "我做了一组以流行语为出发点，尝试以汉字为视觉载体进行再创作的海报设计。作为清华大学学生设计团体 BIFF 的集体创作之一，本系列通过字体设计将具有社会情绪与文化意涵的热门词汇具象化，展现出汉字在当代语言环境中的视觉表达潜力。"
         }
     }
 ]
