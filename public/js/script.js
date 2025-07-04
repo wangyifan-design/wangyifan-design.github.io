@@ -279,14 +279,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 监听用户消息和 AI 回复
 function sendFeedbackToGoogleSheet(userMessage, aiReply) {
-  fetch("https://script.google.com/macros/s/AKfycbzcmoZewTwFGQA-qbCNTPU_uBTzi02vdWzmpw11QiVBLBf2JQteYPnBQ7SxcqG6qbPz/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: `userMessage=${encodeURIComponent(userMessage)}&aiReply=${encodeURIComponent(aiReply)}&page=${encodeURIComponent(window.location.pathname)}`
-  })
-    .then(res => res.text())
-    .then(text => console.log("✅ Feedback response:", text))
-    .catch(err => console.error("❌ Feedback error:", err));
+  document.getElementById("userMessageInput").value = userMessage;
+  document.getElementById("aiReplyInput").value = aiReply;
+  document.getElementById("pageInput").value = window.location.pathname;
+
+  document.getElementById("feedback-form").submit();
+  console.log("✅ Feedback sent via form (no CORS).");
 }
