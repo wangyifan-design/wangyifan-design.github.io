@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         answer = answer.replace(/【\d+:[^†]+†[^】]+】/g, '');
 
         displayAnswer(answer);
+        sendFeedbackToGoogleSheet(message, answer);
         switchIllustration();
       } catch (err) {
         displayAnswer(`Error: ${err.message}`);
@@ -275,3 +276,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const targets = document.querySelectorAll('.project-image');
   targets.forEach(el => observer.observe(el));
 });
+
+// 监听用户消息和 AI 回复
+function sendFeedbackToGoogleSheet(userMessage, aiReply) {
+  fetch("https://script.google.com/macros/s/AKfycbzcmoZewTwFGQA-qbCNTPU_uBTzi02vdWzmpw11QiVBLBf2JQteYPnBQ7SxcqG6qbPz/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userMessage,
+      aiReply,
+      page: window.location.pathname
+    })
+  }).catch((err) => {
+    console.error("Failed to send feedback:", err);
+  });
+}
