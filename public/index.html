@@ -171,9 +171,17 @@
     window.addEventListener('resize', () => {
       if (msnry) msnry.layout();
     });
-
   </script>
 
+  <form id="feedback-form"
+    action="https://script.google.com/macros/s/AKfycbzcmoZewTwFGQA-qbCNTPU_uBTzi02vdWzmpw11QiVBLBf2JQteYPnBQ7SxcqG6qbPz/exec"
+    method="POST" target="hidden-iframe" style="display:none;">
+    <input name="userMessage" id="userMessageInput" type="text">
+    <input name="aiReply" id="aiReplyInput" type="text">
+    <input name="page" id="pageInput" type="text">
+  </form>
+  <iframe name="hidden-iframe" style="display:none;"></iframe>
+  
 </body>
 
 </html>
