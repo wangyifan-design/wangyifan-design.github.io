@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 监听用户消息和 AI 回复
 // 获取你的 Google Apps Script Web App URL
-const GOOGLE_SHEET_APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcmoZewTwFGQA-qbCNTPU_uBTzi02vdWzmpw11QiVBLBf2JQteYPnBQ7SxcqG6qbPz/exec"; // 替换成你的实际部署URL
+const GOOGLE_SHEET_APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJdBnnzxyDtaIkCi7l7LJvpU7AWy3AUfZk0zVXvjecWbwfEvH5737pOZloqVyC-_gZ/exec"; // 替换成你的实际部署URL
 
 async function sendFeedbackToGoogleSheet(userMessage, aiReply) {
   const formData = new FormData();
