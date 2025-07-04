@@ -278,11 +278,32 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // 监听用户消息和 AI 回复
-function sendFeedbackToGoogleSheet(userMessage, aiReply) {
-  document.getElementById("userMessageInput").value = userMessage;
-  document.getElementById("aiReplyInput").value = aiReply;
-  document.getElementById("pageInput").value = window.location.pathname;
+// 获取你的 Google Apps Script Web App URL
+const GOOGLE_SHEET_APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcmoZewTwFGQA-qbCNTPU_uBTzi02vdWzmpw11QiVBLBf2JQteYPnBQ7SxcqG6qbPz/exec"; // 替换成你的实际部署URL
 
-  document.getElementById("feedback-form").submit();
-  console.log("✅ Feedback sent via form (no CORS).");
+async function sendFeedbackToGoogleSheet(userMessage, aiReply) {
+  const formData = new FormData();
+  formData.append("userMessage", userMessage);
+  formData.append("aiReply", aiReply);
+  formData.append("page", window.location.pathname);
+
+  try {
+    const response = await fetch(GOOGLE_SHEET_APP_SCRIPT_URL, {
+      method: "POST",
+      body: formData,
+      // mode: 'no-cors' // 通常不需要，Apps Script 会处理 CORS
+    });
+
+    if (response.ok) {
+      const result = await response.text(); // 获取Apps Script返回的文本
+      console.log("✅ Feedback sent successfully:", result);
+      // 可以在这里添加成功提示，例如弹窗或修改页面元素
+    } else {
+      console.error("❌ Failed to send feedback. Status:", response.status);
+      // 可以在这里添加失败提示
+    }
+  } catch (error) {
+    console.error("❌ Error sending feedback:", error);
+    // 可以在这里处理网络错误等
+  }
 }
