@@ -282,14 +282,11 @@ function sendFeedbackToGoogleSheet(userMessage, aiReply) {
   fetch("https://script.google.com/macros/s/AKfycbzcmoZewTwFGQA-qbCNTPU_uBTzi02vdWzmpw11QiVBLBf2JQteYPnBQ7SxcqG6qbPz/exec", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify({
-      userMessage,
-      aiReply,
-      page: window.location.pathname
-    })
-  }).catch((err) => {
-    console.error("Failed to send feedback:", err);
-  });
+    body: `userMessage=${encodeURIComponent(userMessage)}&aiReply=${encodeURIComponent(aiReply)}&page=${encodeURIComponent(window.location.pathname)}`
+  })
+    .then(res => res.text())
+    .then(text => console.log("✅ Feedback response:", text))
+    .catch(err => console.error("❌ Feedback error:", err));
 }
