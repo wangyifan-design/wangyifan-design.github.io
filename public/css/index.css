@@ -66,6 +66,12 @@
   border-radius: 16px 16px 16px 0;
 }
 
+.thinking-message {
+  padding: 0.4rem 0.8rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
 .chat-input {
   position: relative;
   display: flex;
@@ -140,3 +146,4 @@
 .dot:nth-child(3) {
   animation-delay: 0.4s;
 }
+
