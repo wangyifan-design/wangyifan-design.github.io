@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function displayThinking() {
       thinkingMessage = document.createElement('div');
-      thinkingMessage.className = 'chat-message ai';
+      thinkingMessage.className = 'chat-message ai thinking-message';
 
       // 创建动画容器
       const dotsContainer = document.createElement('span');
