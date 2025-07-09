@@ -142,19 +142,30 @@ document.addEventListener("DOMContentLoaded", () => {
     function displayThinking() {
       thinkingMessage = document.createElement('div');
       thinkingMessage.className = 'chat-message ai';
-      thinkingMessage.textContent = 'Thinking...';
+
+      // 创建动画容器
+      const dotsContainer = document.createElement('span');
+      dotsContainer.innerHTML = `
+    Thinking<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+  `;
+
+      thinkingMessage.appendChild(dotsContainer);
       chat.appendChild(thinkingMessage);
     }
 
     function displayAnswer(answer) {
       if (thinkingMessage) {
         chat.removeChild(thinkingMessage);
+        thinkingMessage = null;
       }
       const aiMsg = document.createElement('div');
       aiMsg.className = 'chat-message ai';
-      aiMsg.innerHTML = answer;
       chat.appendChild(aiMsg);
+
+      // 打字机效果
+      typeWriter(answer, aiMsg, 25); // 25毫秒一个字，可根据需要调节速度
     }
+
 
     function switchIllustration() {
       illustrationIndex = (illustrationIndex + 1) % illustrations.length;
@@ -306,4 +317,17 @@ async function sendFeedbackToGoogleSheet(userMessage, aiReply) {
     console.error("❌ Error sending feedback:", error);
     // 可以在这里处理网络错误等
   }
+}
+
+function typeWriter(text, container, delay = 30) {
+  let i = 0;
+  container.innerHTML = '';
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      container.innerHTML += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, delay);
 }
