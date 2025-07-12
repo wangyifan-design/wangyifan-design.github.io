@@ -14,7 +14,7 @@
 
 .project-intro {
   margin-top: 100vh;
-  background: black;
+  background: white;
   padding: 2rem;
   position: relative;
   z-index: 1;
@@ -33,15 +33,16 @@
 
 .title {
   font-size: 2.5rem;
-  color: white;
-  margin-bottom: 0.5rem;
+  color: black;
+  margin-bottom: 5rem;
+  margin-top: 0.5rem;
 }
 
 .subtitle {
   font-family: 'EB Garamond', serif;
   font-style: italic;
   font-size: 1.8rem;
-  color: white;
+  color: black;
   margin-bottom: 0.5rem;
 }
 
@@ -50,7 +51,7 @@
   grid-template-columns: 80px 1fr;
   row-gap: 0.5rem;
   font-size: 0.8rem;
-  color: white;
+  color: black;
   margin-top: 2rem;
 }
 
@@ -63,7 +64,7 @@
   max-width: 600px;
   margin: 0 auto;
   font-size: 1rem;
-  color: white;
+  color: black;
 }
 
 .project-content {
