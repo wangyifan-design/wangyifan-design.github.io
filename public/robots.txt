@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wangyifan-design-github-io.vercel.app/sitemap.xml
