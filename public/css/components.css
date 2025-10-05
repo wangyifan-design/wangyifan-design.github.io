@@ -6,6 +6,13 @@
   position: relative;
 }
 
+.project-link { display: block; }
+
+.project-figure {
+  margin: 0;
+  position: relative;
+}
+
 .project-image {
   border-radius: 12px;
   overflow: hidden;
@@ -119,5 +126,4 @@
   max-width: 90%;
   max-height: 90%;
 }
-
 

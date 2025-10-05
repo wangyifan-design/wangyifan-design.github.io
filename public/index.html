@@ -22,141 +22,167 @@
   <link rel="stylesheet" href="css/index.css">
 
 
-  <title>Wang Yifan Design Portfolio</title>
   <link rel="icon" type="image/png" href="img/logo.svg">
 
 
 </head>
 
 <body>
-  <div class="cursor-dot" id="cursor-dot"></div>
-  <div id="navbar">
-    <div class="nav-left">
-      <img src="img/logo.svg" alt="Logo" class="logo" />
-      <span class="site-title">Wang Yifan Design Portfolio</span>
-    </div>
-    <div class="nav-right">
-      <a href="index.html" class="hover-underline">Work</a>
-      <a href="play.html" class="hover-underline">Play</a>
-      <a href="about.html" class="hover-underline">About</a>
-    </div>
-  </div>
-
-
-  <div class="intro-with-chat">
-    <div class="intro">
-      <img id="illustration" src="img/illustration/1.jpg" alt="Illustration" class="avatar" />
-      <h1>Wang Yifan</h1>
-      <p class="subtitle">Visual Designer | UX/UI Designer | Design Researcher</p>
-    </div>
-
-    <div class="chat-container">
-      <div class="chat-box">
-        <div id="chat-content" class="chat-content"></div>
-        <div class="chat-input">
-          <div class="preset-questions" id="preset-questions">
-            <!-- 预设问题由JS插入 -->
-          </div>
-          <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
-        </div>
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav id="navbar" aria-label="Primary navigation">
+      <div class="nav-left">
+        <a href="index.html" class="logo-link">
+          <img src="img/logo.svg" alt="Wang Yifan logo" class="logo" />
+          <span class="site-title">Wang Yifan Design Portfolio</span>
+        </a>
       </div>
-    </div>
-  </div>
+      <ul class="nav-right">
+        <li><a href="index.html" class="hover-underline">Work</a></li>
+        <li><a href="play.html" class="hover-underline">Play</a></li>
+        <li><a href="about.html" class="hover-underline">About</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <section class="projects home">
-    <div class="grid-sizer"></div>
-    <div class="project"><a href="rockhood.html">
-        <img class="project-image" src="img/rockhood/Snapshot.png" alt="Rockhood.ai" />
-        <div class="project-labels">
-          <span>Rockhood.ai</span>
-          <span>2025</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="heidegger.html">
-        <video class="project-image" src="videos/cover1.mp4" autoplay muted loop playsinline></video>
-        <div class="project-labels">
-          <span>Heidegger’s Heaps of Brocade and Ash</span>
-          <span>2023</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="livingjiagu.html">
-        <video class="project-image" src="videos/cover5.mp4" autoplay muted loop playsinline></video>
-        <div class="project-labels">
-          <span>Living Jiagu</span>
-          <span>2019</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="virtualzoo.html">
-        <img class="project-image" src="img/project-2.jpg" alt="Project 2" />
-        <div class="project-labels">
-          <span>Shengqinyuan - Virtual Zoo</span>
-          <span>2025</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="redpacket.html">
-        <img class="project-image" src="img/project-9.jpg" alt="Project 9" />
-        <div class="project-labels">
-          <span>Bone Script Red Packet</span>
-          <span>2018</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="patapata.html">
-        <video class="project-image" src="videos/cover4.mp4" autoplay muted loop playsinline></video>
-        <div class="project-labels">
-          <span>Philosophy Drama Festival</span>
-          <span>2024</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="poster.html">
-        <img class="project-image" src="img/project-3.jpg" alt="Project 3" />
-        <div class="project-labels">
-          <span>Popular Phrase</span>
-          <span>2023</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="ram.html">
-        <img class="project-image" src="img/project-8.jpg" alt="Project 8" />
-        <div class="project-labels">
-          <span>The mascot of RAM</span>
-          <span>2024</span>
-        </div>
-      </a>
-    </div>
-    <div class="project"><a href="bird.html">
-        <img class="project-image" src="img/project-6.jpg" alt="Project 6" />
-        <div class="project-labels">
-          <span>Online Museum of Bird and Insect Pattern</span>
-          <span>2020</span>
-        </div>
-      </a>
-    </div>
-    <!-- <div class="project">
-      <img class="project-image" src="img/project-7.jpg" alt="Project 7" />
-      <div class="project-labels">
-        <span>Art Criticism Professional Committee</span>
-        <span>2024</span>
-      </div>
-    </div> -->
 
-    <!-- 更多项目 -->
-  </section>
+  <main>
+    <section class="intro-with-chat" aria-labelledby="intro-heading">
+      <header class="intro">
+        <img id="illustration" src="img/illustration/1.jpg" alt="Portrait of Wang Yifan" class="avatar" />
+        <h1 id="intro-heading">Wang Yifan</h1>
+        <p class="subtitle">Visual Designer | UX/UI Designer | Design Researcher</p>
+      </header>
+
+      <section class="chat-container" aria-label="Interactive bio chatbot">
+        <div class="chat-box">
+          <div id="chat-content" class="chat-content"></div>
+          <form class="chat-input" action="#" aria-label="Ask a question about Wang Yifan">
+            <div class="preset-questions" id="preset-questions">
+              <!-- 预设问题由JS插入 -->
+            </div>
+            <label class="visually-hidden" for="user-input">Ask a question about Wang Yifan</label>
+            <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
+          </form>
+        </div>
+      </section>
+    </section>
+
+    <section class="projects home" aria-labelledby="featured-work">
+      <h2 id="featured-work">Featured Work</h2>
+      <div class="grid-sizer" aria-hidden="true"></div>
+      <article class="project">
+        <a href="rockhood.html" class="project-link">
+          <figure class="project-figure">
+            <img class="project-image" src="img/rockhood/Snapshot.png" alt="Rockhood.ai project cover" />
+            <figcaption class="project-labels">
+              <span class="project-title">Rockhood.ai</span>
+              <span class="project-year">2025</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="heidegger.html" class="project-link">
+          <figure class="project-figure">
+            <video class="project-image" src="videos/cover1.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+            <figcaption class="project-labels">
+              <span class="project-title">Heidegger’s Heaps of Brocade and Ash</span>
+              <span class="project-year">2023</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="livingjiagu.html" class="project-link">
+          <figure class="project-figure">
+            <video class="project-image" src="videos/cover5.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+            <figcaption class="project-labels">
+              <span class="project-title">Living Jiagu</span>
+              <span class="project-year">2019</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="virtualzoo.html" class="project-link">
+          <figure class="project-figure">
+            <img class="project-image" src="img/project-2.jpg" alt="Shengqinyuan - Virtual Zoo project cover" />
+            <figcaption class="project-labels">
+              <span class="project-title">Shengqinyuan - Virtual Zoo</span>
+              <span class="project-year">2025</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="redpacket.html" class="project-link">
+          <figure class="project-figure">
+            <img class="project-image" src="img/project-9.jpg" alt="Bone Script Red Packet project cover" />
+            <figcaption class="project-labels">
+              <span class="project-title">Bone Script Red Packet</span>
+              <span class="project-year">2018</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="patapata.html" class="project-link">
+          <figure class="project-figure">
+            <video class="project-image" src="videos/cover4.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+            <figcaption class="project-labels">
+              <span class="project-title">Philosophy Drama Festival</span>
+              <span class="project-year">2024</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="poster.html" class="project-link">
+          <figure class="project-figure">
+            <img class="project-image" src="img/project-3.jpg" alt="Popular Phrase project cover" />
+            <figcaption class="project-labels">
+              <span class="project-title">Popular Phrase</span>
+              <span class="project-year">2023</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="ram.html" class="project-link">
+          <figure class="project-figure">
+            <img class="project-image" src="img/project-8.jpg" alt="The mascot of RAM project cover" />
+            <figcaption class="project-labels">
+              <span class="project-title">The mascot of RAM</span>
+              <span class="project-year">2024</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <article class="project">
+        <a href="bird.html" class="project-link">
+          <figure class="project-figure">
+            <img class="project-image" src="img/project-6.jpg" alt="Online Museum of Bird and Insect Pattern project cover" />
+            <figcaption class="project-labels">
+              <span class="project-title">Online Museum of Bird and Insect Pattern</span>
+              <span class="project-year">2020</span>
+            </figcaption>
+          </figure>
+        </a>
+      </article>
+      <!-- Additional projects can be inserted here -->
+
+      <!-- 更多项目 -->
+    </section>
+  </main>
 
   <footer style="text-align: center; padding: 2rem 0; font-size: 0.9rem; color: #666;">
-    <div style="margin-bottom: 0.5rem;">
-      © 2025 Wang Yifan. All rights reserved.
-    </div>
-    <div>
+    <p style="margin-bottom: 0.5rem;">© 2025 Wang Yifan. All rights reserved.</p>
+    <nav aria-label="Contact links">
       <a href="mailto:vegdogzhenzhen@gmail.com" style="margin: 0 1rem; color: inherit; text-decoration: none;">Email</a>
-      <a href="https://www.linkedin.com/in/yifanwang-design" target="_blank"
+      <a href="https://www.linkedin.com/in/yifanwang-design" target="_blank" rel="noopener"
         style="margin: 0 1rem; color: inherit; text-decoration: none;">LinkedIn</a>
-    </div>
+    </nav>
   </footer>
 
   <script src="js/script.js"></script>

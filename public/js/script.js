@@ -11,6 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (input && chat && illustration && presetQuestionsContainer) {
     let isRequesting = false;
     let thinkingMessage = null;
+    const chatForm = document.querySelector('.chat-input');
+
+    if (chatForm) {
+      chatForm.addEventListener('submit', (event) => event.preventDefault());
+    }
 
     const illustrations = [
       'img/illustration/1.jpg',

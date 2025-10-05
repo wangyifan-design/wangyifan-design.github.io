@@ -12,10 +12,24 @@
 }
 
 .nav-left { display: flex; align-items: center; gap: 10px; }
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
 .logo { height: 30px; }
 .site-title { font-weight: bold; }
+.nav-right {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-right li { display: flex; }
 .nav-right a {
-  margin-left: 20px;
   text-decoration: none;
   color: #000;
   font-weight: 500;
