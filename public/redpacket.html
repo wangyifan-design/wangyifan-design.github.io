@@ -19,18 +19,22 @@
 
 </head>
 <body>
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div id="navbar">
-        <div class="nav-left">
-        <img src="img/logo.svg" alt="Logo" class="logo" />
-        <span class="site-title">Wang Yifan Design Portfolio</span>
-        </div>
-        <div class="nav-right">
-        <a href="index.html" class="hover-underline">Work</a>
-        <a href="play.html" class="hover-underline">Play</a>
-        <a href="about.html" class="hover-underline">About</a>
-        </div>
-    </div>
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+    <header class="site-header">
+        <nav id="navbar" aria-label="Primary navigation">
+            <div class="nav-left">
+                <a href="index.html" class="logo-link">
+                    <img src="img/logo.svg" alt="Wang Yifan logo" class="logo" />
+                    <span class="site-title">Wang Yifan Design Portfolio</span>
+                </a>
+            </div>
+            <ul class="nav-right">
+                <li><a href="index.html" class="hover-underline">Work</a></li>
+                <li><a href="play.html" class="hover-underline">Play</a></li>
+                <li><a href="about.html" class="hover-underline">About</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <section class="project-hero">
     <img src="img/redpacket/cover.jpg" class="hero-image" alt="Project Cover">
@@ -71,9 +75,9 @@
 
     <section  style="margin-bottom: 0;" class="project-content">
         <div class="content-block">
-            <img class="img-medium project-image" src="img/redpacket/1.jpg" class="redpacket">
-            <img class="img-medium project-image" src="img/redpacket/2.jpg" class="redpacket">
-            <img class="img-medium project-image" src="img/redpacket/3.jpg" class="redpacket">
+            <img class="img-medium project-image redpacket" src="img/redpacket/1.jpg" alt="Bone Script Red Packet design 1">
+            <img class="img-medium project-image redpacket" src="img/redpacket/2.jpg" alt="Bone Script Red Packet design 2">
+            <img class="img-medium project-image redpacket" src="img/redpacket/3.jpg" alt="Bone Script Red Packet design 3">
 
         </div>
     </section>
