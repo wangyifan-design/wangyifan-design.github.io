@@ -58,6 +58,11 @@
   margin-top: 2rem;
 }
 
+.meta-table dt,
+.meta-table dd {
+  margin: 0;
+}
+
 .meta-label {
   font-weight: 400;
   color: #777;
