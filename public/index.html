@@ -71,7 +71,7 @@
 
 </head>
 
-<body>
+<body data-page="home">
   <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
   <header class="site-header">
     <nav id="navbar" aria-label="Primary navigation">
@@ -84,6 +84,7 @@
       <ul class="nav-right">
         <li><a href="index.html" class="hover-underline">Work</a></li>
         <li><a href="play.html" class="hover-underline">Play</a></li>
+        <li><a href="chat.html" class="hover-underline">Chat</a></li>
         <li><a href="about.html" class="hover-underline">About</a></li>
       </ul>
     </nav>
@@ -93,7 +94,6 @@
   <main>
     <section class="intro-with-chat" aria-labelledby="intro-heading">
       <header class="intro">
-        <img id="illustration" src="img/illustration/1.jpg" alt="Portrait of Wang Yifan" class="avatar" />
         <h1 id="intro-heading">Wang Yifan</h1>
         <p class="subtitle">Visual Designer | UX/UI Designer | Design Researcher</p>
       </header>
@@ -101,12 +101,22 @@
       <section class="chat-container" aria-label="Interactive bio chatbot">
         <div class="chat-box">
           <div id="chat-content" class="chat-content"></div>
+
           <form class="chat-input" action="#" aria-label="Ask a question about Wang Yifan">
-            <div class="preset-questions" id="preset-questions">
-              <!-- 预设问题由JS插入 -->
+            <div class="preset-questions-viewport">
+              <div class="preset-questions" id="preset-questions">
+                <!-- 预设问题由JS插入 -->
+              </div>
             </div>
-            <label class="visually-hidden" for="user-input">Ask a question about Wang Yifan</label>
-            <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
+            <div class="chat-input-field">
+              <label class="visually-hidden" for="user-input">Ask a question about Wang Yifan</label>
+              <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
+              <button type="submit" class="chat-send-button" aria-label="Send question">
+                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+                  <path d="M9 3l-5.5 5.5 1.06 1.06L8.25 5.87V15h1.5V5.87l3.69 3.69 1.06-1.06L9 3z" fill="currentColor" />
+                </svg>
+              </button>
+            </div>
           </form>
         </div>
       </section>

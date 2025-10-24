@@ -37,13 +37,10 @@
 
 .intro-with-chat {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   padding: 120px 5vw 5vw;
   justify-content: center;
-  align-items: flex-end;
-  gap: 4rem;
-}
-
-@media (max-width: 768px) {
-  .intro-with-chat { flex-direction: column; align-items: center; }
+  align-items: center;
+  gap: 2.5rem;
+  text-align: center;
 }

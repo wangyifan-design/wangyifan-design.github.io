@@ -1,188 +1,205 @@
+const presetQuestions = [
+  "What are you up to these days?",
+  "Which project should I check out first?",
+  "What’s something you're researching lately?",
+  "Tell me about your dog!"
+];
+
+const PAGE_TRANSITION_IN_DURATION = 600;
+const PAGE_TRANSITION_OUT_DURATION = 450;
+const CITATION_PATTERN = /【\d+:[^†]+†[^】]+】/g;
+let isPageTransitioning = false;
+let cachedKnowledge = null;
+let registeredLightbox = null;
+
 document.addEventListener("DOMContentLoaded", () => {
-  // === 聊天功能相关 DOM ===
   const input = document.getElementById('user-input');
   const chat = document.getElementById('chat-content');
-  const illustration = document.getElementById('illustration');
   const presetQuestionsContainer = document.getElementById('preset-questions');
+  const chatForm = document.querySelector('.chat-input');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+  const cursorDot = document.getElementById('cursor-dot');
+  const pageType = document.body.dataset.page || 'default';
 
-  // ✅ 如果这些元素存在，才初始化聊天逻辑
-  if (input && chat && illustration && presetQuestionsContainer) {
-    let isRequesting = false;
-    let thinkingMessage = null;
-    const chatForm = document.querySelector('.chat-input');
+  requestAnimationFrame(() => {
+    document.body.classList.add('page-transition-in');
+    setTimeout(() => document.body.classList.remove('page-transition-in'), PAGE_TRANSITION_IN_DURATION);
+  });
 
-    if (chatForm) {
-      chatForm.addEventListener('submit', (event) => event.preventDefault());
-    }
-
-    const illustrations = [
-      'img/illustration/1.jpg',
-      'img/illustration/2.jpg',
-      'img/illustration/3.jpg',
-      'img/illustration/4.jpg',
-      'img/illustration/5.jpg',
-      'img/illustration/6.jpg',
-      'img/illustration/7.jpg',
-      'img/illustration/8.jpg',
-      'img/illustration/9.jpg',
-      'img/illustration/10.jpg',
-      'img/illustration/11.jpg',
-      'img/illustration/12.jpg',
-      'img/illustration/13.jpg',
-      'img/illustration/14.jpg',
-      'img/illustration/15.jpg',
-    ];
-    let illustrationIndex = 0;
-
-    const presetQuestions = [
-      "What are you up to these days?",
-      "Which project should I check out first?",
-      "What’s something you're researching lately?",
-      "Tell me about your dog!"
-    ];
-    const clickedQuestions = new Set();
-
-    function renderPresetQuestions() {
-      presetQuestionsContainer.innerHTML = '';
-      presetQuestions.forEach((q, i) => {
-        if (!clickedQuestions.has(i)) {
-          const span = document.createElement('span');
-          span.textContent = q;
-          span.title = 'Click to ask';
-          span.addEventListener('click', () => {
-            clickedQuestions.add(i);
-            renderPresetQuestions();
-            startConversation(q);
-          });
-          presetQuestionsContainer.appendChild(span);
-        }
-      });
-      presetQuestionsContainer.style.display = presetQuestionsContainer.children.length ? 'block' : 'none';
-    }
-
-    renderPresetQuestions();
-
-    async function startConversation(message) {
-      if (isRequesting) return;
-      isRequesting = true;
-
-      chat.innerHTML = '';
-      addUserMessage(message);
-      const isChinese = /[\u4e00-\u9fa5]/.test(message);
-      displayThinking();
-
-      try {
-        const knowledge = await fetch('/knowledge.json').then(res => res.json());
-
-        let answer = null;
-        for (let item of knowledge) {
-          if (!item.keywords || !Array.isArray(item.keywords)) continue;
-          for (let keyword of item.keywords) {
-            if (message.toLowerCase().includes(keyword.toLowerCase())) {
-              answer = isChinese ? item.a.zh : item.a.en;
-              break;
-            }
-          }
-          if (answer) break;
-        }
-
-        if (!answer) {
-          console.log("No match in knowledge.json, trying OpenAI...");
-          answer = await fetchFromOpenAI(message);
-        }
-
-        answer = answer.replace(/【\d+:[^†]+†[^】]+】/g, '');
-
-        displayAnswer(answer);
-        sendFeedbackToGoogleSheet(message, answer);
-        switchIllustration();
-      } catch (err) {
-        displayAnswer(`Error: ${err.message}`);
-      } finally {
-        isRequesting = false;
-      }
-    }
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const text = input.value.trim();
-        if (text) {
-          clickedQuestions.add(-1);
-          renderPresetQuestions();
-          startConversation(text);
-          input.value = '';
-        }
-      }
-    });
-
-    async function fetchFromOpenAI(userInput) {
-      try {
-        const apiUrl = '/api/assistant';
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userInput })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data.reply;
-      } catch (error) {
-        return `Error: ${error.message}`;
-      }
-    }
-
-    function addUserMessage(text) {
-      const userMsg = document.createElement('div');
-      userMsg.className = 'chat-message user';
-      userMsg.textContent = text;
-      chat.appendChild(userMsg);
-    }
-
-    function displayThinking() {
-      thinkingMessage = document.createElement('div');
-      thinkingMessage.className = 'chat-message ai thinking-message';
-
-      // 创建动画容器
-      const dotsContainer = document.createElement('span');
-      dotsContainer.innerHTML = `
-    Thinking<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-  `;
-
-      thinkingMessage.appendChild(dotsContainer);
-      chat.appendChild(thinkingMessage);
-    }
-
-    function displayAnswer(answer) {
-      if (thinkingMessage) {
-        chat.removeChild(thinkingMessage);
-        thinkingMessage = null;
-      }
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'chat-message ai';
-      chat.appendChild(aiMsg);
-
-      // 打字机效果
-      typeWriter(answer, aiMsg, 25); // 25毫秒一个字，可根据需要调节速度
-    }
-
-
-    function switchIllustration() {
-      illustrationIndex = (illustrationIndex + 1) % illustrations.length;
-      illustration.src = illustrations[illustrationIndex];
-    }
+  if (pageType === 'home') {
+    setupHomeChat(input, presetQuestionsContainer, chatForm);
+  } else if (pageType === 'chat') {
+    setupChatPage(input, chat, presetQuestionsContainer, chatForm);
   }
 
-  // ✅ 以下逻辑所有页面都适用
+  initNavigationScroll();
+  initCursor(cursorDot);
+  initLightbox(lightbox, lightboxImg);
+});
 
-  // navbar 滚动隐藏
-  let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+function setupHomeChat(input, container, form) {
+  if (!input || !container || !form) return;
+
+  renderPresetQuestions(container, (question) => navigateToChat(question), { removeOnClick: false });
+
+  if (!form.dataset.homeSubmitBound) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = input.value.trim();
+      if (!value) return;
+      navigateToChat(value);
+      input.value = '';
+    });
+    form.dataset.homeSubmitBound = 'true';
+  }
+}
+
+function navigateToChat(rawMessage) {
+  const message = (rawMessage || '').trim();
+  if (!message) return;
+
+  sessionStorage.setItem('initialQuestion', message);
+  triggerPageExit(() => {
+    window.location.href = 'chat.html';
+  });
+}
+
+function setupChatPage(input, chat, container, form) {
+  if (!input || !chat || !container || !form) return;
+
+  let isRequesting = false;
+  let thinkingMessage = null;
+
+  renderPresetQuestions(container, (question) => {
+    handleQuestion(question);
+  });
+
+  if (!form.dataset.chatSubmitBound) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = input.value.trim();
+      if (!value) return;
+      handleQuestion(value);
+      input.value = '';
+    });
+    form.dataset.chatSubmitBound = 'true';
+  }
+
+  const storedQuestion = sessionStorage.getItem('initialQuestion');
+  if (storedQuestion) {
+    sessionStorage.removeItem('initialQuestion');
+    handleQuestion(storedQuestion);
+  }
+
+  async function handleQuestion(rawMessage) {
+    const message = (rawMessage || '').trim();
+    if (!message || isRequesting) return;
+
+    isRequesting = true;
+    chat.innerHTML = '';
+    addUserMessage(chat, message);
+    const isChinese = /[\u4e00-\u9fa5]/.test(message);
+    thinkingMessage = displayThinking(chat);
+
+    try {
+      const knowledge = await fetchKnowledge();
+      let answer = findAnswerFromKnowledge(knowledge, message, isChinese);
+
+      if (!answer) {
+        answer = await fetchFromOpenAI(message);
+      }
+
+      answer = sanitizeAnswer(answer);
+      displayAnswer(chat, answer, thinkingMessage);
+      sendFeedbackToGoogleSheet(message, answer);
+    } catch (error) {
+      displayAnswer(chat, `Error: ${error.message}`, thinkingMessage);
+    } finally {
+      isRequesting = false;
+    }
+  }
+}
+
+function renderPresetQuestions(container, onSelect, { removeOnClick = true } = {}) {
+  if (!container) return;
+
+  const clicked = container.__presetClicked || new Set();
+  container.__presetClicked = clicked;
+
+  const render = () => {
+    container.innerHTML = '';
+
+    presetQuestions.forEach((question, index) => {
+      if (removeOnClick && clicked.has(index)) {
+        return;
+      }
+      const span = document.createElement('span');
+      span.className = 'preset-question';
+      span.dataset.index = String(index);
+      span.dataset.question = question;
+      span.title = 'Click to ask';
+      span.textContent = question;
+      container.appendChild(span);
+    });
+
+    if (!removeOnClick && !container.dataset.scrollCloned && container.children.length) {
+      Array.from(container.children).forEach(node => {
+        const clone = node.cloneNode(true);
+        clone.dataset.clone = 'true';
+        container.appendChild(clone);
+      });
+      container.dataset.scrollCloned = 'true';
+    }
+
+    container.style.display = container.children.length ? '' : 'none';
+
+    const viewport = container.parentElement;
+    if (viewport && viewport.classList && viewport.classList.contains('preset-questions-viewport')) {
+      viewport.style.display = container.children.length ? '' : 'none';
+    }
+  };
+
+  render();
+
+  if (container.__presetHandler) {
+    container.removeEventListener('click', container.__presetHandler);
+  }
+
+  const handler = (event) => {
+    const span = event.target.closest('.preset-question');
+    if (!span || !container.contains(span)) return;
+
+    const question = span.dataset.question || span.textContent;
+    const index = Number(span.dataset.index);
+
+    if (removeOnClick && !Number.isNaN(index)) {
+      clicked.add(index);
+      render();
+    }
+
+    if (question) {
+      onSelect(question);
+    }
+  };
+
+  container.__presetHandler = handler;
+  container.addEventListener('click', handler);
+}
+
+function triggerPageExit(callback) {
+  if (isPageTransitioning) return;
+  isPageTransitioning = true;
+  document.body.classList.add('page-transition-out');
+  document.body.classList.remove('page-transition-in');
+  setTimeout(callback, PAGE_TRANSITION_OUT_DURATION);
+}
+
+function initNavigationScroll() {
   const navbar = document.getElementById('navbar');
+  if (!navbar) return;
+
+  let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
   let ticking = false;
 
   window.addEventListener('scroll', () => {
@@ -199,33 +216,21 @@ document.addEventListener("DOMContentLoaded", () => {
       ticking = true;
     }
   });
+}
 
-  // // 图片滚动浮现
-  // window.addEventListener('scroll', () => {
-  //   const images = document.querySelectorAll('.project-image');
-  //   images.forEach((image) => {
-  //     const imagePosition = image.getBoundingClientRect().top;
-  //     const windowHeight = window.innerHeight;
-  //     if (imagePosition < windowHeight * 0.95) {
-  //       image.classList.add('visible');
-  //     }
-  //   });
-  // });
+function initCursor(cursorDot) {
+  if (!cursorDot) return;
 
+  document.addEventListener('mousemove', (event) => {
+    cursorDot.style.top = `${event.clientY}px`;
+    cursorDot.style.left = `${event.clientX}px`;
 
-  // 自定义鼠标跟随
-  const cursorDot = document.getElementById('cursor-dot');
-
-  document.addEventListener('mousemove', (e) => {
-    cursorDot.style.top = `${e.clientY}px`;
-    cursorDot.style.left = `${e.clientX}px`;
-
-    // 检查是否 hover 在可点击元素上
-    const target = document.elementFromPoint(e.clientX, e.clientY);
+    const target = document.elementFromPoint(event.clientX, event.clientY);
     if (target && (target.tagName === 'A' ||
       target.tagName === 'BUTTON' ||
       target.classList.contains('preset-questions') ||
-      target.closest('.project') ||
+      target.classList.contains('preset-question') ||
+      (target.closest && target.closest('.project')) ||
       typeof target.onclick === 'function')) {
       cursorDot.style.width = '36px';
       cursorDot.style.height = '36px';
@@ -234,10 +239,13 @@ document.addEventListener("DOMContentLoaded", () => {
       cursorDot.style.height = '20px';
     }
   });
+}
 
+function initLightbox(lightbox, lightboxImg) {
+  registeredLightbox = lightbox;
 
+  if (!lightbox || !lightboxImg) return;
 
-  //   play点击全屏
   document.querySelectorAll('.project-image').forEach(img => {
     if (img.tagName === 'IMG') {
       img.addEventListener('click', () => {
@@ -247,16 +255,111 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  window.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
+  window.addEventListener('click', (event) => {
+    if (event.target === lightbox) {
       lightbox.style.display = 'none';
     }
   });
+}
 
-  function closeLightbox() {
-    lightbox.style.display = 'none';
+function closeLightbox() {
+  if (registeredLightbox) {
+    registeredLightbox.style.display = 'none';
   }
-});
+}
+
+async function fetchKnowledge() {
+  if (cachedKnowledge) return cachedKnowledge;
+
+  const candidates = ['knowledge.json', '/knowledge.json'];
+  let response = null;
+
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      response = res;
+      break;
+    } catch (error) {
+      // fall through to try next candidate
+    }
+  }
+
+  if (!response) {
+    throw new Error('Failed to load knowledge base');
+  }
+
+  cachedKnowledge = await response.json();
+  return cachedKnowledge;
+}
+
+function findAnswerFromKnowledge(knowledge, message, isChinese) {
+  if (!Array.isArray(knowledge)) return null;
+
+  const normalizedMessage = message.toLowerCase();
+  for (const item of knowledge) {
+    if (!item.keywords || !Array.isArray(item.keywords)) continue;
+    for (const keyword of item.keywords) {
+      if (normalizedMessage.includes(String(keyword).toLowerCase())) {
+        if (isChinese && item.a && item.a.zh) {
+          return item.a.zh;
+        }
+        if (item.a && item.a.en) {
+          return item.a.en;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+async function fetchFromOpenAI(userInput) {
+  const apiUrl = '/api/assistant';
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: userInput })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.reply;
+}
+
+function addUserMessage(container, text) {
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-message user';
+  userMsg.textContent = text;
+  container.appendChild(userMsg);
+}
+
+function displayThinking(container) {
+  const thinkingMessage = document.createElement('div');
+  thinkingMessage.className = 'chat-message ai thinking-message';
+  const dotsContainer = document.createElement('span');
+  dotsContainer.innerHTML = `Thinking<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>`;
+  thinkingMessage.appendChild(dotsContainer);
+  container.appendChild(thinkingMessage);
+  return thinkingMessage;
+}
+
+function displayAnswer(container, answer, thinkingMessage) {
+  if (thinkingMessage && thinkingMessage.parentNode === container) {
+    container.removeChild(thinkingMessage);
+  }
+  const aiMsg = document.createElement('div');
+  aiMsg.className = 'chat-message ai';
+  container.appendChild(aiMsg);
+  typeWriter(answer, aiMsg, 25);
+}
+
+function sanitizeAnswer(answer) {
+  if (!answer) return '';
+  return answer.replace(CITATION_PATTERN, '');
+}
 
 // 页面加载时就检测可视区域元素并手动加上 .visible 类
 function handleVisibilityOnLoad() {

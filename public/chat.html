@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat with Wang Yifan</title>
+  <meta name="description" content="Ask Wang Yifan about projects, research, and design practice." />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV9ZKLPVH4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-PV9ZKLPVH4');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="icon" type="image/png" href="img/logo.svg">
+</head>
+
+<body data-page="chat">
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav id="navbar" aria-label="Primary navigation">
+      <div class="nav-left">
+        <a href="index.html" class="logo-link">
+          <img src="img/logo.svg" alt="Wang Yifan logo" class="logo" />
+          <span class="site-title">Wang Yifan Design Portfolio</span>
+        </a>
+      </div>
+      <ul class="nav-right">
+        <li><a href="index.html" class="hover-underline">Work</a></li>
+        <li><a href="play.html" class="hover-underline">Play</a></li>
+        <li><a href="chat.html" class="hover-underline">Chat</a></li>
+        <li><a href="about.html" class="hover-underline">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="chat-page-hero" aria-labelledby="chat-heading">
+      <header class="chat-page-intro">
+        <h1 id="chat-heading">Let’s Chat</h1>
+        <p class="subtitle">Ask anything about my work, process, or interests.</p>
+      </header>
+
+      <section class="chat-container" aria-label="Interactive bio chatbot">
+        <div class="chat-box">
+          <div id="chat-content" class="chat-content"></div>
+          <form class="chat-input" action="#" aria-label="Ask a question about Wang Yifan">
+            <div class="preset-questions-viewport">
+              <div class="preset-questions" id="preset-questions"></div>
+            </div>
+
+            <div class="chat-input-field">
+              <label class="visually-hidden" for="user-input">Ask a question about Wang Yifan</label>
+              <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
+              <button type="submit" class="chat-send-button" aria-label="Send question">
+                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+                  <path d="M9 3l-5.5 5.5 1.06 1.06L8.25 5.87V15h1.5V5.87l3.69 3.69 1.06-1.06L9 3z" fill="currentColor" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer style="text-align: center; padding: 2rem 0; font-size: 0.9rem; color: #666;">
+    <p style="margin-bottom: 0.5rem;">© 2025 Wang Yifan. All rights reserved.</p>
+    <nav aria-label="Contact links">
+      <a href="mailto:vegdogzhenzhen@gmail.com" style="margin: 0 1rem; color: inherit; text-decoration: none;">Email</a>
+      <a href="https://www.linkedin.com/in/yifanwang-design" target="_blank" rel="noopener"
+        style="margin: 0 1rem; color: inherit; text-decoration: none;">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+
+</html>
