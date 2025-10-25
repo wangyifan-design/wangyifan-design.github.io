@@ -2,9 +2,12 @@
   margin-top: 100px;
   display: flex;
   flex-wrap: wrap;
-  margin-left: 2rem;
-  margin-right: 1.5rem;
   box-sizing: border-box;
+}
+
+body[data-page="play"] main > section {
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .projects.play .grid-sizer,
@@ -18,5 +21,10 @@
   .projects.play .grid-sizer,
   .projects.play .project {
     width: 100%;
+  }
+
+  body[data-page="play"] main > section {
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 }
