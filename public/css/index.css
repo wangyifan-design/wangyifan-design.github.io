@@ -161,17 +161,14 @@
 
 .projects.home {
   /* 使用 margin 而非 padding，避免 Masonry 误判容器宽度被挤爆 */
-  /* 右边减 0.5rem 以抵消 Masonry gutter，确保视觉对称 */
-  margin-left: 2rem;
-  margin-right: 2rem;
+  /* gutter 由 Masonry 处理，这里保持左右 margin 对称 */
   box-sizing: border-box;
 }
 
-/* Masonry 列宽设为 (100% - 总 gutter) / 2 */
+/* Masonry 列宽设为 (100% - gutter) / 2，避免右侧额外空隙 */
 .projects.home .grid-sizer,
 .projects.home .project {
-  width: calc(50% - 8px);
-  /* 如果 Masonry gutter 是 16px（两列 → 每列减 8px） */
+  width: calc(50% - 4px);
   margin-bottom: 0.5rem;
 }
 
@@ -180,6 +177,18 @@
   .projects.home .grid-sizer,
   .projects.home .project {
     width: 100%;
+  }
+}
+
+body[data-page="home"] main > section {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+@media (max-width: 768px) {
+  body[data-page="home"] main > section {
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 }
 
@@ -245,22 +254,34 @@ body[data-page="home"] .preset-question {
   text-align: center;
 }
 
+.chat-page-hero.hide-intro .chat-page-intro {
+  display: none;
+}
+
 .chat-page-intro {
   max-width: 520px;
 }
 
 body[data-page="chat"] .chat-container {
   max-width: 720px;
+  width: 100%;
 }
 
 body[data-page="chat"] .chat-box {
   background: #fff;
   border-radius: 24px;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.5rem;
+  min-height: 60vh;
+  box-sizing: border-box;
 }
 
 body[data-page="chat"] .chat-content {
-  min-height: 260px;
+  flex: 1;
+  min-height: 0;
   padding: 1rem;
   border-radius: 16px;
   overflow-y: auto;
@@ -270,6 +291,7 @@ body[data-page="chat"] .chat-input {
   gap: 1.25rem;
   width: 100%;
   align-items: stretch;
+  margin-top: auto;
 }
 
 body[data-page="chat"] .preset-questions {
@@ -324,5 +346,15 @@ body[data-page="chat"] .preset-question {
     width: 40px;
     height: 40px;
     right: 10px;
+  }
+
+  body[data-page="chat"] .chat-page-intro {
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  body[data-page="chat"] .chat-box {
+    padding: 1.5rem;
+    min-height: 70vh;
   }
 }

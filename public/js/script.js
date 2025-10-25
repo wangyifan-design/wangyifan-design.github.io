@@ -1,3 +1,5 @@
+document.documentElement.classList.add('js-ready');
+
 const presetQuestions = [
   "What are you up to these days?",
   "Which project should I check out first?",
@@ -11,6 +13,7 @@ const CITATION_PATTERN = /【\d+:[^†]+†[^】]+】/g;
 let isPageTransitioning = false;
 let cachedKnowledge = null;
 let registeredLightbox = null;
+let closeMobileNav = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById('user-input');
@@ -33,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupChatPage(input, chat, presetQuestionsContainer, chatForm);
   }
 
+  initMobileNavigation();
   initNavigationScroll();
   initCursor(cursorDot);
   initLightbox(lightbox, lightboxImg);
@@ -70,6 +74,21 @@ function setupChatPage(input, chat, container, form) {
 
   let isRequesting = false;
   let thinkingMessage = null;
+  const chatHero = document.querySelector('.chat-page-hero');
+  let hasConversation = false;
+
+  const updateChatIntroVisibility = () => {
+    if (!chatHero) return;
+    chatHero.classList.toggle('hide-intro', hasConversation);
+  };
+
+  const markConversationStarted = () => {
+    if (hasConversation) return;
+    hasConversation = true;
+    updateChatIntroVisibility();
+  };
+
+  updateChatIntroVisibility();
 
   renderPresetQuestions(container, (question) => {
     handleQuestion(question);
@@ -99,6 +118,7 @@ function setupChatPage(input, chat, container, form) {
     isRequesting = true;
     chat.innerHTML = '';
     addUserMessage(chat, message);
+    markConversationStarted();
     const isChinese = /[\u4e00-\u9fa5]/.test(message);
     thinkingMessage = displayThinking(chat);
 
@@ -205,6 +225,9 @@ function initNavigationScroll() {
   window.addEventListener('scroll', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
+        if (typeof closeMobileNav === 'function' && document.body.classList.contains('nav-menu-open')) {
+          closeMobileNav();
+        }
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const delta = scrollTop - lastScrollTop;
         if (Math.abs(delta) > 5) {
@@ -216,6 +239,121 @@ function initNavigationScroll() {
       ticking = true;
     }
   });
+}
+
+function initMobileNavigation() {
+  const navbar = document.getElementById('navbar');
+  if (!navbar) return;
+
+  const menu = navbar.querySelector('.nav-right');
+  if (!menu) return;
+
+  if (!menu.id) {
+    menu.id = 'primary-navigation';
+  }
+
+  let toggle = navbar.querySelector('.nav-toggle');
+  let closeButton = navbar.querySelector('.nav-close');
+  if (!toggle) {
+    toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'nav-toggle';
+    toggle.setAttribute('aria-label', 'Toggle navigation');
+
+    for (let index = 0; index < 3; index += 1) {
+      const bar = document.createElement('span');
+      bar.className = 'nav-toggle-bar';
+      toggle.appendChild(bar);
+    }
+
+    navbar.insertBefore(toggle, menu);
+  }
+
+  if (!closeButton) {
+    closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'nav-close';
+    closeButton.setAttribute('aria-label', 'Close navigation');
+    const icon = document.createElement('span');
+    icon.className = 'nav-close-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    closeButton.appendChild(icon);
+    navbar.appendChild(closeButton);
+  }
+
+  toggle.setAttribute('aria-controls', menu.id);
+  toggle.setAttribute('aria-expanded', 'false');
+  menu.setAttribute('aria-hidden', 'true');
+  closeButton.setAttribute('aria-hidden', 'true');
+
+  const mediaQuery = window.matchMedia('(max-width: 768px)');
+
+  const setMenuState = (shouldOpen) => {
+    menu.classList.toggle('is-open', shouldOpen);
+    toggle.classList.toggle('is-active', shouldOpen);
+    toggle.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+    menu.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+    document.body.classList.toggle('nav-menu-open', shouldOpen);
+    closeButton.classList.toggle('is-visible', shouldOpen);
+    closeButton.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+  };
+
+  const closeMenu = () => setMenuState(false);
+  closeMobileNav = closeMenu;
+
+  const handleToggle = () => {
+    if (!mediaQuery.matches) return;
+    setMenuState(!menu.classList.contains('is-open'));
+  };
+
+  if (!toggle.dataset.toggleBound) {
+    toggle.addEventListener('click', handleToggle);
+    toggle.dataset.toggleBound = 'true';
+  }
+
+  if (!closeButton.dataset.closeBound) {
+    closeButton.addEventListener('click', closeMenu);
+    closeButton.dataset.closeBound = 'true';
+  }
+
+  if (!menu.dataset.mobileNavBound) {
+    menu.addEventListener('click', (event) => {
+      if (event.target.closest('a')) {
+        closeMenu();
+      }
+    });
+    menu.dataset.mobileNavBound = 'true';
+  }
+
+  const handleDocumentClick = (event) => {
+    if (!menu.classList.contains('is-open')) return;
+    if (navbar.contains(event.target)) return;
+    closeMenu();
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape' && menu.classList.contains('is-open')) {
+      closeMenu();
+      toggle.focus();
+    }
+  };
+
+  document.addEventListener('click', handleDocumentClick);
+  document.addEventListener('keydown', handleKeydown);
+
+  const handleMediaChange = (event) => {
+    if (!event.matches) {
+      closeMenu();
+      closeButton.classList.remove('is-visible');
+      closeButton.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  if (typeof mediaQuery.addEventListener === 'function') {
+    mediaQuery.addEventListener('change', handleMediaChange);
+  } else if (typeof mediaQuery.addListener === 'function') {
+    mediaQuery.addListener(handleMediaChange);
+  }
 }
 
 function initCursor(cursorDot) {
