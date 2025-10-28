@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Detective</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="led"></div>
+        <h1>Project_Detective <small>alpha</small></h1>
+      </div>
+      <div class="controls">
+        <button id="langToggle" class="btn">中文 / EN</button>
+        <button id="resetBtn" class="btn danger">Reset</button>
+      </div>
+      <div class="panel">
+        <h3 id="filesHeader">Files</h3>
+      </div>
+      <div id="files" class="files" aria-label="evidence files list"></div>
+      <div class="progress">
+        <div class="progress-head">
+          <span class="muted" id="progressLabel">Progress</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="bar"><i id="barFill"></i><small id="barText">0 / 20</small></div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="stagebar">
+        <span class="badge" id="stageBadge">I · The Request</span>
+        <span class="muted" id="stageHint">Follow Jane's lead. Type to respond.</span>
+      </div>
+      <div class="chatwrap">
+        <div class="messages" id="messages" aria-live="polite"></div>
+      </div>
+      <div class="composer">
+        <div class="composer-inner">
+          <input id="input" class="input" placeholder="Type here… / 在此输入…" autocomplete="off" />
+          <button id="send" class="btn primary">Send</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Delete modal -->
+  <div class="modal" id="deleteModal" role="dialog" aria-modal="true">
+    <div class="card">
+      <h4 id="delTitle">DELETE LOGS?</h4>
+      <p id="delBody" class="muted">Do you want to delete the selected evidence? This action cannot be undone.</p>
+      <div class="row">
+        <button id="delY" class="btn danger">Delete</button>
+        <button id="delN" class="btn">Keep</button>
+        <button id="delO" class="btn primary">Override</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image preview modal -->
+  <div class="modal" id="previewModal" role="dialog" aria-modal="true">
+    <div class="card">
+      <h4 id="pvTitle">Preview</h4>
+      <img id="pvImg" alt="" />
+      <div id="pvHtml" class="pv-html" hidden></div>
+      <p id="pvDesc" class="muted"></p>
+      <div class="row">
+        <button id="pvClose" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
