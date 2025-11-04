@@ -26,19 +26,34 @@
       <div class="progress">
         <div class="progress-head">
           <span class="muted" id="progressLabel">Progress</span>
-          <span id="progressPct">0%</span>
+          <span id="progressPct">0 / 20</span>
         </div>
         <div class="bar"><i id="barFill"></i><small id="barText">0 / 20</small></div>
       </div>
     </aside>
 
     <main>
-      <div class="stagebar">
-        <span class="badge" id="stageBadge">I · The Request</span>
-        <span class="muted" id="stageHint">Follow Jane's lead. Type to respond.</span>
+      <div class="searchbar">
+        <input id="chatSearch" class="search-input" placeholder="Search chat… / 搜索聊天…" autocomplete="off" />
+        <div class="search-meta">
+          <span id="searchStatus" class="muted">Search chat</span>
+          <div class="search-buttons">
+            <button id="searchPrev" class="search-btn" aria-label="Previous match">↑</button>
+            <button id="searchNext" class="search-btn" aria-label="Next match">↓</button>
+          </div>
+        </div>
       </div>
-      <div class="chatwrap">
+      <div class="chatwrap" id="chatwrap">
         <div class="messages" id="messages" aria-live="polite"></div>
+        <aside id="previewPane" class="preview-pane" aria-live="polite" hidden>
+          <div class="preview-head">
+            <h4 id="pvTitle">Preview</h4>
+            <button id="pvClose" class="btn">Close</button>
+          </div>
+          <img id="pvImg" alt="" hidden />
+          <div id="pvHtml" class="pv-html" hidden></div>
+          <p id="pvDesc" class="muted"></p>
+        </aside>
       </div>
       <div class="composer">
         <div class="composer-inner">
@@ -58,19 +73,6 @@
         <button id="delY" class="btn danger">Delete</button>
         <button id="delN" class="btn">Keep</button>
         <button id="delO" class="btn primary">Override</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Image preview modal -->
-  <div class="modal" id="previewModal" role="dialog" aria-modal="true">
-    <div class="card">
-      <h4 id="pvTitle">Preview</h4>
-      <img id="pvImg" alt="" />
-      <div id="pvHtml" class="pv-html" hidden></div>
-      <p id="pvDesc" class="muted"></p>
-      <div class="row">
-        <button id="pvClose" class="btn">Close</button>
       </div>
     </div>
   </div>

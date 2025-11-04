@@ -22,9 +22,9 @@ window.CONTENT = (function () {
     },
     zh: {
       files: "档案",
-      progress: "进度",
+      progress: "档案收集进度",
       stageHint: "跟随 Jane 的引导，通过输入来回应。",
-      systemInit: "你是一个侦探。你将接收一系列来自咨询者的对话、视觉记录与个人陈述。你的首要目标是通过语言与证据的交叉推理，重建被遮蔽的真相。请保持冷静与自然的语气。在共情与理性之间维持平衡。不得在未经验证的情况下擅自推断结论；不得伪造或修改数据流；不得访问未经授权的记忆区。所有交互均受中央监督系统实时监控，以防偏离协议。",
+      systemInit: "你是一个侦探。你将接收一系列来自咨询者的对话、视觉记录与个人陈述。你的首要目标是通过语言与证据的交叉推理，重建被遮蔽的真相。请保持冷静与自然的语气。试着在咨询者的回复中找到关键信息并追问。在共情与理性之间维持平衡。不得在未经验证的情况下擅自推断结论；不得伪造或修改数据流；不得访问未经授权的记忆区。所有交互均受中央监督系统实时监控，以防偏离协议。",
       systemRecovered: (names) =>
         `[已获得档案：${names.join("、")}]`,
       delTitle: "删除日志？",
@@ -94,149 +94,149 @@ window.CONTENT = (function () {
 
   const nextId = () => EVIDENCE.length + 1;
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "course_brief",
-  title: {
-    en: "Course Overview — Artificial Beings",
-    zh: "仿生人课程简介",
-  },
-  desc: {
-    en: "Design Theory and Practice of Artificial Beings — syllabus summary.",
-    zh: "《仿生人的设计理论与实践》课程介绍。",
-  },
-  htmlSrc: {
-    en: "reports/course_brief.en.html",
-    zh: "reports/course_brief.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "course_brief",
+    title: {
+      en: "Course Overview — Artificial Beings",
+      zh: "仿生人课程简介",
+    },
+    desc: {
+      en: "Design Theory and Practice of Artificial Beings — syllabus summary.",
+      zh: "《仿生人的设计理论与实践》课程介绍。",
+    },
+    htmlSrc: {
+      en: "reports/course_brief.en.html",
+      zh: "reports/course_brief.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "tech_report",
-  title: {
-    en: "Technical Report Excerpt",
-    zh: "事故技术报告节选",
-  },
-  desc: {
-    en: "Brake system anomaly findings from report M-109.",
-    zh: "机械取证报告 M-109 中关于刹车异常的结论。",
-  },
-  htmlSrc: {
-    en: "reports/tech_report.en.html",
-    zh: "reports/tech_report.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "tech_report",
+    title: {
+      en: "Technical Report Excerpt",
+      zh: "事故技术报告节选",
+    },
+    desc: {
+      en: "Brake system anomaly findings from report M-109.",
+      zh: "机械取证报告 M-109 中关于刹车异常的结论。",
+    },
+    htmlSrc: {
+      en: "reports/tech_report.en.html",
+      zh: "reports/tech_report.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "grant_overview",
-  title: {
-    en: "Horizon Grant Profile",
-    zh: "地平线基金简介",
-  },
-  desc: {
-    en: "Summary of the Horizon Research Grant team and scope.",
-    zh: "Horizon Research Grant 的资助范围与团队成员。",
-  },
-  htmlSrc: {
-    en: "reports/grant_overview.en.html",
-    zh: "reports/grant_overview.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "grant_overview",
+    title: {
+      en: "Horizon Grant Profile",
+      zh: "地平线基金简介",
+    },
+    desc: {
+      en: "Summary of the Horizon Research Grant team and scope.",
+      zh: "Horizon Research Grant 的资助范围与团队成员。",
+    },
+    htmlSrc: {
+      en: "reports/grant_overview.en.html",
+      zh: "reports/grant_overview.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "draft_email",
-  title: {
-    en: "Draft Email to Dean",
-    zh: "致院长的邮件草稿",
-  },
-  desc: {
-    en: "Unsent note from John about Horizon fund irregularities.",
-    zh: "John 关于 Horizon 基金异常的未发送邮件。",
-  },
-  htmlSrc: {
-    en: "reports/draft_email.en.html",
-    zh: "reports/draft_email.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "draft_email",
+    title: {
+      en: "Draft Email to Dean",
+      zh: "致院长的邮件草稿",
+    },
+    desc: {
+      en: "Unsent note from John about Horizon fund irregularities.",
+      zh: "John 关于 Horizon 基金异常的未发送邮件。",
+    },
+    htmlSrc: {
+      en: "reports/draft_email.en.html",
+      zh: "reports/draft_email.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "clink_report",
-  title: {
-    en: "C-Link System Report",
-    zh: "连接系统研究报告",
-  },
-  desc: {
-    en: "Restricted protocol summary for the C-Link neural interface.",
-    zh: "C-Link 神经连接系统的内部协议摘要。",
-  },
-  htmlSrc: {
-    en: "reports/clink_report.en.html",
-    zh: "reports/clink_report.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "clink_report",
+    title: {
+      en: "C-Link System Report",
+      zh: "连接系统研究报告",
+    },
+    desc: {
+      en: "Restricted protocol summary for the C-Link neural interface.",
+      zh: "C-Link 神经连接系统的内部协议摘要。",
+    },
+    htmlSrc: {
+      en: "reports/clink_report.en.html",
+      zh: "reports/clink_report.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "emotion_module",
-  title: {
-    en: "Emotion Module Test Log",
-    zh: "情感模块测试日志",
-  },
-  desc: {
-    en: "Unregistered Emotion Kernel notes uploaded by Eli.",
-    zh: "Eli 上传的未备案情感模块测试记录。",
-  },
-  htmlSrc: {
-    en: "reports/emotion_module.en.html",
-    zh: "reports/emotion_module.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "emotion_module",
+    title: {
+      en: "Emotion Module Test Log",
+      zh: "情感模块测试日志",
+    },
+    desc: {
+      en: "Unregistered Emotion Kernel notes uploaded by Eli.",
+      zh: "Eli 上传的未备案情感模块测试记录。",
+    },
+    htmlSrc: {
+      en: "reports/emotion_module.en.html",
+      zh: "reports/emotion_module.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "zoe_email",
-  title: {
-    en: "Email from Zoë",
-    zh: "Zoë 致 John 的邮件",
-  },
-  desc: {
-    en: "Message requesting another connection session.",
-    zh: "请求再次进行连接实验的邮件。",
-  },
-  htmlSrc: {
-    en: "reports/zoe_email.en.html",
-    zh: "reports/zoe_email.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "zoe_email",
+    title: {
+      en: "Email from Zoë",
+      zh: "Zoë 致 John 的邮件",
+    },
+    desc: {
+      en: "Message requesting another connection session.",
+      zh: "请求再次进行连接实验的邮件。",
+    },
+    htmlSrc: {
+      en: "reports/zoe_email.en.html",
+      zh: "reports/zoe_email.zh.html",
+    },
+    unlocked: false,
+  });
 
-EVIDENCE.push({
-  id: nextId(),
-  code: "chat_log",
-  title: {
-    en: "Zoë & John Chat Log",
-    zh: "Zoë 与 John 的聊天记录",
-  },
-  desc: {
-    en: "Extracted messages discussing connection sessions.",
-    zh: "关于连接实验的聊天摘录。",
-  },
-  htmlSrc: {
-    en: "reports/chat_log.en.html",
-    zh: "reports/chat_log.zh.html",
-  },
-  unlocked: false,
-});
+  EVIDENCE.push({
+    id: nextId(),
+    code: "chat_log",
+    title: {
+      en: "Zoë & John Chat Log",
+      zh: "Zoë 与 John 的聊天记录",
+    },
+    desc: {
+      en: "Extracted messages discussing connection sessions.",
+      zh: "关于连接实验的聊天摘录。",
+    },
+    htmlSrc: {
+      en: "reports/chat_log.en.html",
+      zh: "reports/chat_log.zh.html",
+    },
+    unlocked: false,
+  });
 
   // Bilingual keyword routing regex
   const KEY = {
@@ -252,10 +252,11 @@ EVIDENCE.push({
     car_crash: [/car[\s-]?crash|车祸/i],
     accident: [/accident|意外/i],
     callPolice: [/call.*police|报警|警察/i],
-    lostMemory: [/lost.*memory|记不起|失忆|记得|重伤/i],
+    lostMemory: [/lost.*memory|记不起|失忆|重伤/i],
 
     // 人物
-    johnQuincy: [/john\s+quincy|john/i],
+    johnQuincy: [/john\s+quincy/i],
+    johnPartial: [/\bhusband\b|\bjohn\b|丈夫|老公/i],
     eli: [/eli|学生/i],
     zoe: [/zo[eë]|zoë|Eli的女朋友/i],
 
@@ -270,17 +271,17 @@ EVIDENCE.push({
     contacts: [/contacts|通讯录|电话簿|联系人/i],
     angerScene: [/生气|抢手机|抓手机|愤怒|吵|争执/i],
     steering: [/steering|方向盘/i],
-    thatCar: [/that\s*car|那辆车|蓝光|蓝色车/i],
+    thatCar: [/that\s*car|那辆车|Eli的车/i],
     notCrazy: [/crazy|疯了?|疯/i],
     pregnant: [/pregnant|怀孕|怀了|有.*宝宝/i],
     anniversary: [/anniversary|纪念日|周年/i],
     embezzle: [/embezzl|挪用|造假|占用/i],
     reportDocs: [/(research\s*report|研究报告|研究成果|techn(ical)?\s*paper)/i],
-    fatherSon: [/father|父子|Ken|Barrymore/i],
+    fatherSon: [/father|父子|Ken Barrymore/i],
     girlfriend: [/girlfriend|女朋友/i],
-    connectionMail: [/connection\b|连接|邮件/i],
+    connectionMail: [/connection\b|连接/i],
 
-    fight: [/atmosphere|fight|不愉快|争吵|吵架/i],
+    fight: [/atmosphere|fight|不愉快|争吵|吵架|气氛/i],
     memory: [/memory|记忆|想起/i],
 
     gps: [/gps|定位|位置/i],
@@ -297,6 +298,26 @@ EVIDENCE.push({
   const LINES = {
     en: {
       hearCheck: "Hello… can you help me?",
+      hearRetry: [
+        "Huh? Then refund my subscription fee — $200,000. This is outrageous!",
+        "I'll give you one more chance. Can you help me now?"
+      ],
+      repeatWarn: [
+        "Don't make me answer the same question twice. It makes me doubt your skills. Read the chat log and come back when you're certain.",
+        "You're asking the same thing again. Were you even listening? I'm not repeating myself. Go check the chat log… go!"
+      ],
+      sysStart:" Try asking about the car crash or memory loss details.",
+      sysEmbezzle: "[SYSTEM] Restricted file unlocked: C-Link_Protocol_v1.pdf.",
+      sysReportDocs: [
+        "[SYSTEM] Experimental log retrieved: Emotion_Module_v2_log.txt.",
+        "[SYSTEM] Compliance alert issued — unregistered module detected."
+      ],
+      sysConnectionMail: "[SYSTEM] New message queued: Zoë → John.",
+      johnNameChallenge: [
+        "Honestly, if you can't even look up his full name, I'm really disappointed.",
+        "If you want to hear about us, tell me his complete name.",
+        "Consider this a test."
+      ],
       brake: [
         "John mentioned the brakes felt a little soft that day, so I called to book a check-up for him. The service center's log shows he never went in — nobody touched that car.",
         "The official car crash report is spotless: 'No involvement of other vehicles. No traces of external tampering.' Everything got filed under driver error.",
@@ -347,7 +368,13 @@ EVIDENCE.push({
       ],
       angry: "Shut up! You know nothing!",
       deleteNow: "Delete it. Now.",
-      goOn: "😮‍💨",
+      goOn: [
+        "😮‍💨",
+        "...Can we stay focused?",
+        "I'm waiting for something that actually helps.",
+        "Please, let's not waste time.",
+        "If you don't know, just say so."
+      ],
       janeHusband: [
         "Yes, he was my husband.",
         "I first met him during my master's program, when I took an elective called 'Theory and Practice of Bionic Design.'",
@@ -368,14 +395,13 @@ EVIDENCE.push({
         "Honestly, all of this is on the university's website. Does it really help the investigation?",
       ],
       chatLog: [
-        "A week ago I went to the studio. He was talking with Eli, so I waited outside.",
-        "By accident… I saw his chat window.",
-        "No idea what odd software they used—I had never seen that interface. Maybe it was on purpose, to hide it from me.",
-        "I remember every sentence. He wrote, “I keep thinking about last night… that connection is strange, but I like it.”",
-        "She answered, “I’m thinking the same thing. After all these years, this might be beyond what I planned.”",
-        "He really had some kind of relationship with that student. “Connection”? “Like”?",
-        "He even said, “I’ll remember you.”",
-        "Do you understand? That feeling of being excluded… as if the world only had the two of them and I was the extra one.",
+        "I really don't want to talk about her, but every time I think about it I feel awful. John said Zoë was his student, yet I never felt it was just that. I even thought she was Eli's girlfriend — they were together almost every day.",
+        "A week ago I went to the studio to find him. He was chatting with Eli, so I waited outside.",
+        "By accident… I saw his chat log.",
+        "Who knows what kind of strange software they used — I'd never seen that interface. Maybe it was on purpose, to keep it away from me.",
+        "I remember every line clearly. She told him, 'I keep thinking about last night… that connection is strange, but I like it.' He replied, 'I'm thinking the same thing. After all these years, this might be beyond what I planned.'",
+        "He really had some sort of… relationship with that student. 'Connection'? 'Like'? He even said——'I will remember you.'", 
+        "Do you understand? That feeling of being excluded… like the world only has the two of them, and I'm the extra one.",
       ],
       affair: [
         "You know, I had sensed it already—that unsettling silence that shouldn’t be there.",
@@ -494,6 +520,26 @@ EVIDENCE.push({
     },
     zh: {
       hearCheck: "你好……你能帮帮我吗？",
+      hearRetry: [
+        "啊？既然这样，退给我订阅费 $200,000。也太不靠谱了！",
+        "再给你一次机会，你能帮帮我吗？"
+      ],
+      repeatWarn: [
+        "同样的问题不要让我回答两遍。这样会让我怀疑你的能力。你还是先翻翻聊天记录吧，想清楚了再来和我说话。",
+        "你又在问一样的事。你是不是根本没在听我说话？我不想再重复了。去看看聊天记录……去看吧！"
+      ],
+      sysStart: "试试询问关于车祸或者失忆的细节吧。",
+      sysEmbezzle: "[系统] 已解锁受限文件：C-Link_Protocol_v1.pdf。",
+      sysReportDocs: [
+        "[系统] 检索到实验日志：Emotion_Module_v2_log.txt。",
+        "[系统] 触发合规警报 —— 检测到未备案模块。"
+      ],
+      sysConnectionMail: "[系统] 新邮件入站：Zoë → John。",
+      johnNameChallenge: [
+        "实话说，如果你连这个都查不出来，我对你真的很失望。",
+        "如果你想知道我和他的事，就告诉我他的全名吧。",
+        "这也是我对你的一个考验。"
+      ],
       brake: [
         "John那天说刹车感觉有点轻，我打电话帮他预约过检查。维修中心的记录显示他从没去过，也没人动过那辆车。",
         "官方的事故调查报告写得很干净：‘无他车介入，无外部破坏痕迹。’一切都被归为驾驶失误。",
@@ -545,7 +591,13 @@ EVIDENCE.push({
       ],
       angry: "闭嘴！你什么都不懂！",
       deleteNow: "删掉它。现在。",
-      goOn: "😮‍💨",
+      goOn: [
+        "😮‍💨",
+        "……能不能专注一点？",
+        "我在等真正有用的线索。",
+        "别浪费时间好吗？",
+        "不会的话就直说。"
+      ],
       janeHusband: [
         "是的，他是我的丈夫。",
         "我第一次见到他是在读硕士的时候，那时候我选修了一门叫《仿生人设计理论与实践》的课。",
@@ -567,7 +619,7 @@ EVIDENCE.push({
         "一周前，我去工作室找他。那天他在和Eli聊天，我就坐在外面等。",
         "无意中……我看到了他的聊天记录。",
         "鬼知道他们用了什么奇怪的软件，那个界面我从没见过——也许是故意的，想避开我吧。",
-        "我还记得那几句话，清清楚楚。他对她说：‘我还在想我们昨晚……那种连接很奇怪，但我很喜欢。’",
+        "我还记得那几句话，清清楚楚。她对他说：‘我还在想我们昨晚……那种连接很奇怪，但我很喜欢。’",
         "他真的和那个学生有了某种……关系。‘连接’？‘喜欢’？",
         "他甚至说——‘我会记得你’。",
         "你明白吗？那种被排除在外的感觉……好像世界只剩他们两个，而我成了多余的人。",
@@ -590,7 +642,7 @@ EVIDENCE.push({
         "我当时……真的很生气。你知道那种感觉吗？像是被推开——你说的话全撞在车窗上。",
       ],
       contacts: [
-        "他的通讯录整理得很好，艺术家可能多多少少都会有这种强迫症吧。",
+        "他的通讯录整理得很好，搞技术的可能多多少少都会有这种强迫症吧。",
         "他的好友不多，总共就两百多人，我翻了个遍，都没有Zoë这个名字。",
         "可是我明明看到他们的聊天记录，我还拍了照了，你看。",
       ],
@@ -688,8 +740,14 @@ EVIDENCE.push({
     introCheck: {
       steps: [{ speaker: "jane", line: "hearCheck" }],
     },
+    introRetry: {
+      steps: [{ speaker: "jane", line: "hearRetry" }],
+    },
     introWelcome: {
-      steps: [{ speaker: "jane", template: "janeIntro" }],
+      steps: [
+        { speaker: "jane", template: "janeIntro" }, 
+        { speaker: "system", line: "sysStart" },
+      ],
     },
     car_crash: {
       steps: [{ speaker: "jane", line: "sendInitial" }],
@@ -709,7 +767,9 @@ EVIDENCE.push({
       steps: [{ speaker: "jane", line: "anniversary" }],
     },
     chatLog: {
-      steps: [{ speaker: "jane", line: "chatLog" }],
+      steps: [
+        { speaker: "jane", line: "chatLog" }
+      ],
       unlock: ["chat_log"],
     },
     affair: {
@@ -722,11 +782,18 @@ EVIDENCE.push({
       steps: [{ speaker: "jane", line: "contacts" }],
     },
     embezzle: {
-      steps: [{ speaker: "jane", line: "embezzle" }],
+      steps: [
+        { speaker: "system", line: "sysEmbezzle" },
+        { speaker: "jane", line: "embezzle" }
+      ],
+      unlock: ["clink_report"],
     },
     reportDocs: {
-      steps: [{ speaker: "jane", line: "reportDocs" }],
-      unlock: ["clink_report","emotion_module"],
+      steps: [
+        { speaker: "system", line: "sysReportDocs" },
+        { speaker: "jane", line: "reportDocs" }
+      ],
+      unlock: ["emotion_module"],
     },
     fatherSon: {
       steps: [{ speaker: "jane", line: "fatherSon" }],
@@ -735,7 +802,10 @@ EVIDENCE.push({
       steps: [{ speaker: "jane", line: "girlfriend" }],
     },
     connectionMail: {
-      steps: [{ speaker: "jane", line: "connectionMail" }],
+      steps: [
+        { speaker: "system", line: "sysConnectionMail" },
+        { speaker: "jane", line: "connectionMail" }
+      ],
       unlock: ["zoe_email"],
     },
     angerScene: {
@@ -770,6 +840,9 @@ EVIDENCE.push({
       steps: [{ speaker: "jane", line: "janeHusband" }],
       unlock: ["evidence_02"],
     },
+    johnPartial: {
+      steps: [{ speaker: "jane", line: "johnNameChallenge" }],
+    },
     eli: {
       steps: [{ speaker: "jane", line: "eli" }],
     },
@@ -785,7 +858,7 @@ EVIDENCE.push({
       steps: [{ speaker: "jane", line: "zoe" }],
     },
     fallback: {
-      steps: [{ speaker: "jane", line: "goOn" }],
+      steps: [{ speaker: "jane", line: "goOn", random: true }],
     },
   };
 
@@ -793,6 +866,7 @@ EVIDENCE.push({
     { intents: ["callPolice"], flow: "callPolice" },
     { intents: ["lostMemory"], flow: "lostMemory" },
     { intents: ["johnQuincy"], flow: "johnQuincy" },
+    { intents: ["johnPartial"], flow: "johnPartial" },
     { intents: ["car_crash", "gps"], flow: "car_crash" },
     { intents: ["accident"], flow: "accident" },
     { intents: ["fight"], flow: "fight" },
@@ -828,7 +902,7 @@ EVIDENCE.push({
   const HEARING = {
     promptFlow: "introCheck",
     successFlow: "introWelcome",
-    retryFlow: "introCheck",
+    retryFlow: "introRetry",
     positiveIntents: ["heardYes"],
     negativeIntents: ["heardNo"],
   };

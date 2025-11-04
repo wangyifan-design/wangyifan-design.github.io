@@ -5,8 +5,46 @@
     const { I18N, EVIDENCE, KEY, STAGES, LINES, FLOWS, ROUTES, HEARING } = window.CONTENT;
     let LANG = 'zh';
     const TOTAL = EVIDENCE.length;
-    const ctx = { unlockedCount: 0, stageIndex: 0, awaiting: null };
+    const ctx = { unlockedCount: 0, stageIndex: 0, awaiting: null, triggeredFlows: new Set() };
     const htmlCache = new Map();
+    const urlPattern = /^[a-z][a-z0-9+.-]*:/i;
+
+    const baseHref = (() => {
+        const baseEl = document.querySelector('base');
+        if (baseEl?.href) return baseEl.href;
+        try {
+            const current = new URL(window.location.href);
+            const pathname = current.pathname || '/';
+            const normalizePath = (path) => {
+                if (!path || path === '/') return '/';
+                if (path.endsWith('/')) return path;
+                const lastSlash = path.lastIndexOf('/');
+                const lastSegment = path.slice(lastSlash + 1);
+                if (lastSegment.includes('.')) {
+                    return path.slice(0, lastSlash + 1);
+                }
+                return `${path}/`;
+            };
+            const normalizedPath = normalizePath(pathname);
+            return `${current.protocol}//${current.host}${normalizedPath}`;
+        } catch (err) {
+            console.warn('[assets] unable to determine base href', err);
+            return '';
+        }
+    })();
+
+    const resolveAssetUrl = (relPath) => {
+        if (!relPath) return relPath;
+        if (relPath.startsWith('//') || urlPattern.test(relPath)) return relPath;
+        if (relPath.startsWith('/')) return relPath;
+        if (!baseHref) return relPath;
+        try {
+            return new URL(relPath, baseHref).href;
+        } catch (err) {
+            console.warn('[assets] unable to resolve path', relPath, err);
+            return relPath;
+        }
+    };
 
     const el = {
         files: document.getElementById('files'),
@@ -16,19 +54,26 @@
         barText: document.getElementById('barText'),
         stageBadge: document.getElementById('stageBadge'),
         stageHint: document.getElementById('stageHint'),
+        chatwrap: document.getElementById('chatwrap'),
         messages: document.getElementById('messages'),
         input: document.getElementById('input'),
         send: document.getElementById('send'),
         langToggle: document.getElementById('langToggle'),
         filesHeader: document.getElementById('filesHeader'),
         resetBtn: document.getElementById('resetBtn'),
+        chatSearch: document.getElementById('chatSearch'),
+        searchbar: document.querySelector('.searchbar'),
+        searchStatus: document.getElementById('searchStatus'),
+        searchPrev: document.getElementById('searchPrev'),
+        searchNext: document.getElementById('searchNext'),
+        searchMeta: document.querySelector('.search-meta'),
         deleteModal: document.getElementById('deleteModal'),
         delTitle: document.getElementById('delTitle'),
         delBody: document.getElementById('delBody'),
         delY: document.getElementById('delY'),
         delN: document.getElementById('delN'),
         delO: document.getElementById('delO'),
-        previewModal: document.getElementById('previewModal'),
+        previewPane: document.getElementById('previewPane'),
         pvTitle: document.getElementById('pvTitle'),
         pvImg: document.getElementById('pvImg'),
         pvHtml: document.getElementById('pvHtml'),
@@ -36,6 +81,7 @@
         pvClose: document.getElementById('pvClose'),
     };
     let currentPreview = null;
+    const searchState = { query: '', matches: [], index: -1 };
 
     // ---------- utility ----------
     const msg = (text, role = 'system') => {
@@ -43,7 +89,10 @@
         node.className = `msg ${role}`;
         node.textContent = text;
         el.messages.appendChild(node);
-        el.messages.scrollTop = el.messages.scrollHeight;
+        if (!searchState.query) {
+            el.messages.scrollTop = el.messages.scrollHeight;
+        }
+        refreshSearchMatches();
         return node;
     };
 
@@ -81,6 +130,100 @@
     const jane = (text, opts = {}) => speak(text, 'human', opts.delay);
     const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
+    function clearSearchHighlights() {
+        searchState.matches.forEach((node) => {
+            node.classList.remove('search-match', 'search-match-current');
+        });
+    }
+
+    function updateSearchStatus() {
+        if (!el.searchStatus) return;
+        const baseText = LANG === 'zh' ? '搜索聊天记录' : 'Search chat';
+        const noMatchText = LANG === 'zh' ? '未查找到相关记录' : 'No matches';
+        const hasQuery = Boolean(searchState.query);
+        if (el.searchMeta) {
+            el.searchMeta.classList.toggle('hidden', !hasQuery);
+        }
+        if (el.searchbar) {
+            el.searchbar.classList.toggle('solo', !hasQuery);
+        }
+        if (!searchState.query) {
+            el.searchStatus.textContent = baseText;
+        } else if (!searchState.matches.length) {
+            el.searchStatus.textContent = noMatchText;
+        } else {
+            el.searchStatus.textContent = `${searchState.index + 1} / ${searchState.matches.length}`;
+        }
+        if (el.searchPrev) el.searchPrev.disabled = searchState.matches.length <= 1;
+        if (el.searchNext) el.searchNext.disabled = searchState.matches.length <= 1;
+    }
+
+    function activateMatch(index, scroll = true) {
+        if (!searchState.matches.length) {
+            updateSearchStatus();
+            return;
+        }
+        if (searchState.index >= 0 && searchState.matches[searchState.index]) {
+            searchState.matches[searchState.index].classList.remove('search-match-current');
+        }
+        searchState.index = index;
+        const node = searchState.matches[index];
+        if (node) {
+            node.classList.add('search-match-current');
+            if (scroll) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        updateSearchStatus();
+    }
+
+    function performSearch(query = '', keepIndex = false) {
+        if (!el.chatSearch) return;
+        const trimmed = (query || '').trim();
+        const prevIndex = keepIndex ? searchState.index : -1;
+        clearSearchHighlights();
+        searchState.query = trimmed;
+        searchState.matches = [];
+        searchState.index = -1;
+        if (!trimmed) {
+            updateSearchStatus();
+            return;
+        }
+        const lower = trimmed.toLowerCase();
+        const nodes = Array.from(el.messages.querySelectorAll('.msg'));
+        nodes.forEach((node) => {
+            if (node.textContent.toLowerCase().includes(lower)) {
+                node.classList.add('search-match');
+                searchState.matches.push(node);
+            }
+        });
+        if (!searchState.matches.length) {
+            updateSearchStatus();
+            return;
+        }
+        let target = 0;
+        if (keepIndex && prevIndex >= 0) {
+            target = Math.min(prevIndex, searchState.matches.length - 1);
+        }
+        activateMatch(target, !keepIndex);
+    }
+
+    function moveSearch(step) {
+        if (!searchState.matches.length) return;
+        let next = searchState.index + step;
+        const total = searchState.matches.length;
+        if (next < 0) next = total - 1;
+        if (next >= total) next = 0;
+        activateMatch(next);
+    }
+
+    function refreshSearchMatches() {
+        if (!searchState.query) {
+            clearSearchHighlights();
+            updateSearchStatus();
+            return;
+        }
+        performSearch(searchState.query, true);
+    }
+
     // ---------- UI render helpers ----------
     function renderFiles() {
         el.files.innerHTML = '';
@@ -96,8 +239,10 @@
       <div>
         <div class="name">${title}</div>
         <div class="desc">${subtitle}</div>
-      </div>
-      <div class="state">✓</div>`;
+      </div>`;
+            if (currentPreview && currentPreview.code === ev.code) {
+                row.classList.add('active');
+            }
             if (hasPreview) {
                 row.tabIndex = 0;
                 row.setAttribute('role', 'button');
@@ -114,13 +259,15 @@
     }
 
     function renderProgress() {
-        const pct = Math.round((ctx.unlockedCount / TOTAL) * 100);
-        el.progressPct.textContent = pct + '%';
+        const pct = TOTAL ? Math.round((ctx.unlockedCount / TOTAL) * 100) : 0;
         el.barFill.style.width = pct + '%';
-        el.barText.textContent = `${ctx.unlockedCount} / ${TOTAL}`;
+        const countLabel = `${ctx.unlockedCount} / ${TOTAL}`;
+        if (el.progressPct) el.progressPct.textContent = countLabel;
+        el.barText.textContent = countLabel;
     }
 
     function renderStage() {
+        if (!el.stageBadge || !el.stageHint) return;
         el.stageBadge.textContent = STAGES[LANG][ctx.stageIndex];
         el.stageHint.textContent = I18N[LANG].stageHint;
     }
@@ -144,7 +291,8 @@
     async function loadHtml(ev, lang) {
         const src = getHtmlSource(ev, lang);
         if (!src) return '';
-        const key = `${ev.code}:${lang}:${src}`;
+        const resolvedSrc = resolveAssetUrl(src);
+        const key = `${ev.code}:${lang}:${resolvedSrc}`;
         if (htmlCache.has(key)) {
             const cached = htmlCache.get(key);
             if (cached) {
@@ -157,15 +305,15 @@
         if (ev._loadingHtml[lang]) return '';
         ev._loadingHtml[lang] = true;
         try {
-            const res = await fetch(src);
-            if (!res.ok) throw new Error(`Failed to load ${src} (${res.status})`);
+            const res = await fetch(resolvedSrc);
+            if (!res.ok) throw new Error(`Failed to load ${resolvedSrc} (${res.status})`);
             const text = await res.text();
             htmlCache.set(key, text);
             ev.html = ev.html || {};
             ev.html[lang] = text;
             return text;
         } catch (err) {
-            console.warn('[preview] unable to load report', src, err);
+            console.warn('[preview] unable to load report', resolvedSrc, err);
             htmlCache.set(key, '');
             return '';
         } finally {
@@ -175,9 +323,29 @@
     }
 
     function renderPreview() {
-        if (!currentPreview) return;
-        const title = currentPreview.title[LANG];
-        const desc = currentPreview.desc?.[LANG] || '';
+        const pane = el.previewPane;
+        if (!pane) return;
+        if (!currentPreview) {
+            pane.hidden = true;
+            pane.scrollTop = 0;
+            if (el.chatwrap) el.chatwrap.classList.remove('has-preview');
+            el.pvTitle.textContent = '';
+            el.pvImg.removeAttribute('src');
+            el.pvImg.removeAttribute('alt');
+            el.pvImg.hidden = true;
+            el.pvHtml.hidden = true;
+            el.pvHtml.innerHTML = '';
+            el.pvDesc.textContent = '';
+            el.pvDesc.style.display = 'none';
+            return;
+        }
+        pane.hidden = false;
+        if (el.chatwrap) el.chatwrap.classList.add('has-preview');
+        const title =
+            currentPreview.title?.[LANG] ||
+            currentPreview.title?.en ||
+            currentPreview.code;
+        const desc = currentPreview.desc?.[LANG] || currentPreview.desc?.en || '';
         const htmlByLang = currentPreview.html?.[LANG];
         const fallbackHtml = currentPreview.html?.en;
         const displayHtml = htmlByLang || fallbackHtml || '';
@@ -186,7 +354,7 @@
         const hasHtml = Boolean(displayHtml);
         el.pvTitle.textContent = title;
         if (hasImg) {
-            el.pvImg.src = currentPreview.img;
+            el.pvImg.src = resolveAssetUrl(currentPreview.img);
             el.pvImg.alt = title;
             el.pvImg.hidden = false;
         } else {
@@ -211,8 +379,9 @@
     async function showPreview(ev) {
         if (!ev.img && !ev.html && !ev.htmlSrc) return;
         currentPreview = ev;
-        el.previewModal.style.display = 'flex';
+        renderFiles();
         renderPreview();
+        if (el.previewPane) el.previewPane.scrollTop = 0;
         if (ev.htmlSrc && !(ev.html && (ev.html[LANG] || ev.html.en))) {
             await loadHtml(ev, LANG);
             if (currentPreview === ev) renderPreview();
@@ -220,14 +389,9 @@
     }
 
     function hidePreview() {
-        el.previewModal.style.display = 'none';
         currentPreview = null;
-        el.pvImg.removeAttribute('src');
-        el.pvImg.removeAttribute('alt');
-        el.pvImg.hidden = false;
-        el.pvHtml.hidden = true;
-        el.pvHtml.innerHTML = '';
-        el.pvDesc.style.display = 'none';
+        renderFiles();
+        renderPreview();
     }
 
     function setLang(next) {
@@ -236,10 +400,17 @@
         el.progressLabel.textContent = I18N[LANG].progress;
         el.delTitle.textContent = I18N[LANG].delTitle;
         el.delBody.textContent = I18N[LANG].delBody;
+        if (el.chatSearch) {
+            el.chatSearch.placeholder = LANG === 'zh' ? '搜索聊天…' : 'Search chat…';
+        }
+        if (el.pvClose) {
+            el.pvClose.textContent = LANG === 'zh' ? '关闭' : 'Close';
+        }
         renderFiles();
         renderProgress();
         renderStage();
         renderPreview();
+        updateSearchStatus();
     }
 
     // ---------- evidence + modal ----------
@@ -295,9 +466,15 @@
         return raw;
     };
 
-    const getLineValues = (lineKey) => {
+    const getLineValues = (lineKey, opts = {}) => {
         const raw = LINES[LANG][lineKey];
-        if (Array.isArray(raw)) return raw;
+        if (Array.isArray(raw)) {
+            if (opts.random) {
+                const pick = raw[Math.floor(Math.random() * raw.length)];
+                return pick !== undefined ? [pick] : [];
+            }
+            return raw;
+        }
         return typeof raw === 'string' ? [raw] : (raw ? [String(raw)] : []);
     };
 
@@ -307,7 +484,7 @@
             return text ? [text] : [];
         }
         if (step.line) {
-            return getLineValues(step.line);
+            return getLineValues(step.line, step);
         }
         if (step.text) {
             const raw = typeof step.text === 'string' ? step.text : (step.text[LANG] ?? step.text.en ?? '');
@@ -396,6 +573,12 @@
             const heardYes = HEARING.positiveIntents?.some(intent => matchIntent(intent, t));
             const heardNo = HEARING.negativeIntents?.some(intent => matchIntent(intent, t));
 
+            if (heardNo) {
+                await playFlow(HEARING.retryFlow);
+                ctx.awaiting = 'hearing';
+                return;
+            }
+
             if (heardYes) {
                 ctx.awaiting = null;
                 await playFlow(HEARING.successFlow);
@@ -410,7 +593,16 @@
         const routeMatch = findRoute(t);
         if (routeMatch) {
             if (routeMatch.flow) {
+                if (ctx.triggeredFlows.has(routeMatch.flow)) {
+                    const warns = LINES[LANG].repeatWarn;
+                    if (warns && warns.length) {
+                        const pick = warns[Math.floor(Math.random() * warns.length)];
+                        await jane(pick);
+                    }
+                    return;
+                }
                 await playFlow(routeMatch.flow);
+                ctx.triggeredFlows.add(routeMatch.flow);
                 return;
             }
             if (routeMatch.action) {
@@ -453,11 +645,37 @@
 
     el.langToggle.addEventListener('click', () => setLang(LANG === 'zh' ? 'en' : 'zh'));
 
+    if (el.chatSearch) {
+        el.chatSearch.addEventListener('input', (e) => performSearch(e.target.value));
+        el.chatSearch.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                moveSearch(1);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                moveSearch(-1);
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                moveSearch(1);
+            }
+        });
+    }
+    if (el.searchNext) el.searchNext.addEventListener('click', () => moveSearch(1));
+    if (el.searchPrev) el.searchPrev.addEventListener('click', () => moveSearch(-1));
+
     el.resetBtn.addEventListener('click', () => {
         EVIDENCE.forEach(e => e.unlocked = false);
         ctx.unlockedCount = 0;
         ctx.stageIndex = 0;
         ctx.awaiting = null;
+        ctx.triggeredFlows = new Set();
+        hidePreview();
+        searchState.query = '';
+        clearSearchHighlights();
+        searchState.matches = [];
+        searchState.index = -1;
+        if (el.chatSearch) el.chatSearch.value = '';
+        updateSearchStatus();
         el.messages.innerHTML = '';
         boot().catch(console.error);
     });
@@ -466,14 +684,14 @@
     el.delN.addEventListener('click', () => handleChoice('N').catch(console.error));
     el.delO.addEventListener('click', () => handleChoice('O').catch(console.error));
     el.deleteModal.addEventListener('click', (e) => { if (e.target === el.deleteModal) hideDelete(); });
-    el.previewModal.addEventListener('click', (e) => { if (e.target === el.previewModal) hidePreview(); });
-    el.pvClose.addEventListener('click', hidePreview);
+    if (el.pvClose) el.pvClose.addEventListener('click', hidePreview);
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            if (el.previewModal.style.display === 'flex') hidePreview();
+            if (currentPreview) hidePreview();
             if (el.deleteModal.style.display === 'flex') hideDelete();
         }
     });
 
+    updateSearchStatus();
     boot().catch(console.error);
 })();
