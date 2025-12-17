@@ -10,8 +10,10 @@ const presetQuestions = [
 const PAGE_TRANSITION_IN_DURATION = 600;
 const PAGE_TRANSITION_OUT_DURATION = 450;
 const CITATION_PATTERN = /【\d+:[^†]+†[^】]+】/g;
+const MEDIA_DATA_CANDIDATES = ['chat-media.json', '/chat-media.json'];
 let isPageTransitioning = false;
 let cachedKnowledge = null;
+let cachedChatMedia = null;
 let registeredLightbox = null;
 let closeMobileNav = null;
 
@@ -124,17 +126,26 @@ function setupChatPage(input, chat, container, form) {
 
     try {
       const knowledge = await fetchKnowledge();
+      let mediaCatalog = [];
+
+      try {
+        mediaCatalog = await fetchChatMedia();
+      } catch (mediaError) {
+        console.warn('Unable to load chat media map', mediaError);
+      }
+
       let answer = findAnswerFromKnowledge(knowledge, message, isChinese);
 
       if (!answer) {
         answer = await fetchFromOpenAI(message);
       }
 
-      answer = sanitizeAnswer(answer);
-      displayAnswer(chat, answer, thinkingMessage);
-      sendFeedbackToGoogleSheet(message, answer);
+      const sanitizedAnswer = sanitizeAnswer(answer);
+      const mediaMatches = matchMediaFromText(sanitizedAnswer, mediaCatalog);
+      displayAnswer(chat, { text: sanitizedAnswer, media: mediaMatches }, thinkingMessage);
+      sendFeedbackToGoogleSheet(message, sanitizedAnswer);
     } catch (error) {
-      displayAnswer(chat, `Error: ${error.message}`, thinkingMessage);
+      displayAnswer(chat, { text: `Error: ${error.message}` }, thinkingMessage);
     } finally {
       isRequesting = false;
     }
@@ -452,6 +463,29 @@ async function fetchKnowledge() {
   return cachedKnowledge;
 }
 
+async function fetchChatMedia() {
+  if (cachedChatMedia) return cachedChatMedia;
+
+  let response = null;
+  for (const url of MEDIA_DATA_CANDIDATES) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      response = res;
+      break;
+    } catch (error) {
+      // try next candidate
+    }
+  }
+
+  if (!response) {
+    throw new Error('Failed to load chat media data');
+  }
+
+  cachedChatMedia = await response.json();
+  return cachedChatMedia;
+}
+
 function findAnswerFromKnowledge(knowledge, message, isChinese) {
   if (!Array.isArray(knowledge)) return null;
 
@@ -470,6 +504,39 @@ function findAnswerFromKnowledge(knowledge, message, isChinese) {
     }
   }
   return null;
+}
+
+function matchMediaFromText(answer, mediaCatalog) {
+  if (!answer || !Array.isArray(mediaCatalog) || !mediaCatalog.length) return [];
+
+  const normalizedAnswer = normalizeTextForMatching(answer);
+  if (!normalizedAnswer) return [];
+
+  const matches = [];
+  const seen = new Set();
+
+  for (const media of mediaCatalog) {
+    if (!media || seen.has(media.id || media.image)) continue;
+    const keywords = Array.isArray(media.keywords) ? media.keywords : [];
+    const hasKeyword = keywords.some(keyword => {
+      if (!keyword) return false;
+      return normalizedAnswer.includes(String(keyword).toLowerCase());
+    });
+    if (hasKeyword) {
+      matches.push(media);
+      seen.add(media.id || media.image);
+    }
+  }
+
+  return matches;
+}
+
+function normalizeTextForMatching(text) {
+  return String(text)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .toLowerCase();
 }
 
 async function fetchFromOpenAI(userInput) {
@@ -505,19 +572,86 @@ function displayThinking(container) {
   return thinkingMessage;
 }
 
-function displayAnswer(container, answer, thinkingMessage) {
+function displayAnswer(container, answerData, thinkingMessage) {
   if (thinkingMessage && thinkingMessage.parentNode === container) {
     container.removeChild(thinkingMessage);
   }
   const aiMsg = document.createElement('div');
   aiMsg.className = 'chat-message ai';
   container.appendChild(aiMsg);
-  typeWriter(answer, aiMsg, 25);
+  const data = typeof answerData === 'string' ? { text: answerData } : (answerData || {});
+  const mediaItems = Array.isArray(data.media) ? data.media : [];
+
+  typeWriter(data.text || '', aiMsg, 25).then(() => {
+    renderAnswerMedia(aiMsg, mediaItems);
+  });
 }
 
 function sanitizeAnswer(answer) {
   if (!answer) return '';
   return answer.replace(CITATION_PATTERN, '');
+}
+
+function renderAnswerMedia(container, mediaItems) {
+  if (!Array.isArray(mediaItems) || !mediaItems.length) return;
+  const grid = document.createElement('div');
+  grid.className = 'chat-media-grid';
+
+  mediaItems.forEach(media => {
+    const card = createMediaCard(media);
+    if (card) {
+      grid.appendChild(card);
+    }
+  });
+
+  if (grid.children.length) {
+    container.appendChild(grid);
+  }
+}
+
+function createMediaCard(media) {
+  if (!media || !media.image) return null;
+
+  const card = document.createElement('article');
+  card.className = 'chat-media-card';
+
+  const img = document.createElement('img');
+  img.src = media.image;
+  img.alt = media.alt || media.title || '';
+  card.appendChild(img);
+
+  if (media.title || media.description) {
+    const textWrapper = document.createElement('div');
+    textWrapper.className = 'chat-media-text';
+
+    if (media.title) {
+      const title = document.createElement('p');
+      title.className = 'chat-media-title';
+      title.textContent = media.title;
+      textWrapper.appendChild(title);
+    }
+
+    if (media.description) {
+      const description = document.createElement('p');
+      description.className = 'chat-media-desc';
+      description.textContent = media.description;
+      textWrapper.appendChild(description);
+    }
+
+    card.appendChild(textWrapper);
+  }
+
+  if (media.url) {
+    const link = document.createElement('a');
+    link.href = media.url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.className = 'chat-media-link';
+    link.appendChild(card);
+    return link;
+  }
+
+  return card;
 }
 
 // 页面加载时就检测可视区域元素并手动加上 .visible 类
@@ -587,14 +721,29 @@ async function sendFeedbackToGoogleSheet(userMessage, aiReply) {
 }
 
 function typeWriter(text, container, delay = 30) {
-  let i = 0;
-  container.innerHTML = '';
-  const interval = setInterval(() => {
-    if (i < text.length) {
-      container.innerHTML += text.charAt(i);
-      i++;
-    } else {
-      clearInterval(interval);
+  return new Promise((resolve) => {
+    if (!container) {
+      resolve();
+      return;
     }
-  }, delay);
+
+    const content = typeof text === 'string' ? text : '';
+    let i = 0;
+    container.innerHTML = '';
+
+    if (!content.length) {
+      resolve();
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (i < content.length) {
+        container.innerHTML += content.charAt(i);
+        i += 1;
+      } else {
+        clearInterval(interval);
+        resolve();
+      }
+    }, delay);
+  });
 }
