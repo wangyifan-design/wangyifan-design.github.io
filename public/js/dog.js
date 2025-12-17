@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const face = document.getElementById('dog-face');
   if (!face) return;
 
+  const pointerArea = document.querySelector('.intro') || face;
+
   const features = face.querySelectorAll('[data-feature]');
   if (!features.length) return;
 
@@ -49,14 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  face.addEventListener('pointermove', (event) => {
+  pointerArea.addEventListener('pointermove', (event) => {
     pointer.x = event.clientX;
     pointer.y = event.clientY;
     pointer.active = true;
     scheduleUpdate();
   });
 
-  face.addEventListener('pointerleave', () => {
+  pointerArea.addEventListener('pointerleave', () => {
     pointer.active = false;
     scheduleUpdate();
   });
