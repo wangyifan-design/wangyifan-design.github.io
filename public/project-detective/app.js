@@ -1,11 +1,16 @@
 // Project Detective — main controller (script-driven version)
-// Uses content.js for all text and metadata
+// Consumes qa.*.js + evidence.js for all text and metadata
 
 (() => {
-    const { I18N, EVIDENCE, KEY, STAGES, LINES, FLOWS, ROUTES, HEARING } = window.CONTENT;
-    let LANG = 'zh';
+    const QA = {
+        en: hydrateQA(window.QA_EN),
+        zh: hydrateQA(window.QA_ZH),
+    };
+    const EVIDENCE = JSON.parse(JSON.stringify(window.EVIDENCE_DATA || []));
+    let LANG = QA.zh ? 'zh' : 'en';
+    if (!QA[LANG]) LANG = 'en';
     const TOTAL = EVIDENCE.length;
-    const ctx = { unlockedCount: 0, stageIndex: 0, awaiting: null, triggeredFlows: new Set() };
+    const ctx = { unlockedCount: 0, triggered: new Set(), deletePrompted: false, awaitingHearing: false };
     const htmlCache = new Map();
     const urlPattern = /^[a-z][a-z0-9+.-]*:/i;
 
@@ -46,14 +51,106 @@
         }
     };
 
+    function hydrateQA(raw = {}) {
+        if (!raw) {
+            return {
+                ui: {},
+                templates: {},
+                intro: [],
+                fallback: [],
+                repeatWarnings: [],
+                deletePrompt: '',
+                actionReplies: {},
+                hearing: null,
+                sequences: [],
+                actions: {},
+            };
+        }
+
+        const compileTriggers = (list = []) => {
+            const result = [];
+            for (const item of list || []) {
+                if (!item || !item.pattern) continue;
+                const flags = item.flags || 'i';
+                try {
+                    result.push({
+                        pattern: item.pattern,
+                        flags,
+                        regex: new RegExp(item.pattern, flags),
+                    });
+                } catch (err) {
+                    console.warn('[qa] invalid pattern', item.pattern, err);
+                }
+            }
+            return result;
+        };
+
+        const normalizeReplies = (replies = []) => {
+            const out = [];
+            (replies || []).forEach((reply) => {
+                if (reply == null) return;
+                if (typeof reply === 'string') {
+                    out.push({ speaker: 'jane', text: reply });
+                    return;
+                }
+                const speaker = reply.speaker || 'system';
+                const value = reply.text;
+                if (Array.isArray(value)) {
+                    value.forEach((line) => {
+                        if (line != null) out.push({ speaker, text: line });
+                    });
+                } else if (value != null) {
+                    out.push({ speaker, text: value });
+                }
+            });
+            return out;
+        };
+
+        const sequences = (raw.sequences || []).map((seq) => ({
+            id: seq.id,
+            triggers: compileTriggers(seq.triggers || []),
+            replies: normalizeReplies(seq.replies),
+            unlock: Array.isArray(seq.unlock) ? [...new Set(seq.unlock)] : [],
+            once: seq.once !== false,
+        }));
+
+        const actions = {};
+        for (const [key, action] of Object.entries(raw.actions || {})) {
+            actions[key] = {
+                triggers: compileTriggers(action.triggers || []),
+            };
+        }
+
+        let hearing = null;
+        if (raw.hearing) {
+            hearing = {
+                positive: compileTriggers(raw.hearing.positive || []),
+                negative: compileTriggers(raw.hearing.negative || []),
+                retry: normalizeReplies(raw.hearing.retry),
+                success: normalizeReplies(raw.hearing.success),
+            };
+        }
+
+        return {
+            ui: raw.ui || {},
+            templates: raw.templates || {},
+            intro: normalizeReplies(raw.intro),
+            fallback: Array.isArray(raw.fallback) ? raw.fallback.slice() : [],
+            repeatWarnings: Array.isArray(raw.repeatWarnings) ? raw.repeatWarnings.slice() : [],
+            deletePrompt: raw.deletePrompt || '',
+            actionReplies: raw.actionReplies || {},
+            hearing,
+            sequences,
+            actions,
+        };
+    }
+
     const el = {
         files: document.getElementById('files'),
         progressLabel: document.getElementById('progressLabel'),
         progressPct: document.getElementById('progressPct'),
         barFill: document.getElementById('barFill'),
         barText: document.getElementById('barText'),
-        stageBadge: document.getElementById('stageBadge'),
-        stageHint: document.getElementById('stageHint'),
         chatwrap: document.getElementById('chatwrap'),
         messages: document.getElementById('messages'),
         input: document.getElementById('input'),
@@ -128,7 +225,6 @@
     };
 
     const jane = (text, opts = {}) => speak(text, 'human', opts.delay);
-    const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
     function clearSearchHighlights() {
         searchState.matches.forEach((node) => {
@@ -138,8 +234,9 @@
 
     function updateSearchStatus() {
         if (!el.searchStatus) return;
-        const baseText = LANG === 'zh' ? '搜索聊天记录' : 'Search chat';
-        const noMatchText = LANG === 'zh' ? '未查找到相关记录' : 'No matches';
+        const qa = getQA();
+        const baseText = qa.ui?.searchTitle || '';
+        const noMatchText = qa.ui?.searchNoMatch || '';
         const hasQuery = Boolean(searchState.query);
         if (el.searchMeta) {
             el.searchMeta.classList.toggle('hidden', !hasQuery);
@@ -266,22 +363,6 @@
         el.barText.textContent = countLabel;
     }
 
-    function renderStage() {
-        if (!el.stageBadge || !el.stageHint) return;
-        el.stageBadge.textContent = STAGES[LANG][ctx.stageIndex];
-        el.stageHint.textContent = I18N[LANG].stageHint;
-    }
-
-    function updateStage() {
-        const count = ctx.unlockedCount;
-        if (count >= 16) ctx.stageIndex = 4;
-        else if (count >= 12) ctx.stageIndex = 3;
-        else if (count >= 8) ctx.stageIndex = 2;
-        else if (count >= 4) ctx.stageIndex = 1;
-        else ctx.stageIndex = 0;
-        renderStage();
-    }
-
     function getHtmlSource(ev, lang) {
         if (!ev || !ev.htmlSrc) return null;
         if (typeof ev.htmlSrc === 'string') return ev.htmlSrc;
@@ -394,21 +475,54 @@
         renderPreview();
     }
 
+    const getQA = () => QA[LANG] || QA.en;
+
+    const pickRandom = (list = []) => {
+        if (!Array.isArray(list) || !list.length) return null;
+        const index = Math.floor(Math.random() * list.length);
+        return list[index];
+    };
+
+    function formatRecovered(names = []) {
+        const qa = getQA();
+        const tpl = qa.templates?.recovered;
+        if (!tpl || !tpl.text) return names.join(', ');
+        const separator = tpl.separator ?? ', ';
+        const list = names.join(separator);
+        return tpl.text.replace('{{list}}', list);
+    }
+
+    async function deliverReplies(replies = []) {
+        for (const reply of replies || []) {
+            if (!reply || !reply.text) continue;
+            if (reply.speaker === 'jane') {
+                await jane(reply.text);
+            } else {
+                msg(reply.text, 'system');
+            }
+        }
+    }
+
     function setLang(next) {
+        if (!QA[next]) next = 'en';
         LANG = next;
-        el.filesHeader.textContent = I18N[LANG].files;
-        el.progressLabel.textContent = I18N[LANG].progress;
-        el.delTitle.textContent = I18N[LANG].delTitle;
-        el.delBody.textContent = I18N[LANG].delBody;
-        if (el.chatSearch) {
-            el.chatSearch.placeholder = LANG === 'zh' ? '搜索聊天…' : 'Search chat…';
-        }
-        if (el.pvClose) {
-            el.pvClose.textContent = LANG === 'zh' ? '关闭' : 'Close';
-        }
+        const qa = getQA();
+        if (el.filesHeader) el.filesHeader.textContent = qa.ui?.files || '';
+        if (el.progressLabel) el.progressLabel.textContent = qa.ui?.progress || '';
+        if (el.delTitle) el.delTitle.textContent = qa.ui?.deleteTitle || '';
+        if (el.delBody) el.delBody.textContent = qa.ui?.deleteBody || '';
+        if (el.chatSearch) el.chatSearch.placeholder = qa.ui?.searchPlaceholder || '';
+        if (el.searchStatus) el.searchStatus.textContent = qa.ui?.searchTitle || '';
+        if (el.input) el.input.placeholder = qa.ui?.composerPlaceholder || '';
+        if (el.send && qa.ui?.sendLabel) el.send.textContent = qa.ui.sendLabel;
+        if (el.resetBtn && qa.ui?.resetLabel) el.resetBtn.textContent = qa.ui.resetLabel;
+        if (el.pvTitle && qa.ui?.previewTitle) el.pvTitle.textContent = qa.ui.previewTitle;
+        if (el.pvClose && qa.ui?.closePreview) el.pvClose.textContent = qa.ui.closePreview;
+        if (el.delY && qa.ui?.deleteButton) el.delY.textContent = qa.ui.deleteButton;
+        if (el.delN && qa.ui?.keepButton) el.delN.textContent = qa.ui.keepButton;
+        if (el.delO && qa.ui?.overrideButton) el.delO.textContent = qa.ui.overrideButton;
         renderFiles();
         renderProgress();
-        renderStage();
         renderPreview();
         updateSearchStatus();
     }
@@ -427,10 +541,10 @@
         }
         if (!newlyUnlocked.length) return [];
         ctx.unlockedCount = EVIDENCE.filter(e => e.unlocked).length;
-        msg(I18N[LANG].systemRecovered(newlyUnlocked.map(ev => ev.code)), 'system');
+        msg(formatRecovered(newlyUnlocked.map(ev => ev.code)), 'system');
         renderFiles();
         renderProgress();
-        updateStage();
+        maybeTriggerDelete();
         return newlyUnlocked;
     }
 
@@ -439,6 +553,7 @@
 
     async function handleChoice(ch) {
         hideDelete();
+        const qa = getQA();
         if (ch === 'Y') {
             const idx = EVIDENCE.findLastIndex(e => e.unlocked);
             if (idx >= 0) {
@@ -446,115 +561,67 @@
                 ctx.unlockedCount = EVIDENCE.filter(x => x.unlocked).length;
                 renderFiles();
                 renderProgress();
-                updateStage();
+                if (ctx.unlockedCount < 16) ctx.deletePrompted = false;
             }
-            await jane(I18N[LANG].delThanks);
+            if (qa.actionReplies?.deleteConfirmed) {
+                await jane(qa.actionReplies.deleteConfirmed);
+            }
         } else if (ch === 'N') {
-            await jane(I18N[LANG].insultA);
+            if (qa.actionReplies?.deleteRefused) {
+                await jane(qa.actionReplies.deleteRefused);
+            }
         } else if (ch === 'O') {
             msg('[Override executed.]', 'system');
             const remaining = EVIDENCE.filter(e => !e.unlocked).map(e => e.code);
-            await jane(I18N[LANG].overrideWhisper);
+            if (qa.actionReplies?.deleteOverride) {
+                await jane(qa.actionReplies.deleteOverride);
+            }
             unlockByCodes(remaining);
         }
     }
 
     // ---------- script helpers ----------
-    const getTemplateText = (key) => {
-        const raw = I18N[LANG][key];
-        if (typeof raw === 'function') return raw(ctx.unlockedCount, TOTAL);
-        return raw;
-    };
-
-    const getLineValues = (lineKey, opts = {}) => {
-        const raw = LINES[LANG][lineKey];
-        if (Array.isArray(raw)) {
-            if (opts.random) {
-                const pick = raw[Math.floor(Math.random() * raw.length)];
-                return pick !== undefined ? [pick] : [];
-            }
-            return raw;
-        }
-        return typeof raw === 'string' ? [raw] : (raw ? [String(raw)] : []);
-    };
-
-    const resolveTexts = (step = {}) => {
-        if (step.template) {
-            const text = getTemplateText(step.template);
-            return text ? [text] : [];
-        }
-        if (step.line) {
-            return getLineValues(step.line, step);
-        }
-        if (step.text) {
-            const raw = typeof step.text === 'string' ? step.text : (step.text[LANG] ?? step.text.en ?? '');
-            if (Array.isArray(raw)) return raw;
-            return raw ? [raw] : [];
-        }
-        return [];
-    };
-
-    const matchIntent = (intent, text) => {
-        const rules = KEY[intent];
-        return Array.isArray(rules) ? rules.some((r) => r.test(text)) : false;
-    };
-
-    const findRoute = (text) => {
-        if (!ROUTES) return null;
-        return ROUTES.find(route => route.intents?.some(intent => matchIntent(intent, text)));
-    };
-
-    const maybeTriggerDelete = () => {
-        if (ctx.unlockedCount >= 16) {
+    function maybeTriggerDelete() {
+        const qa = getQA();
+        if (ctx.deletePrompted) return;
+        if (ctx.unlockedCount >= 16 && qa.deletePrompt) {
+            ctx.deletePrompted = true;
             setTimeout(() => {
-                jane(LINES[LANG].deleteNow).then(() => showDelete());
+                jane(qa.deletePrompt).then(() => showDelete());
             }, 400);
-        }
-    };
-
-    async function deliverStep(step = {}) {
-        if (step.speaker === 'jane') {
-            const texts = resolveTexts(step);
-            for (const line of texts) {
-                await jane(line, { delay: step.delay });
-                if (step.pause) await wait(step.pause);
-            }
-            return;
-        }
-        if (step.speaker === 'system') {
-            const texts = resolveTexts(step);
-            texts.forEach((line) => msg(line, 'system'));
         }
     }
 
-    async function playFlow(flowId) {
-        if (!flowId) return { unlocked: [] };
-        const flow = FLOWS?.[flowId];
-        if (!flow) return { unlocked: [] };
+    function findMatchingSequence(text) {
+        const qa = getQA();
+        return qa.sequences.find(seq =>
+            Array.isArray(seq.triggers) && seq.triggers.some(({ regex }) => regex.test(text))
+        ) || null;
+    }
 
-        for (const step of flow.steps || []) {
-            await deliverStep(step);
+    function findMatchingAction(text) {
+        const qa = getQA();
+        for (const [key, info] of Object.entries(qa.actions || {})) {
+            if (info.triggers?.some(({ regex }) => regex.test(text))) {
+                return key;
+            }
         }
-
-        let unlocked = [];
-        if (flow.unlock?.length) {
-            unlocked = unlockByCodes(flow.unlock);
-        }
-
-        if (flow.after === 'checkDelete') {
-            maybeTriggerDelete();
-        }
-
-        return { unlocked };
+        return null;
     }
 
     async function handleAction(action) {
+        const qa = getQA();
         if (action === 'delete') {
+            if (qa.actionReplies?.deleteInsist) {
+                await jane(qa.actionReplies.deleteInsist);
+            }
             showDelete();
             return;
         }
         if (action === 'report') {
-            msg(I18N[LANG].report, 'system');
+            if (qa.actionReplies?.report) {
+                msg(qa.actionReplies.report, 'system');
+            }
             return;
         }
         if (action === 'override') {
@@ -568,64 +635,56 @@
         if (!t) return;
         msg(t, 'player');
 
-        const awaitingHearing = ctx.awaiting === 'hearing';
-        if (awaitingHearing && HEARING) {
-            const heardYes = HEARING.positiveIntents?.some(intent => matchIntent(intent, t));
-            const heardNo = HEARING.negativeIntents?.some(intent => matchIntent(intent, t));
-
-            if (heardNo) {
-                await playFlow(HEARING.retryFlow);
-                ctx.awaiting = 'hearing';
+        const qa = getQA();
+        if (ctx.awaitingHearing && qa.hearing) {
+            const hearing = qa.hearing;
+            const negativeHit = hearing.negative?.some(({ regex }) => regex.test(t));
+            if (negativeHit) {
+                await deliverReplies(hearing.retry);
                 return;
             }
-
-            if (heardYes) {
-                ctx.awaiting = null;
-                await playFlow(HEARING.successFlow);
+            const positiveHit = hearing.positive?.some(({ regex }) => regex.test(t));
+            if (positiveHit) {
+                ctx.awaitingHearing = false;
+                await deliverReplies(hearing.success);
                 return;
             }
-
-            await playFlow(HEARING.retryFlow);
-            ctx.awaiting = 'hearing';
+            await deliverReplies(hearing.retry);
+            return;
+        }
+        const sequence = findMatchingSequence(t);
+        if (sequence) {
+            if (sequence.once !== false && ctx.triggered.has(sequence.id)) {
+                const warn = pickRandom(qa.repeatWarnings);
+                if (warn) await jane(warn);
+                return;
+            }
+            await deliverReplies(sequence.replies);
+            unlockByCodes(sequence.unlock);
+            if (sequence.once !== false) ctx.triggered.add(sequence.id);
             return;
         }
 
-        const routeMatch = findRoute(t);
-        if (routeMatch) {
-            if (routeMatch.flow) {
-                if (ctx.triggeredFlows.has(routeMatch.flow)) {
-                    const warns = LINES[LANG].repeatWarn;
-                    if (warns && warns.length) {
-                        const pick = warns[Math.floor(Math.random() * warns.length)];
-                        await jane(pick);
-                    }
-                    return;
-                }
-                await playFlow(routeMatch.flow);
-                ctx.triggeredFlows.add(routeMatch.flow);
-                return;
-            }
-            if (routeMatch.action) {
-                await handleAction(routeMatch.action);
-                return;
-            }
+        const action = findMatchingAction(t);
+        if (action) {
+            await handleAction(action);
+            return;
         }
 
-        await playFlow('fallback');
+        const fallback = pickRandom(qa.fallback);
+        if (fallback) {
+            await jane(fallback);
+        }
     }
 
     // ---------- boot ----------
     async function boot() {
         setLang(LANG);
         el.messages.innerHTML = '';
-        msg(I18N[LANG].systemInit, 'system');
-
-        if (HEARING?.promptFlow) {
-            ctx.awaiting = 'hearing';
-            await playFlow(HEARING.promptFlow);
-        } else {
-            await playFlow('introWelcome');
-        }
+        ctx.triggered = new Set();
+        ctx.deletePrompted = ctx.unlockedCount >= 16;
+        ctx.awaitingHearing = Boolean(getQA().hearing);
+        await deliverReplies(getQA().intro);
     }
 
     // ---------- events ----------
@@ -666,9 +725,9 @@
     el.resetBtn.addEventListener('click', () => {
         EVIDENCE.forEach(e => e.unlocked = false);
         ctx.unlockedCount = 0;
-        ctx.stageIndex = 0;
-        ctx.awaiting = null;
-        ctx.triggeredFlows = new Set();
+        ctx.triggered = new Set();
+        ctx.deletePrompted = false;
+        ctx.awaitingHearing = false;
         hidePreview();
         searchState.query = '';
         clearSearchHighlights();

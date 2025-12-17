@@ -221,24 +221,45 @@ function initNavigationScroll() {
 
   let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
   let ticking = false;
+  let isPinned = true;
 
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        if (typeof closeMobileNav === 'function' && document.body.classList.contains('nav-menu-open')) {
-          closeMobileNav();
-        }
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const delta = scrollTop - lastScrollTop;
-        if (Math.abs(delta) > 5) {
-          navbar.style.top = delta > 0 ? '-70px' : '0';
-          lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-        }
-        ticking = false;
-      });
-      ticking = true;
+  const setNavPosition = (visible) => {
+    if (visible && !isPinned) {
+      navbar.style.top = '0';
+      isPinned = true;
+    } else if (!visible && isPinned) {
+      navbar.style.top = '-80px';
+      isPinned = false;
     }
-  });
+  };
+
+  const handleScroll = () => {
+    if (typeof closeMobileNav === 'function' && document.body.classList.contains('nav-menu-open')) {
+      closeMobileNav();
+    }
+
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const delta = scrollTop - lastScrollTop;
+
+    if (scrollTop <= 24 || delta < 0) {
+      setNavPosition(true);
+    } else if (delta > 4) {
+      setNavPosition(false);
+    }
+
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(handleScroll);
+    }
+  };
+
+  navbar.style.top = '0';
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 function initMobileNavigation() {

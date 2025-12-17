@@ -1,41 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Minimal Hover Swap</title>
   <style>
-    .hover-image-container {
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: white;
+    }
+
+    .face {
+      width: 226px;
+      height: 169px;
       position: relative;
-      width: 50%;
-      margin: 2rem auto;
+      overflow: hidden;
     }
 
-    .hover-image-container img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .hover-image {
+    .head {
       position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
     }
 
-    .hover-image-container:hover .hover-image {
-      opacity: 1;
+    .eye,
+    .nose {
+      position: absolute;
+      will-change: transform;
+      transition: transform 60ms linear;
     }
+
+    .eye {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #222;
+      top: 70px;
+      animation: blink 5s infinite;
+    }
+
+    .eye.left {
+      left: 70px;
+    }
+
+    .eye.right {
+      right: 80px;
+    }
+
+    .nose {
+      width: 30px;
+      height: 20px;
+      background: #222;
+      border-radius: 8px;
+      top: 90px;
+      left: 45%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes blink {
+      0%,
+      46%,
+      55% {
+        height: 14px;
+        top: 70px;
+        border-radius: 50%;
+      }
+
+      47%,
+      49% {
+        height: 2px;
+        top: 76px;
+        border-radius: 2px;
+      }
+    }
+
+
   </style>
 </head>
+
 <body>
 
-  <div class="hover-image-container">
-    <img src="img/patapata/logo1.jpg" alt="Base Image">
-    <img src="img/patapata/pdf-1.jpg" class="hover-image" alt="Hover Image">
+  <div class="face" id="face">
+    <img class="head" src="./img/doghead.svg" alt="dog head">
+    <div class="eye left" data-feature="eye"></div>
+    <div class="eye right" data-feature="eye"></div>
+    <div class="nose" data-feature="nose"></div>
   </div>
+  <script>
+    const face = document.getElementById("face");
+    const features = document.querySelectorAll("[data-feature]");
+
+    // 不同五官不同“灵敏度”
+    const strength = {
+      eye: 8,
+      nose: 20,
+    };
+
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+    window.addEventListener("mousemove", (e) => {
+      const r = face.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+
+      let dx = e.clientX - cx;
+      let dy = e.clientY - cy;
+
+      // 归一化方向（避免鼠标很远时移动过大）
+      const dist = Math.hypot(dx, dy) || 1;
+      dx /= dist;
+      dy /= dist;
+
+      features.forEach(el => {
+        const type = el.dataset.feature;
+        const max = strength[type] ?? 6;
+
+        const x = clamp(dx * max, -max, max);
+        const y = clamp(dy * max, -max, max);
+
+        if (type === "nose") {
+          el.style.transform = `translateX(-50%) translate(${x}px, ${y}px)`;
+        } else {
+          el.style.transform = `translate(${x}px, ${y}px)`;
+        }
+      });
+    });
+  </script>
 
 </body>
+
 </html>

@@ -64,6 +64,7 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/dog.css">
 
 
   <link rel="icon" type="image/png" href="img/logo.svg">
@@ -93,7 +94,16 @@
 
   <main>
     <section class="intro-with-chat" aria-labelledby="intro-heading">
+      
       <header class="intro">
+        <div class="dog-hero" aria-hidden="true">
+        <div class="dog-face" id="dog-face">
+          <img class="dog-head" src="img/doghead.svg" alt="" />
+          <div class="dog-eye left" data-feature="eye"></div>
+          <div class="dog-eye right" data-feature="eye"></div>
+          <div class="dog-nose" data-feature="nose"></div>
+        </div>
+      </div>
         <h1 id="intro-heading">Wang Yifan</h1>
         <p class="subtitle">Visual Designer | UX/UI Designer | Design Researcher</p>
       </header>
@@ -128,7 +138,7 @@
       <article class="project">
         <a href="rockhood.html" class="project-link">
           <figure class="project-figure">
-            <img class="project-image" src="img/rockhood/Snapshot.png" alt="Rockhood.ai project cover" />
+            <img class="project-image" src="img/rockhood/Snapshot.png" alt="Rockhood.ai project cover" loading="lazy" decoding="async" />
             <figcaption class="project-labels">
               <span class="project-title">Rockhood.ai</span>
               <span class="project-year">2025</span>
@@ -161,7 +171,7 @@
       <article class="project">
         <a href="virtualzoo.html" class="project-link">
           <figure class="project-figure">
-            <img class="project-image" src="img/project-2.jpg" alt="Shengqinyuan - Virtual Zoo project cover" />
+            <img class="project-image" src="img/project-2.jpg" alt="Shengqinyuan - Virtual Zoo project cover" loading="lazy" decoding="async" />
             <figcaption class="project-labels">
               <span class="project-title">Shengqinyuan - Virtual Zoo</span>
               <span class="project-year">2025</span>
@@ -172,7 +182,7 @@
       <article class="project">
         <a href="redpacket.html" class="project-link">
           <figure class="project-figure">
-            <img class="project-image" src="img/project-9.jpg" alt="Bone Script Red Packet project cover" />
+            <img class="project-image" src="img/project-9.jpg" alt="Bone Script Red Packet project cover" loading="lazy" decoding="async" />
             <figcaption class="project-labels">
               <span class="project-title">Bone Script Red Packet</span>
               <span class="project-year">2018</span>
@@ -194,7 +204,7 @@
       <article class="project">
         <a href="poster.html" class="project-link">
           <figure class="project-figure">
-            <img class="project-image" src="img/project-3.jpg" alt="Popular Phrase project cover" />
+            <img class="project-image" src="img/project-3.jpg" alt="Popular Phrase project cover" loading="lazy" decoding="async" />
             <figcaption class="project-labels">
               <span class="project-title">Popular Phrase</span>
               <span class="project-year">2023</span>
@@ -205,7 +215,7 @@
       <article class="project">
         <a href="ram.html" class="project-link">
           <figure class="project-figure">
-            <img class="project-image" src="img/project-8.jpg" alt="The mascot of RAM project cover" />
+            <img class="project-image" src="img/project-8.jpg" alt="The mascot of RAM project cover" loading="lazy" decoding="async" />
             <figcaption class="project-labels">
               <span class="project-title">The mascot of RAM</span>
               <span class="project-year">2024</span>
@@ -216,7 +226,7 @@
       <article class="project">
         <a href="bird.html" class="project-link">
           <figure class="project-figure">
-            <img class="project-image" src="img/project-6.jpg" alt="Online Museum of Bird and Insect Pattern project cover" />
+            <img class="project-image" src="img/project-6.jpg" alt="Online Museum of Bird and Insect Pattern project cover" loading="lazy" decoding="async" />
             <figcaption class="project-labels">
               <span class="project-title">Online Museum of Bird and Insect Pattern</span>
               <span class="project-year">2020</span>
@@ -239,36 +249,38 @@
     </nav>
   </footer>
 
+  <script src="js/dog.js"></script>
   <script src="js/script.js"></script>
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
   <script>
     const grid = document.querySelector('.projects');
-    imagesLoaded(grid, function () {
-      setTimeout(() => {
+    let msnry;
+
+    const createMasonry = () => {
+      if (!grid || typeof Masonry === 'undefined' || typeof imagesLoaded === 'undefined') return;
+
+      imagesLoaded(grid, () => {
+        if (msnry) {
+          msnry.layout();
+          return;
+        }
+
         msnry = new Masonry(grid, {
           itemSelector: '.project',
           columnWidth: '.grid-sizer',
           percentPosition: true,
           gutter: 8
         });
-      }, 50); // 延迟 50ms
-    });
-
-    let msnry;
-
-    imagesLoaded(grid, function () {
-      msnry = new Masonry(grid, {
-        itemSelector: '.project',
-        columnWidth: '.grid-sizer',
-        percentPosition: true,
-        gutter: 8
       });
-    });
+    };
 
-    // ✅ 在窗口尺寸变化时，强制重新布局
+    createMasonry();
+
     window.addEventListener('resize', () => {
-      if (msnry) msnry.layout();
+      if (msnry) {
+        msnry.layout();
+      }
     });
   </script>
 
