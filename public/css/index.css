@@ -75,6 +75,7 @@
 
 .chat-media-card {
   background: #fff;
+  margin: 0.25rem 0;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -110,7 +111,6 @@
 
 .chat-media-link:hover .chat-media-card,
 .chat-media-card:hover {
-  transform: translateY(-2px);
   box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
 }
 
