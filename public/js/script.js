@@ -400,7 +400,8 @@ function initCursor(cursorDot) {
       target.tagName === 'BUTTON' ||
       target.classList.contains('preset-questions') ||
       target.classList.contains('preset-question') ||
-      (target.closest && target.closest('.project')) ||
+      target.classList.contains('chat-media-card') ||
+      (target.closest && (target.closest('.project') || target.closest('.chat-media-link'))) ||
       typeof target.onclick === 'function')) {
       cursorDot.style.width = '36px';
       cursorDot.style.height = '36px';
