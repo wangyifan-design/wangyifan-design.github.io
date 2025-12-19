@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script>document.documentElement.classList.add('js-ready');</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -320,14 +321,17 @@
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <script>
         const grid = document.querySelector('.projects');
-        imagesLoaded(grid, function () {
-            new Masonry(grid, {
-                itemSelector: '.project',
-                columnWidth: '.grid-sizer',
-                percentPosition: true,
-                gutter: 8
+        if (grid) {
+            imagesLoaded(grid, function () {
+                new Masonry(grid, {
+                    itemSelector: '.project',
+                    columnWidth: '.grid-sizer',
+                    percentPosition: true,
+                    gutter: 8
+                });
+                grid.classList.add('is-ready');
             });
-        });
+        }
     </script>
 
 

@@ -1,5 +1,3 @@
-document.documentElement.classList.add('js-ready');
-
 const presetQuestions = [
   "What are you up to these days?",
   "Which project should I check out first?",

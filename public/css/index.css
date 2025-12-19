@@ -231,22 +231,30 @@
 }
 
 .projects.home {
-  /* 使用 margin 而非 padding，避免 Masonry 误判容器宽度被挤爆 */
-  /* gutter 由 Masonry 处理，这里保持左右 margin 对称 */
   box-sizing: border-box;
 }
 
-/* Masonry 列宽设为 (100% - gutter) / 2，避免右侧额外空隙 */
-.projects.home .grid-sizer,
-.projects.home .project {
-  width: calc(50% - 4px);
-  margin-bottom: 0.5rem;
+.projects.home .project-grid {
+  position: relative;
+  width: 100%;
+}
+
+.projects.home .project-grid .grid-sizer,
+.projects.home .project-grid .project {
+  width: calc((100% - 16px) / 2);
+  margin-bottom: 1rem;
+}
+
+#featured-work {
+  text-align: center;
+  padding-bottom: 2rem;
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {
 
-  .projects.home .grid-sizer,
-  .projects.home .project {
+  .projects.home .project-grid .grid-sizer,
+  .projects.home .project-grid .project {
     width: 100%;
   }
 }

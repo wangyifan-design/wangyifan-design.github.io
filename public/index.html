@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script>document.documentElement.classList.add('js-ready');</script>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV9ZKLPVH4"></script>
 <script>
@@ -83,7 +84,7 @@
         </a>
       </div>
       <ul class="nav-right">
-        <li><a href="index.html" class="hover-underline">Work</a></li>
+        <li><a href="#featured-work" class="hover-underline">Work</a></li>
         <li><a href="play.html" class="hover-underline">Play</a></li>
         <li><a href="chat.html" class="hover-underline">Chat</a></li>
         <li><a href="about.html" class="hover-underline">About</a></li>
@@ -134,107 +135,109 @@
 
     <section class="projects home" aria-labelledby="featured-work">
       <h2 id="featured-work">Featured Work</h2>
-      <div class="grid-sizer" aria-hidden="true"></div>
-      <article class="project">
-        <a href="rockhood.html" class="project-link">
-          <figure class="project-figure">
-            <img class="project-image" src="img/rockhood/Snapshot.png" alt="Rockhood.ai project cover" loading="lazy" decoding="async" />
-            <figcaption class="project-labels">
-              <span class="project-title">Rockhood.ai</span>
-              <span class="project-year">2025</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="heidegger.html" class="project-link">
-          <figure class="project-figure">
-            <video class="project-image" src="videos/cover1.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
-            <figcaption class="project-labels">
-              <span class="project-title">Heidegger’s Heaps of Brocade and Ash</span>
-              <span class="project-year">2023</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="livingjiagu.html" class="project-link">
-          <figure class="project-figure">
-            <video class="project-image" src="videos/cover5.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
-            <figcaption class="project-labels">
-              <span class="project-title">Living Jiagu</span>
-              <span class="project-year">2019</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="virtualzoo.html" class="project-link">
-          <figure class="project-figure">
-            <img class="project-image" src="img/project-2.jpg" alt="Shengqinyuan - Virtual Zoo project cover" loading="lazy" decoding="async" />
-            <figcaption class="project-labels">
-              <span class="project-title">Shengqinyuan - Virtual Zoo</span>
-              <span class="project-year">2025</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="redpacket.html" class="project-link">
-          <figure class="project-figure">
-            <img class="project-image" src="img/project-9.jpg" alt="Bone Script Red Packet project cover" loading="lazy" decoding="async" />
-            <figcaption class="project-labels">
-              <span class="project-title">Bone Script Red Packet</span>
-              <span class="project-year">2018</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="patapata.html" class="project-link">
-          <figure class="project-figure">
-            <video class="project-image" src="videos/cover4.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
-            <figcaption class="project-labels">
-              <span class="project-title">Philosophy Drama Festival</span>
-              <span class="project-year">2024</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="poster.html" class="project-link">
-          <figure class="project-figure">
-            <img class="project-image" src="img/project-3.jpg" alt="Popular Phrase project cover" loading="lazy" decoding="async" />
-            <figcaption class="project-labels">
-              <span class="project-title">Popular Phrase</span>
-              <span class="project-year">2023</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="ram.html" class="project-link">
-          <figure class="project-figure">
-            <img class="project-image" src="img/project-8.jpg" alt="The mascot of RAM project cover" loading="lazy" decoding="async" />
-            <figcaption class="project-labels">
-              <span class="project-title">The mascot of RAM</span>
-              <span class="project-year">2024</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <article class="project">
-        <a href="bird.html" class="project-link">
-          <figure class="project-figure">
-            <img class="project-image" src="img/project-6.jpg" alt="Online Museum of Bird and Insect Pattern project cover" loading="lazy" decoding="async" />
-            <figcaption class="project-labels">
-              <span class="project-title">Online Museum of Bird and Insect Pattern</span>
-              <span class="project-year">2020</span>
-            </figcaption>
-          </figure>
-        </a>
-      </article>
-      <!-- Additional projects can be inserted here -->
+      <div class="project-grid">
+        <div class="grid-sizer" aria-hidden="true"></div>
+        <article class="project">
+          <a href="rockhood.html" class="project-link">
+            <figure class="project-figure">
+              <img class="project-image" src="img/rockhood/Snapshot.png" alt="Rockhood.ai project cover" loading="lazy" decoding="async" />
+              <figcaption class="project-labels">
+                <span class="project-title">Rockhood.ai</span>
+                <span class="project-year">2025</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="heidegger.html" class="project-link">
+            <figure class="project-figure">
+              <video class="project-image" src="videos/cover1.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+              <figcaption class="project-labels">
+                <span class="project-title">Heidegger’s Heaps of Brocade and Ash</span>
+                <span class="project-year">2023</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="livingjiagu.html" class="project-link">
+            <figure class="project-figure">
+              <video class="project-image" src="videos/cover5.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+              <figcaption class="project-labels">
+                <span class="project-title">Living Jiagu</span>
+                <span class="project-year">2019</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="virtualzoo.html" class="project-link">
+            <figure class="project-figure">
+              <img class="project-image" src="img/project-2.jpg" alt="Shengqinyuan - Virtual Zoo project cover" loading="lazy" decoding="async" />
+              <figcaption class="project-labels">
+                <span class="project-title">Shengqinyuan - Virtual Zoo</span>
+                <span class="project-year">2025</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="redpacket.html" class="project-link">
+            <figure class="project-figure">
+              <img class="project-image" src="img/project-9.jpg" alt="Bone Script Red Packet project cover" loading="lazy" decoding="async" />
+              <figcaption class="project-labels">
+                <span class="project-title">Bone Script Red Packet</span>
+                <span class="project-year">2018</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="patapata.html" class="project-link">
+            <figure class="project-figure">
+              <video class="project-image" src="videos/cover4.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+              <figcaption class="project-labels">
+                <span class="project-title">Philosophy Drama Festival</span>
+                <span class="project-year">2024</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="poster.html" class="project-link">
+            <figure class="project-figure">
+              <img class="project-image" src="img/project-3.jpg" alt="Popular Phrase project cover" loading="lazy" decoding="async" />
+              <figcaption class="project-labels">
+                <span class="project-title">Popular Phrase</span>
+                <span class="project-year">2023</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="ram.html" class="project-link">
+            <figure class="project-figure">
+              <img class="project-image" src="img/project-8.jpg" alt="The mascot of RAM project cover" loading="lazy" decoding="async" />
+              <figcaption class="project-labels">
+                <span class="project-title">The mascot of RAM</span>
+                <span class="project-year">2024</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <article class="project">
+          <a href="bird.html" class="project-link">
+            <figure class="project-figure">
+              <img class="project-image" src="img/project-6.jpg" alt="Online Museum of Bird and Insect Pattern project cover" loading="lazy" decoding="async" />
+              <figcaption class="project-labels">
+                <span class="project-title">Online Museum of Bird and Insect Pattern</span>
+                <span class="project-year">2020</span>
+              </figcaption>
+            </figure>
+          </a>
+        </article>
+        <!-- Additional projects can be inserted here -->
+      </div>
 
       <!-- 更多项目 -->
     </section>
@@ -254,33 +257,59 @@
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
   <script>
-    const grid = document.querySelector('.projects');
+    const grid = document.querySelector('.project-grid');
     let msnry;
 
-    const createMasonry = () => {
-      if (!grid || typeof Masonry === 'undefined' || typeof imagesLoaded === 'undefined') return;
-
-      imagesLoaded(grid, () => {
-        if (msnry) {
-          msnry.layout();
-          return;
-        }
-
+    const ensureMasonry = () => {
+      if (!grid || typeof Masonry === 'undefined') return null;
+      if (!msnry) {
         msnry = new Masonry(grid, {
           itemSelector: '.project',
           columnWidth: '.grid-sizer',
           percentPosition: true,
-          gutter: 8
+          gutter: 16
         });
+      }
+      return msnry;
+    };
+
+    const layoutMasonry = () => {
+      const instance = ensureMasonry();
+      if (instance) {
+        instance.layout();
+      }
+    };
+
+    const createMasonry = () => {
+      if (!grid || typeof imagesLoaded === 'undefined') {
+        layoutMasonry();
+        return;
+      }
+
+      imagesLoaded(grid, () => {
+        layoutMasonry();
       });
     };
 
     createMasonry();
 
+    if (grid) {
+      const mediaElements = grid.querySelectorAll('.project-image');
+      mediaElements.forEach((media) => {
+        const isVideo = media.tagName === 'VIDEO';
+        const eventName = isVideo ? 'loadeddata' : 'load';
+
+        if ((isVideo && media.readyState >= 3) || (!isVideo && media.complete)) {
+          layoutMasonry();
+          return;
+        }
+
+        media.addEventListener(eventName, layoutMasonry);
+      });
+    }
+
     window.addEventListener('resize', () => {
-      if (msnry) {
-        msnry.layout();
-      }
+      layoutMasonry();
     });
   </script>
 

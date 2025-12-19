@@ -4,6 +4,12 @@
   flex-wrap: wrap;
   box-sizing: border-box;
   gap: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.projects.play.is-ready {
+  opacity: 1;
 }
 
 .projects.play .grid-sizer,
