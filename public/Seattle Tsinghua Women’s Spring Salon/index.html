@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>西雅图 · 水木芳华茶话会</title>
+  <style>
+    :root {
+      --bg: #f8f1f2;
+      --ink: #2c2426;
+      --accent: #c56b7a;
+      --accent-2: #8f6b77;
+      --card: #fff7f8;
+      --shadow: 0 18px 36px rgba(44, 36, 38, 0.12);
+      --radius: 22px;
+      --radius-lg: 28px;
+      --pad: 18px;
+      --pad-lg: 26px;
+      --line: rgba(44, 36, 38, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Avenir", sans-serif;
+      background:
+        url("background.jpg") center top / cover no-repeat,
+        radial-gradient(1200px 520px at 80% -10%, rgba(197, 107, 122, 0.18), transparent 60%),
+        radial-gradient(900px 460px at -10% 10%, rgba(225, 199, 211, 0.35), transparent 55%),
+        var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 24px 16px 18px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%);
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    header {
+      padding: 28px 20px 28px;
+      background: transparent;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 132px;
+      height: 132px;
+      object-fit: contain;
+      margin: 6px auto;
+      display: block;
+    }
+
+    .eyebrow {
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 1rem;
+      color: rgba(31, 29, 26, 0.7);
+    }
+
+    .intro {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-top: 14px;
+      color: rgba(31, 29, 26, 0.85);
+    }
+
+    .game-list {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+
+    .game-button {
+      border: none;
+      background: #fffafc;
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 1.02rem;
+      box-shadow: none;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      text-align: left;
+    }
+
+    .game-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .game-icon {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .game-button:hover {
+      border-color: rgba(197, 107, 122, 0.35);
+      background: #fff6f8;
+    }
+
+    .game-button:active {
+      transform: translateY(2px) scale(0.99);
+    }
+
+    .game-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .game-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(31, 29, 26, 0.55);
+    }
+
+    .game-title-cn {
+      font-weight: 600;
+      font-size: 1.02rem;
+    }
+
+    .game-title-en {
+      font-size: 0.88rem;
+      color: rgba(31, 29, 26, 0.6);
+      font-weight: 400;
+    }
+
+    .game-button em {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: rgba(31, 29, 26, 0.6);
+      font-size: 0.88rem;
+      padding-bottom: 8px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(21, 18, 15, 0.45);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+    }
+
+    .modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 500px;
+      background: #fffdf9;
+      border-radius: 26px 26px 0 0;
+      padding: 22px 20px 28px;
+      box-shadow: var(--shadow);
+      transform: translateY(30px);
+      transition: transform 0.25s ease;
+      position: relative;
+      max-height: min(78vh, 680px);
+      overflow: hidden;
+    }
+
+    .modal.is-open .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-title {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+    }
+
+    .modal-body {
+      margin: 0;
+      line-height: 1.65;
+      font-size: 0.98rem;
+      color: rgba(31, 29, 26, 0.85);
+      max-height: 55vh;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .modal-body h3 {
+      margin: 12px 0 6px;
+      font-size: 0.98rem;
+      color: var(--accent-2);
+      letter-spacing: 0.02em;
+    }
+
+    .modal-body p {
+      margin: 0 0 10px;
+    }
+
+    .modal-body ul {
+      margin: 0 0 12px;
+      padding-left: 18px;
+      list-style: disc;
+    }
+
+    .modal-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .modal-title-cn {
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+
+    .modal-title-en {
+      font-size: 0.95rem;
+      color: rgba(31, 29, 26, 0.6);
+      font-weight: 400;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(197, 107, 122, 0.12);
+      color: var(--accent);
+      font-size: 1.1rem;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .close-button:active {
+      transform: scale(0.98);
+    }
+
+    @media (min-width: 600px) {
+      body {
+        padding: 40px 16px 60px;
+      }
+
+      .modal {
+        align-items: center;
+      }
+
+    .modal-card {
+      border-radius: 26px;
+    }
+  }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">Seattle · Tsinghua Women</div>
+      <h1>西雅图 · 水木芳华茶话会</h1>
+      <img class="logo" src="logo.png" alt="Seattle Tsinghua Women’s Spring Salon logo">
+    </header>
+
+    <section class="game-list" aria-label="活动游戏列表">
+      <button
+        class="game-button"
+        data-title-cn="人生体验榜"
+        data-title-en="Life Experience Countdown"
+        data-body="<h3>玩法简介</h3><p>每位参与者先伸出10个手指。游戏开始后，大家轮流说一件自己曾经做过的事情，例如：</p><ul><li>我曾经一个人去旅行</li><li>我曾经通宵工作</li><li>我曾经养过宠物</li></ul><p>如果其他人没有做过这件事，就需要放下一根手指；如果做过，则保持不动。</p><p>游戏会持续进行，直到大家的手指逐渐减少。当只剩下少数人还有手指时，游戏结束。</p><h3>获胜规则</h3><p>最后剩余手指最多的人获胜。</p>"
+      >
+        <span class="game-left">
+          <img class="game-icon" src="1.png" alt="">
+          <span class="game-text">
+            <span class="game-label">游戏一</span>
+            <span class="game-title-cn">人生体验榜</span>
+            <span class="game-title-en">Life Experience Countdown</span>
+          </span>
+        </span>
+      </button>
+
+      <button
+        class="game-button"
+        data-title-cn="五点同频"
+        data-title-en="Five Shared Threads"
+        data-body="<h3>玩法简介</h3><p>参与者分成若干小组（每桌一组即可）。每组需要在10分钟内找出5个共同点。</p><p>这些共同点可以是：</p><ul><li>兴趣爱好</li><li>生活习惯</li><li>经历</li><li>喜欢的食物或旅行目的地</li></ul><p>但不能使用过于显而易见的共同点，例如：</p><ul><li>都是清华校友</li><li>都在同一个活动现场</li></ul><h3>分享环节</h3><p>时间结束后，每组轮流分享自己找到的5个共同点。</p><h3>获胜规则</h3><p>大家一起投票，选出最有趣或最意想不到的共同点。</p><h3>所需材料</h3><p>计时器、便签纸或白纸、笔。</p>"
+      >
+        <span class="game-left">
+          <img class="game-icon" src="2.png" alt="">
+          <span class="game-text">
+            <span class="game-label">游戏二</span>
+            <span class="game-title-cn">五点同频</span>
+            <span class="game-title-en">Five Shared Threads</span>
+          </span>
+        </span>
+      </button>
+
+      <button
+        class="game-button"
+        data-title-cn="画意接龙"
+        data-title-en="Sketch & Guess Relay"
+        data-body="<h3>玩法简介</h3><p>参与者分组进行，每组排成一列。</p><h3>游戏开始时</h3><p>第一位成员看到一个关键词（例如：登山、咖啡、音乐会等），但不能说出来。</p><p>第一位成员根据这个词画一幅简单的图。</p><p>第二位成员根据这幅图写下自己猜到的内容。</p><p>第三位成员根据第二位写下的内容再画一幅图。</p><p>第四位成员根据这幅图再进行猜测。</p><p>游戏按照画 → 猜 → 画 → 猜的顺序继续。</p><h3>结果揭晓</h3><p>最后由最后一位成员公布猜测结果，并和最初的关键词进行对比。</p><h3>获胜规则</h3><p>如果最后的猜测最接近原始关键词，该组获胜。</p><h3>所需材料</h3><p>词卡/词条、A4纸、签字笔/马克笔。</p>"
+      >
+        <span class="game-left">
+          <img class="game-icon" src="3.png" alt="">
+          <span class="game-text">
+            <span class="game-label">游戏三</span>
+            <span class="game-title-cn">画意接龙</span>
+            <span class="game-title-en">Sketch & Guess Relay</span>
+          </span>
+        </span>
+      </button>
+
+      <button
+        class="game-button"
+        data-title-cn="表演程度挑战"
+        data-title-en="Intensity Ranking Challenge"
+        data-body="<h3>玩法简介</h3><p>每位参与者随机抽取一张数字卡片（1–10），但不能向其他人展示。</p><p>主持人随后给出一个情境关键词，例如：</p><ul><li>触电</li><li>害怕</li><li>吃到很辣的食物</li><li>遇到喜欢的人</li></ul><p>参与者需要根据自己抽到的数字用表情或简单动作表演这个情境的程度：</p><ul><li>1 = 程度最轻</li><li>10 = 程度最强</li></ul><h3>排序环节</h3><p>表演结束后，大家根据每个人的表现尝试将所有人从1到10排序。</p><h3>结果揭晓</h3><p>最后每个人公布自己的数字，并与大家的排序进行对比。</p><h3>所需材料</h3><p>数字卡1-10、关键词清单、小奖品。</p>"
+      >
+        <span class="game-left">
+          <img class="game-icon" src="4.png" alt="">
+          <span class="game-text">
+            <span class="game-label">游戏四</span>
+            <span class="game-title-cn">表演程度挑战</span>
+            <span class="game-title-en">Intensity Ranking Challenge</span>
+          </span>
+        </span>
+      </button>
+    </section>
+
+  </main>
+
+  <div class="modal" id="game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <h2 class="modal-title" id="modal-title"></h2>
+      <div class="modal-body" id="modal-body"></div>
+      <button class="close-button" type="button" id="close-modal" aria-label="关闭">×</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('game-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const closeBtn = document.getElementById('close-modal');
+    const buttons = document.querySelectorAll('.game-button');
+
+    const openModal = (button) => {
+      const titleCn = button.dataset.titleCn;
+      const titleEn = button.dataset.titleEn;
+      modalTitle.innerHTML = `
+        <span class="modal-title-cn">${titleCn}</span>
+        <span class="modal-title-en">${titleEn}</span>
+      `;
+      modalBody.innerHTML = button.dataset.body || '';
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        openModal(button);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
