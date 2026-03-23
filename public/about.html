@@ -66,6 +66,48 @@
     .about-text{
        margin-top: 100px; 
        padding: 2rem;
+       max-width: 800px;
+    }
+
+    .about-list {
+    list-style: none;
+    padding: 0 0 0 1.75rem;
+    margin: 0;
+    }
+
+    .about-list li {
+    position: relative;
+    margin-bottom: 1.5em;
+    }
+
+    .about-list li::before {
+    content: "•";
+    position: absolute;
+    left: -1rem;
+    top: 0.1rem;
+    color: #666;
+    }
+
+    .inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: inherit;
+    text-decoration: none;
+    }
+
+    .inline-link::after {
+    content: "↗";
+    opacity: 0;
+    transform: translate(-0.2rem, 0.1rem);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-size: 0.85em;
+    }
+
+    .inline-link:hover::after,
+    .inline-link:focus-visible::after {
+    opacity: 1;
+    transform: translate(0, 0.1rem);
     }
 
     .photo-strip-wrapper {
@@ -139,7 +181,7 @@
 
     </section>
 
-    <!-- ✅ 中间滚动带 -->
+    <!-- Photo strip -->
     <section class="photo-strip-wrapper">
         <div class="photo-strip">
         <img src="img/strip/strip-1.jpg" alt="Wang Yifan presenting design work" />
@@ -148,7 +190,7 @@
         <img src="img/strip/strip-4.jpg" alt="Workshop session with collaborators" />
         <img src="img/strip/strip-5.jpg" alt="Close-up of UI design explorations" />
         <img src="img/strip/strip-6.jpg" alt="Installation view of Wang Yifan's exhibition" />
-        <!-- 复制一轮增强滚动视觉 -->
+        <!-- Duplicate images for continuous scrolling -->
         <img src="img/strip/strip-1.jpg" alt="Wang Yifan presenting design work" />
         <img src="img/strip/strip-2.jpg" alt="Studio snapshot of Wang Yifan sketching" />
         <img src="img/strip/strip-3.jpg" alt="Design research board with notes and materials" />
@@ -159,43 +201,125 @@
     </section>
 
     <section class="about-text">
-        <div style="display: flex; flex-wrap: wrap; gap: 4vw;">
+        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
     
-    <!-- Work -->
-    <div style="flex: 1; min-width: 280px;">
-      <h2 style="font-size: 1.5em; font-weight: bold;">Work</h2>
-      <ul style="list-style: none; padding: 0; margin: 0;">
-        <li style="margin-bottom: 1.5em;">
-          <div style="font-weight: bold;">Product Designer, Rockhood.ai</div>
+    <!-- Selected Experience -->
+    <div>
+      <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 1rem;">Selected Experience</h2>
+      <ul class="about-list">
+        <li>
+          <div>Product Designer, Rockhood.ai</div>
           <div style="color: gray;">Feb 2025 – Now</div>
           <div>Leading brand, UI, and product design for an AI-powered conversational real estate platform.</div>
         </li>
-        <li style="margin-bottom: 1.5em;">
-          <div style="font-weight: bold;">UX Designer, Tsinghua Future Lab</div>
+        <li>
+          <div>UX Designer, Tsinghua Future Lab</div>
           <div style="color: gray;">2024 – Now</div>
           <div>Designed user journey maps and AI tools for senior care and natural language interaction.</div>
+        </li>
+        <li>
+          <div>Design Intern, Baidu / Alibaba / SenseTime</div>
+          <div>Explored large-scale product systems and AI-driven interfaces across different industry contexts. Gained experience working within cross-functional teams and understanding real-world design constraints.</div>
         </li>
       </ul>
     </div>
 
     <!-- Education -->
-    <div style="flex: 1; min-width: 280px;">
-      <h2 style="font-size: 1.5em; font-weight: bold;">Education</h2>
-      <ul style="list-style: none; padding: 0; margin: 0;">
-        <li style="margin-bottom: 1.5em;">
-          <div style="font-weight: bold;">PhD in Visual Communication</div>
+    <div>
+      <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 1rem;">Education</h2>
+      <ul class="about-list">
+        <li>
+          <div>PhD in Visual Communication</div>
           <div style="color: gray;">2020 – 2024, Tsinghua University</div>
           <div>Research in intelligent design, ancient character innovation, and speculative AI interfaces.</div>
         </li>
-        <li style="margin-bottom: 1.5em;">
-          <div style="font-weight: bold;">MA in Visual Communication</div>
+        <li>
+          <div>MA in Visual Communication</div>
           <div style="color: gray;">2016 – 2019, Tsinghua University</div>
           <div>Focus on revitalizing traditional culture through virtual exhibitions and visual systems.</div>
         </li>
-        <li style="margin-bottom: 1.5em;">
-          <div style="font-weight: bold;">BA in Visual Communication</div>
+        <li>
+          <div>BA in Visual Communication</div>
           <div style="color: gray;">2012 – 2016, Tsinghua University</div>
           <div>Trained in fundamental design skills: logo design, typography, packaging, and motion graphics.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Projects -->
+    <div>
+      <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 1rem;">Projects</h2>
+      <ul class="about-list">
+        <li>
+          <div>
+            <a href="https://www.ad.tsinghua.edu.cn/info/1061/8148.htm" target="_blank" rel="noopener noreferrer" class="inline-link">Personalized Service Stamp Design</a>
+          </div>
+          <div style="color: gray;">Tsinghua University</div>
+        </li>
+        <li>
+          <div>Central Asian Cultural Cookbook</div>
+          <div style="color: gray;">FAO (UN Volunteer)</div>
+        </li>
+        <li>
+          <div>Digital Oracle Bone Script Project</div>
+          <div style="color: gray;">Tsinghua University</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Exhibitions -->
+    <div>
+      <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 1rem;">Exhibitions</h2>
+      <ul class="about-list">
+        <li>
+          <div>National Graphic Design Exhibition (Selected / Finalist)</div>
+          <div style="color: gray;">2025, China Artists Association</div>
+        </li>
+        <li>
+          <div>Tianjin Youth Art Season (Selected Work)</div>
+          <div style="color: gray;">2025, Tianjin Academy of Fine Arts</div>
+        </li>
+        <li>
+          <div>Chinese Character Interactive Festival</div>
+          <div style="color: gray;">2022, Macao</div>
+        </li>
+        <li>
+          <div>
+            <a href="https://www.tsinghua.org.cn/info/1013/41767.htm" target="_blank" rel="noopener noreferrer" class="inline-link">Moments in Sound and Image - Tsinghua Alumni Boston Art Festival</a>
+          </div>
+          <div style="color: gray;">2025, North America Federation of Tsinghua Alumni Association</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Awards -->
+    <div>
+      <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 1rem;">Awards</h2>
+      <ul class="about-list">
+        <li>
+          <div>Shenzhen Global Design Award (Excellence Award / Kunpeng Award)</div>
+          <div style="color: gray;">2024, Shenzhen Municipal Government / Shenzhen Innovation & Creative Design Development Office</div>
+        </li>
+        <li>
+          <div>BIAF Busan International Art Festival (Silver Award)</div>
+          <div style="color: gray;">2024, Busan Metropolitan City / BIAF Organizing Committee</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Activities -->
+    <div>
+      <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 1rem;">Activities</h2>
+      <ul class="about-list">
+        <li>
+          <div>
+            <a href="https://www.gdcaward.com/gdc-show-243.html?lang=cn" target="_blank" rel="noopener noreferrer" class="inline-link">GDC Show 2017 — Tell the Future (Execution Team)</a>
+          </div>
+          <div style="color: gray;">2017, Tsinghua University</div>
+        </li>
+        <li>
+          <div>Tsinghua International Art &amp; Design Education Conference (Volunteer)</div>
+          <div style="color: gray;">2023, Tsinghua University</div>
         </li>
       </ul>
     </div>
