@@ -328,13 +328,17 @@ body[data-page="home"] .preset-question {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 2.5rem;
-  padding: 120px 5vw 5vw;
+  gap: 1.25rem;
+  padding: 96px 5vw 5vw;
   text-align: center;
 }
 
 .chat-page-hero.hide-intro .chat-page-intro {
   display: none;
+}
+
+.chat-page-hero.hide-intro {
+  gap: 0.5rem;
 }
 
 .chat-page-intro {
@@ -344,6 +348,8 @@ body[data-page="home"] .preset-question {
 body[data-page="chat"] .chat-container {
   max-width: 720px;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 body[data-page="chat"] .chat-box {
@@ -354,7 +360,8 @@ body[data-page="chat"] .chat-box {
   flex-direction: column;
   align-items: stretch;
   gap: 1.5rem;
-  min-height: 60vh;
+  flex: 1;
+  min-height: 0;
   box-sizing: border-box;
 }
 
@@ -398,6 +405,59 @@ body[data-page="chat"] .preset-question {
   text-align: left;
 }
 
+body[data-page="chat"] {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body[data-page="chat"] main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+body[data-page="chat"] > footer {
+  flex-shrink: 0;
+}
+
+body[data-page="chat"] .chat-page-hero {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  padding-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+body[data-page="chat"] .chat-page-hero.hide-intro {
+  padding-top: 76px;
+}
+
+body[data-page="chat"] .chat-page-hero.hide-intro .chat-box {
+  padding-top: 1rem;
+}
+
+body[data-page="chat"] .chat-page-hero.hide-intro .chat-content {
+  padding-top: 0.25rem;
+}
+
+body[data-page="chat"] .chat-page-intro {
+  flex-shrink: 0;
+}
+
+body[data-page="chat"] .chat-container,
+body[data-page="chat"] .chat-box {
+  overflow: hidden;
+}
+
+body[data-page="chat"] .chat-input,
+body[data-page="chat"] .chat-input-field {
+  overflow: visible;
+}
+
 @keyframes presetMarquee {
   from {
     transform: translateX(0);
@@ -434,6 +494,5 @@ body[data-page="chat"] .preset-question {
   
   body[data-page="chat"] .chat-box {
     padding: 1.5rem;
-    min-height: 70vh;
   }
 }

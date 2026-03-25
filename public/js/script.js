@@ -116,11 +116,12 @@ function setupChatPage(input, chat, container, form) {
     if (!message || isRequesting) return;
 
     isRequesting = true;
-    chat.innerHTML = '';
     addUserMessage(chat, message);
     markConversationStarted();
+    scrollChatToBottom(chat);
     const isChinese = /[\u4e00-\u9fa5]/.test(message);
     thinkingMessage = displayThinking(chat);
+    scrollChatToBottom(chat);
 
     try {
       const knowledge = await fetchKnowledge();
@@ -559,6 +560,7 @@ function addUserMessage(container, text) {
   userMsg.className = 'chat-message user';
   userMsg.textContent = text;
   container.appendChild(userMsg);
+  scrollChatToBottom(container);
 }
 
 function displayThinking(container) {
@@ -568,6 +570,7 @@ function displayThinking(container) {
   dotsContainer.innerHTML = `Thinking<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>`;
   thinkingMessage.appendChild(dotsContainer);
   container.appendChild(thinkingMessage);
+  scrollChatToBottom(container);
   return thinkingMessage;
 }
 
@@ -580,9 +583,11 @@ function displayAnswer(container, answerData, thinkingMessage) {
   container.appendChild(aiMsg);
   const data = typeof answerData === 'string' ? { text: answerData } : (answerData || {});
   const mediaItems = Array.isArray(data.media) ? data.media : [];
+  scrollChatToBottom(container);
 
-  typeWriter(data.text || '', aiMsg, 25).then(() => {
+  typeWriter(data.text || '', aiMsg, 25, () => scrollChatToBottom(container)).then(() => {
     renderAnswerMedia(aiMsg, mediaItems);
+    scrollChatToBottom(container);
   });
 }
 
@@ -719,7 +724,12 @@ async function sendFeedbackToGoogleSheet(userMessage, aiReply) {
   }
 }
 
-function typeWriter(text, container, delay = 30) {
+function scrollChatToBottom(container) {
+  if (!container) return;
+  container.scrollTop = container.scrollHeight;
+}
+
+function typeWriter(text, container, delay = 30, onProgress) {
   return new Promise((resolve) => {
     if (!container) {
       resolve();
@@ -739,6 +749,9 @@ function typeWriter(text, container, delay = 30) {
       if (i < content.length) {
         container.innerHTML += content.charAt(i);
         i += 1;
+        if (typeof onProgress === 'function') {
+          onProgress();
+        }
       } else {
         clearInterval(interval);
         resolve();

@@ -87,7 +87,7 @@
 .project-content p,
 .project-content h2,
 .project-content h3  {
-  max-width: 50%;
+  width: min(100%, 700px);
   margin: 0 auto 1rem auto;
   line-height: 1.6;
 }
@@ -116,11 +116,13 @@
 }
 
 .img-medium {
-  width: 80%;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  border-radius: 0;
 }
 
 .img-small {
-  width: 50%;
+  width: min(100%, 700px);
 }
 
 .img-mini {
