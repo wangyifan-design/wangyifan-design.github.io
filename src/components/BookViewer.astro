@@ -1,46 +1,63 @@
 ---
-// BookViewer — a horizontally-paged book spread viewer.
+// BookViewer — a paged book spread viewer.
 //
-// Pass an array of page image URLs in reading order; the component pairs
-// them up into spreads (left + right) and lets the reader move between
-// spreads with:
-//   - prev / next buttons
-//   - keyboard arrows (when the viewer is focused)
-//   - pointer drag / touch swipe
+// Reading model:
+//   - Spread 1: front cover on the RIGHT, left page empty (no left arrow)
+//   - Spreads 2..N-1: interior page pairs (left + right, both arrows)
+//   - Spread N: back cover on the LEFT, right page empty (no right arrow)
 //
-// Slide transition is pure CSS (transform: translateX) — no animation
-// library. Re-bootstraps on Astro View Transitions via astro:after-swap.
+// Interaction:
+//   - Prev / Next buttons (hidden when there's no neighbour, e.g. left arrow
+//     is hidden on the cover spread).
+//   - Keyboard ← / → when the viewer has focus.
+//
+// Navigation does NOT animate — spreads swap instantly, like flipping
+// through a stack of cards. The viewer is bootstrapped on every Astro
+// View Transition so re-entering the project page rewires events.
 //
 // Usage in MDX:
 //   import BookViewer from '../../components/BookViewer.astro';
-//   <BookViewer pages={[
-//     '/img/book-design/p01.jpg',
-//     '/img/book-design/p02.jpg',
-//     ...
-//   ]} alt="Book name spread" />
+//   <BookViewer
+//     frontCover="/img/book-design/book-front.jpg"
+//     backCover="/img/book-design/book-back.jpg"
+//     pages={[ '/img/book-design/p01.jpg', '/img/book-design/p02.jpg', ... ]}
+//     alt="Book name page"
+//   />
 
 interface Props {
-  /** Page image URLs in reading order. Every two consecutive entries
-   *  form one spread (left + right). An odd-length list means the last
-   *  spread has only a left page. */
+  /** Interior page image URLs in reading order. Every two consecutive
+   *  entries form one spread (left + right). */
   pages: string[];
-  /** Alt-text prefix used for every page image (e.g., "Living Jiagu page"). */
+  /** Front cover image. If provided, becomes the first spread (right side
+   *  only). */
+  frontCover?: string;
+  /** Back cover image. If provided, becomes the last spread (left side
+   *  only). */
+  backCover?: string;
+  /** Alt-text prefix used for every page image. */
   alt?: string;
   /** ARIA label for the whole viewer region. */
   label?: string;
 }
 
-const { pages, alt = 'Book page', label = 'Book pages' } = Astro.props;
+const { pages, frontCover, backCover, alt = 'Book page', label = 'Book pages' } = Astro.props;
 
-type Spread = { left?: string; right?: string; leftIdx?: number; rightIdx?: number };
+type Spread = { left?: string; right?: string; leftAlt?: string; rightAlt?: string };
 const spreads: Spread[] = [];
+
+if (frontCover) {
+  spreads.push({ right: frontCover, rightAlt: `${alt} — front cover` });
+}
 for (let i = 0; i < pages.length; i += 2) {
   spreads.push({
     left: pages[i],
     right: pages[i + 1],
-    leftIdx: i + 1,
-    rightIdx: i + 2,
+    leftAlt: `${alt} ${i + 1}`,
+    rightAlt: pages[i + 1] ? `${alt} ${i + 2}` : undefined,
   });
+}
+if (backCover) {
+  spreads.push({ left: backCover, leftAlt: `${alt} — back cover` });
 }
 ---
 
@@ -52,35 +69,33 @@ for (let i = 0; i < pages.length; i += 2) {
       </svg>
     </button>
 
-    <div class="book-track-clip">
-      <div class="book-track">
-        {spreads.map((s, i) => (
-          <div class="book-spread" data-index={i}>
-            <div class="book-page left">
-              {s.left && (
-                <img
-                  src={s.left}
-                  alt={`${alt} ${s.leftIdx}`}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  draggable="false"
-                />
-              )}
-            </div>
-            <div class="book-page right">
-              {s.right && (
-                <img
-                  src={s.right}
-                  alt={`${alt} ${s.rightIdx}`}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  draggable="false"
-                />
-              )}
-            </div>
+    <div class="book-frame">
+      {spreads.map((s, i) => (
+        <div class={`book-spread${i === 0 ? ' is-active' : ''}`} data-index={i}>
+          <div class={`book-page left${s.left ? '' : ' is-empty'}`}>
+            {s.left && (
+              <img
+                src={s.left}
+                alt={s.leftAlt ?? ''}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                draggable="false"
+              />
+            )}
           </div>
-        ))}
-      </div>
+          <div class={`book-page right${s.right ? '' : ' is-empty'}`}>
+            {s.right && (
+              <img
+                src={s.right}
+                alt={s.rightAlt ?? ''}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                draggable="false"
+              />
+            )}
+          </div>
+        </div>
+      ))}
     </div>
 
     <button type="button" class="book-nav next" aria-label="Next spread">
@@ -111,32 +126,27 @@ for (let i = 0; i < pages.length; i += 2) {
     gap: 0.75rem;
   }
 
-  /* The clip wraps the sliding track and carries the book "shadow" so the
-     drop-shadow doesn't get cut off by the overflow:hidden. */
-  .book-track-clip {
+  /* The book frame is the visible double-page area. Spreads stack on top
+     of each other; only the active one is `display: grid`. No sliding,
+     so we don't need a clipping container. */
+  .book-frame {
     flex: 1;
-    overflow: hidden;
-    border-radius: 2px;
+    position: relative;
+    aspect-ratio: 2 / 1.35;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    border-radius: 2px;
+    overflow: hidden;
   }
-
-  .book-track {
-    display: flex;
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-    touch-action: pan-y; /* allow vertical scroll, capture horizontal */
-    cursor: grab;
-  }
-  .book-track.is-dragging { cursor: grabbing; transition: none; }
 
   .book-spread {
-    flex: 0 0 100%;
-    display: grid;
+    position: absolute;
+    inset: 0;
+    display: none;
     grid-template-columns: 1fr 1fr;
-    gap: 1px; /* thin spine line between the two pages */
-    background: rgba(0, 0, 0, 0.12); /* shows through the gap as the spine */
-    aspect-ratio: 2 / 1.35; /* roughly landscape spread; tweak per book */
+    gap: 1px;
+    background: rgba(0, 0, 0, 0.12); /* visible through the gap = spine */
   }
+  .book-spread.is-active { display: grid; }
 
   .book-page {
     background: #fff;
@@ -151,16 +161,18 @@ for (let i = 0; i < pages.length; i += 2) {
     object-fit: cover;
     display: block;
     pointer-events: none;
-    /* Project pages have a global rule that sets `.project-content img`
-       to opacity:0 until a scroll-reveal observer adds `.visible`.
-       Our book pages handle their own reveal via the slide transition,
-       so opt out of that global animation here. */
+    /* Project pages set `.project-content img { opacity: 0 }` until a
+       scroll-reveal observer adds `.visible`. Book pages handle their
+       own visibility, so opt out of that global animation here. */
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
     margin: 0 !important;
     max-width: none !important;
   }
+  /* Empty pages (left of cover spread, right of back-cover spread) stay
+     white — like a blank page on the open side of the book. */
+  .book-page.is-empty { background: #fff; }
 
   .book-nav {
     flex: 0 0 auto;
@@ -184,10 +196,10 @@ for (let i = 0; i < pages.length; i += 2) {
     background: #f5f5f5;
     transform: scale(1.06);
   }
-  .book-nav:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
-  }
+  /* Hidden (not just disabled) at the ends so it visually reads "this is
+     the cover / back" — nothing to flip back/forward to. visibility:hidden
+     keeps the layout from shifting when arrows appear/disappear. */
+  .book-nav.is-hidden { visibility: hidden; }
   .book-nav svg { display: block; }
 
   .book-indicator {
@@ -198,7 +210,7 @@ for (let i = 0; i < pages.length; i += 2) {
     letter-spacing: 0.02em;
   }
 
-  /* Dark-mode tweaks — buttons follow the theme palette. */
+  /* Dark-mode tweaks. */
   :global([data-theme='dark']) .book-nav {
     background: var(--surface, #161616);
     color: var(--fg, #f4f4f4);
@@ -207,15 +219,9 @@ for (let i = 0; i < pages.length; i += 2) {
   :global([data-theme='dark']) .book-nav:hover:not(:disabled) {
     background: var(--surface-alt, #1f1f1f);
   }
-  :global([data-theme='dark']) .book-indicator {
-    color: var(--muted-2, #b0b0b0);
-  }
-  :global([data-theme='dark']) .book-spread {
-    background: rgba(255, 255, 255, 0.14); /* spine line visible on dark too */
-  }
-  :global([data-theme='dark']) .book-track-clip {
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-  }
+  :global([data-theme='dark']) .book-indicator { color: var(--muted-2, #b0b0b0); }
+  :global([data-theme='dark']) .book-spread { background: rgba(255, 255, 255, 0.14); }
+  :global([data-theme='dark']) .book-frame { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
 
   @media (max-width: 640px) {
     .book-stage { gap: 0.35rem; }
@@ -226,8 +232,7 @@ for (let i = 0; i < pages.length; i += 2) {
 
 <script>
   // Bootstrap every BookViewer on the page. Re-runs after Astro View
-  // Transitions so navigating back to a project with a book rewires
-  // listeners on the freshly-swapped DOM.
+  // Transitions so navigating back to a book page rewires events.
   let bookAbort: AbortController | null = null;
 
   function bootstrapBookViewers() {
@@ -238,20 +243,22 @@ for (let i = 0; i < pages.length; i += 2) {
     const { signal } = bookAbort;
 
     viewers.forEach((viewer) => {
-      const track = viewer.querySelector<HTMLElement>('.book-track');
+      const spreads = Array.from(viewer.querySelectorAll<HTMLElement>('.book-spread'));
       const prev = viewer.querySelector<HTMLButtonElement>('.book-nav.prev');
       const next = viewer.querySelector<HTMLButtonElement>('.book-nav.next');
       const current = viewer.querySelector<HTMLElement>('.book-current');
-      const total = parseInt(viewer.dataset.total || '0', 10);
-      if (!track || !total) return;
+      const total = spreads.length;
+      if (!total) return;
 
       let index = 0;
 
       const update = () => {
-        track.style.transform = `translateX(-${index * 100}%)`;
+        spreads.forEach((s, i) => s.classList.toggle('is-active', i === index));
         if (current) current.textContent = String(index + 1);
-        if (prev) prev.disabled = index === 0;
-        if (next) next.disabled = index >= total - 1;
+        // Hide (not just disable) arrows at the ends so it reads "no
+        // previous page" / "no next page" visually.
+        if (prev) prev.classList.toggle('is-hidden', index === 0);
+        if (next) next.classList.toggle('is-hidden', index >= total - 1);
       };
       const go = (to: number) => {
         index = Math.max(0, Math.min(total - 1, to));
@@ -270,55 +277,6 @@ for (let i = 0; i < pages.length; i += 2) {
         },
         { signal },
       );
-
-      // Pointer drag / touch swipe support.
-      let startX = 0;
-      let startedAt = 0;
-      let dragging = false;
-      let pointerId = -1;
-
-      track.addEventListener(
-        'pointerdown',
-        (e) => {
-          if ((e.target as HTMLElement).closest('.book-nav')) return;
-          dragging = true;
-          startX = e.clientX;
-          startedAt = performance.now();
-          pointerId = e.pointerId;
-          track.classList.add('is-dragging');
-          track.setPointerCapture(pointerId);
-        },
-        { signal },
-      );
-
-      track.addEventListener(
-        'pointermove',
-        (e) => {
-          if (!dragging) return;
-          const dx = e.clientX - startX;
-          const width = track.parentElement!.clientWidth;
-          const pct = (dx / width) * 100;
-          track.style.transform = `translateX(calc(${-index * 100}% + ${pct}%))`;
-        },
-        { signal },
-      );
-
-      const endDrag = (e: PointerEvent) => {
-        if (!dragging) return;
-        dragging = false;
-        track.classList.remove('is-dragging');
-        try { track.releasePointerCapture(pointerId); } catch {}
-        const dx = e.clientX - startX;
-        const elapsed = performance.now() - startedAt;
-        const width = track.parentElement!.clientWidth;
-        const threshold = width * 0.15;
-        const isQuickSwipe = elapsed < 250 && Math.abs(dx) > 30;
-        if (dx < -threshold || (isQuickSwipe && dx < 0)) go(index + 1);
-        else if (dx > threshold || (isQuickSwipe && dx > 0)) go(index - 1);
-        else update();
-      };
-      track.addEventListener('pointerup', endDrag, { signal });
-      track.addEventListener('pointercancel', endDrag, { signal });
 
       update();
     });

@@ -3,7 +3,6 @@ title: "Book Design"
 subtitle: "Editorial and binding for a print publication"
 description: "Editorial design for a printed book, by Wang Yifan."
 cover: /img/book-design/cover.jpg
-hero: /img/book-design/hero.jpg
 year: 2024
 date: 2024-06-01
 medium: "Print"
@@ -21,6 +20,8 @@ import BookViewer from '../../components/BookViewer.astro';
   Click the arrows, drag, or use the ← / → keys to flip through.
 
   <BookViewer
+    frontCover="/img/book-design/book-front.jpg"
+    backCover="/img/book-design/book-back.jpg"
     pages={[
       '/img/book-design/p01.jpg',
       '/img/book-design/p02.jpg',
