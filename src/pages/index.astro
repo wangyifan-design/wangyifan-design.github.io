@@ -1,9 +1,38 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DogHero from '../components/DogHero.astro';
 import ChatBox from '../components/ChatBox.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { featuredWork } from '../data/featuredWork';
+import { featuredOverrides } from '../data/featuredWork';
+
+// Build the Featured Work list by merging two sources:
+//   - title + year + (optional) sort order come from each MDX
+//     frontmatter (single source of truth — edit there and it just
+//     propagates here)
+//   - cover image / video flag come from featuredOverrides because
+//     the home tile cover is often different from the project page hero
+//
+// Sorted newest first; ties broken by frontmatter `order` ascending.
+const overrideMap = new Map(featuredOverrides.map((o) => [o.slug, o]));
+const allProjects = await getCollection('projects');
+const featuredWork = allProjects
+  .filter((p) => overrideMap.has(p.id))
+  .map((p) => {
+    const o = overrideMap.get(p.id)!;
+    const yearNum = typeof p.data.year === 'number' ? p.data.year : parseInt(String(p.data.year), 10);
+    return {
+      href: `/projects/${p.id}/`,
+      title: p.data.title,
+      year: p.data.year,
+      cover: o.cover,
+      alt: o.alt,
+      video: o.video,
+      _yearNum: Number.isFinite(yearNum) ? yearNum : 0,
+      _order: p.data.order ?? 999,
+    };
+  })
+  .sort((a, b) => b._yearNum - a._yearNum || a._order - b._order);
 
 // Page-specific CSS
 import '../styles/index.css';
