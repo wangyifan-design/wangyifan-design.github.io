@@ -38,9 +38,20 @@ interface Props {
   alt?: string;
   /** ARIA label for the whole viewer region. */
   label?: string;
+  /** CSS aspect-ratio of the whole spread (left + right combined).
+   *  Defaults to "2 / 1.4" — adjust to match your book's proportions
+   *  (e.g. "2 / 1.5" for a taller book, "2 / 1.2" for a wider one). */
+  aspectRatio?: string;
 }
 
-const { pages, frontCover, backCover, alt = 'Book page', label = 'Book pages' } = Astro.props;
+const {
+  pages,
+  frontCover,
+  backCover,
+  alt = 'Book page',
+  label = 'Book pages',
+  aspectRatio = '2 / 1.4',
+} = Astro.props;
 
 type Spread = { left?: string; right?: string; leftAlt?: string; rightAlt?: string };
 const spreads: Spread[] = [];
@@ -69,7 +80,7 @@ if (backCover) {
       </svg>
     </button>
 
-    <div class="book-frame">
+    <div class="book-frame" style={`aspect-ratio: ${aspectRatio}`}>
       {spreads.map((s, i) => (
         <div class={`book-spread${i === 0 ? ' is-active' : ''}`} data-index={i}>
           <div class={`book-page left${s.left ? '' : ' is-empty'}`}>
@@ -128,15 +139,19 @@ if (backCover) {
 
   /* The book frame is the visible double-page area. Spreads stack on top
      of each other; only the active one is `display: grid`. No sliding,
-     so we don't need a clipping container. No shadow either — empty
-     pages on the cover/back-cover spreads would otherwise show shadow
-     under nothing. */
+     so we don't need a clipping container.
+     - No shadow (empty cover/back-cover pages would show "floating"
+       shadow under nothing)
+     - A subtle 1px border so all-white pages (TOC, blank pages) still
+       read as "a book on the page" instead of disappearing
+     - aspect-ratio is set inline from the `aspectRatio` prop so each
+       book can match its own proportions */
   .book-frame {
     flex: 1;
     position: relative;
-    aspect-ratio: 2 / 1.35;
     border-radius: 2px;
     overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.12);
   }
 
   .book-spread {
@@ -159,7 +174,10 @@ if (backCover) {
   .book-page img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* `contain` shows the whole page (no cropping). If the image's
+       natural aspect doesn't match the frame, the surrounding space
+       stays white — matches the look of a blank book margin. */
+    object-fit: contain;
     display: block;
     pointer-events: none;
     /* Project pages set `.project-content img { opacity: 0 }` until a
@@ -222,6 +240,7 @@ if (backCover) {
   }
   :global([data-theme='dark']) .book-indicator { color: var(--muted-2, #b0b0b0); }
   :global([data-theme='dark']) .book-spread { background: rgba(255, 255, 255, 0.14); }
+  :global([data-theme='dark']) .book-frame { border-color: rgba(255, 255, 255, 0.18); }
 
   @media (max-width: 640px) {
     .book-stage { gap: 0.35rem; }
