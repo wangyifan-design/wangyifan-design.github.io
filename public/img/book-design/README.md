@@ -3,8 +3,11 @@
 Drop your book images here using these filenames:
 
 Project-level (used by Astro routing / home page):
-- `cover.jpg`  — used BOTH as the home Featured Work thumbnail AND
-                 as the full-bleed hero at the top of the project page
+- `cover.jpg`  — home Featured Work thumbnail (the square-ish tile)
+- `hero.jpg`   — wide full-bleed image at the top of the project page
+                 (if you want hero == cover, delete this file AND the
+                 `hero:` line in book-design.mdx's frontmatter — the
+                 page will then fall back to `cover.jpg`)
 
 Inside the BookViewer (the flip-through module):
 - `book-front.jpg` — front cover of the actual book, shown as the
