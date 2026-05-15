@@ -83,8 +83,8 @@ if (backCover) {
 <div class="book-viewer" data-total={spreads.length} role="region" aria-label={label} tabindex="0">
   <div class="book-stage">
     <button type="button" class="book-nav prev" aria-label="Previous spread">
-      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-        <path d="M9 1L3 7l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <svg width="20" height="20" viewBox="0 0 14 14" aria-hidden="true">
+        <path d="M9 1L3 7l6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
 
@@ -118,8 +118,8 @@ if (backCover) {
     </div>
 
     <button type="button" class="book-nav next" aria-label="Next spread">
-      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-        <path d="M5 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <svg width="20" height="20" viewBox="0 0 14 14" aria-hidden="true">
+        <path d="M5 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
   </div>
@@ -204,27 +204,33 @@ if (backCover) {
     border: none;
   }
 
+  /* Click anywhere on a real page to turn it. Left page → previous
+     spread, right page → next spread. Cursor hint + slight visual
+     feedback on hover. Empty halves keep the default cursor since
+     there's nothing to click. */
+  .book-page:not(.is-empty) {
+    cursor: pointer;
+  }
+
+  /* Naked arrow — no circle, no border, no background. Just the icon.
+     Keep a 44×44 click target for accessibility on touch devices. */
   .book-nav {
     flex: 0 0 auto;
     width: 44px;
     height: 44px;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    background: #fff;
-    color: #222;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #555;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition:
-      background 0.2s ease,
-      transform 0.2s ease,
-      opacity 0.2s ease,
-      border-color 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
   }
   .book-nav:hover:not(:disabled) {
-    background: #f5f5f5;
-    transform: scale(1.06);
+    color: #000;
+    transform: scale(1.15);
   }
   /* Hidden (not just disabled) at the ends so it visually reads "this is
      the cover / back" — nothing to flip back/forward to. visibility:hidden
@@ -233,14 +239,8 @@ if (backCover) {
   .book-nav svg { display: block; }
 
   /* Dark-mode tweaks. */
-  :global([data-theme='dark']) .book-nav {
-    background: var(--surface, #161616);
-    color: var(--fg, #f4f4f4);
-    border-color: var(--border, rgba(255, 255, 255, 0.15));
-  }
-  :global([data-theme='dark']) .book-nav:hover:not(:disabled) {
-    background: var(--surface-alt, #1f1f1f);
-  }
+  :global([data-theme='dark']) .book-nav { color: rgba(255, 255, 255, 0.55); }
+  :global([data-theme='dark']) .book-nav:hover:not(:disabled) { color: var(--fg, #f4f4f4); }
   :global([data-theme='dark']) .book-page { border-color: rgba(255, 255, 255, 0.18); }
 
   @media (max-width: 640px) {
@@ -306,6 +306,16 @@ if (backCover) {
 
       prev?.addEventListener('click', () => go(index - 1), { signal });
       next?.addEventListener('click', () => go(index + 1), { signal });
+
+      // Click the page itself to flip: left page → previous spread,
+      // right page → next spread. Empty halves of the cover/back-cover
+      // spreads are skipped (no behaviour expected on transparent space).
+      spreads.forEach((spread) => {
+        const leftPage = spread.querySelector<HTMLElement>('.book-page.left:not(.is-empty)');
+        const rightPage = spread.querySelector<HTMLElement>('.book-page.right:not(.is-empty)');
+        leftPage?.addEventListener('click', () => go(index - 1), { signal });
+        rightPage?.addEventListener('click', () => go(index + 1), { signal });
+      });
 
       // Keyboard navigation when the viewer itself has focus.
       viewer.addEventListener(
