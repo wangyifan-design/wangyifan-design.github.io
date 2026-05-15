@@ -1,0 +1,324 @@
+---
+// BookViewer — a horizontally-paged book spread viewer.
+//
+// Pass an array of page image URLs in reading order; the component pairs
+// them up into spreads (left + right) and lets the reader move between
+// spreads with:
+//   - prev / next buttons
+//   - keyboard arrows (when the viewer is focused)
+//   - pointer drag / touch swipe
+//
+// Slide transition is pure CSS (transform: translateX) — no animation
+// library. Re-bootstraps on Astro View Transitions via astro:after-swap.
+//
+// Usage in MDX:
+//   import BookViewer from '../../components/BookViewer.astro';
+//   <BookViewer pages={[
+//     '/img/book-design/p01.jpg',
+//     '/img/book-design/p02.jpg',
+//     ...
+//   ]} alt="Book name spread" />
+
+interface Props {
+  /** Page image URLs in reading order. Every two consecutive entries
+   *  form one spread (left + right). An odd-length list means the last
+   *  spread has only a left page. */
+  pages: string[];
+  /** Alt-text prefix used for every page image (e.g., "Living Jiagu page"). */
+  alt?: string;
+  /** ARIA label for the whole viewer region. */
+  label?: string;
+}
+
+const { pages, alt = 'Book page', label = 'Book pages' } = Astro.props;
+
+type Spread = { left?: string; right?: string; leftIdx?: number; rightIdx?: number };
+const spreads: Spread[] = [];
+for (let i = 0; i < pages.length; i += 2) {
+  spreads.push({
+    left: pages[i],
+    right: pages[i + 1],
+    leftIdx: i + 1,
+    rightIdx: i + 2,
+  });
+}
+---
+
+<div class="book-viewer" data-total={spreads.length} role="region" aria-label={label} tabindex="0">
+  <div class="book-stage">
+    <button type="button" class="book-nav prev" aria-label="Previous spread">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+        <path d="M9 1L3 7l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <div class="book-track-clip">
+      <div class="book-track">
+        {spreads.map((s, i) => (
+          <div class="book-spread" data-index={i}>
+            <div class="book-page left">
+              {s.left && (
+                <img
+                  src={s.left}
+                  alt={`${alt} ${s.leftIdx}`}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  draggable="false"
+                />
+              )}
+            </div>
+            <div class="book-page right">
+              {s.right && (
+                <img
+                  src={s.right}
+                  alt={`${alt} ${s.rightIdx}`}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  draggable="false"
+                />
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <button type="button" class="book-nav next" aria-label="Next spread">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+        <path d="M5 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="book-indicator" aria-live="polite">
+    <span class="book-current">1</span>&nbsp;/&nbsp;<span class="book-total">{spreads.length}</span>
+  </div>
+</div>
+
+<style>
+  .book-viewer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 2.5rem auto;
+    user-select: none;
+    outline: none;
+  }
+
+  .book-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* The clip wraps the sliding track and carries the book "shadow" so the
+     drop-shadow doesn't get cut off by the overflow:hidden. */
+  .book-track-clip {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  }
+
+  .book-track {
+    display: flex;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    touch-action: pan-y; /* allow vertical scroll, capture horizontal */
+    cursor: grab;
+  }
+  .book-track.is-dragging { cursor: grabbing; transition: none; }
+
+  .book-spread {
+    flex: 0 0 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px; /* thin spine line between the two pages */
+    background: rgba(0, 0, 0, 0.12); /* shows through the gap as the spine */
+    aspect-ratio: 2 / 1.35; /* roughly landscape spread; tweak per book */
+  }
+
+  .book-page {
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .book-page img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .book-nav {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease,
+      opacity 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .book-nav:hover:not(:disabled) {
+    background: #f5f5f5;
+    transform: scale(1.06);
+  }
+  .book-nav:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+  .book-nav svg { display: block; }
+
+  .book-indicator {
+    text-align: center;
+    margin-top: 0.9rem;
+    font-size: 0.85rem;
+    color: #777;
+    letter-spacing: 0.02em;
+  }
+
+  /* Dark-mode tweaks — buttons follow the theme palette. */
+  :global([data-theme='dark']) .book-nav {
+    background: var(--surface, #161616);
+    color: var(--fg, #f4f4f4);
+    border-color: var(--border, rgba(255, 255, 255, 0.15));
+  }
+  :global([data-theme='dark']) .book-nav:hover:not(:disabled) {
+    background: var(--surface-alt, #1f1f1f);
+  }
+  :global([data-theme='dark']) .book-indicator {
+    color: var(--muted-2, #b0b0b0);
+  }
+  :global([data-theme='dark']) .book-spread {
+    background: rgba(255, 255, 255, 0.14); /* spine line visible on dark too */
+  }
+  :global([data-theme='dark']) .book-track-clip {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  @media (max-width: 640px) {
+    .book-stage { gap: 0.35rem; }
+    .book-nav { width: 36px; height: 36px; }
+    .book-viewer { margin: 1.5rem auto; }
+  }
+</style>
+
+<script>
+  // Bootstrap every BookViewer on the page. Re-runs after Astro View
+  // Transitions so navigating back to a project with a book rewires
+  // listeners on the freshly-swapped DOM.
+  let bookAbort: AbortController | null = null;
+
+  function bootstrapBookViewers() {
+    if (bookAbort) bookAbort.abort();
+    const viewers = document.querySelectorAll<HTMLElement>('.book-viewer');
+    if (!viewers.length) return;
+    bookAbort = new AbortController();
+    const { signal } = bookAbort;
+
+    viewers.forEach((viewer) => {
+      const track = viewer.querySelector<HTMLElement>('.book-track');
+      const prev = viewer.querySelector<HTMLButtonElement>('.book-nav.prev');
+      const next = viewer.querySelector<HTMLButtonElement>('.book-nav.next');
+      const current = viewer.querySelector<HTMLElement>('.book-current');
+      const total = parseInt(viewer.dataset.total || '0', 10);
+      if (!track || !total) return;
+
+      let index = 0;
+
+      const update = () => {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        if (current) current.textContent = String(index + 1);
+        if (prev) prev.disabled = index === 0;
+        if (next) next.disabled = index >= total - 1;
+      };
+      const go = (to: number) => {
+        index = Math.max(0, Math.min(total - 1, to));
+        update();
+      };
+
+      prev?.addEventListener('click', () => go(index - 1), { signal });
+      next?.addEventListener('click', () => go(index + 1), { signal });
+
+      // Keyboard navigation when the viewer itself has focus.
+      viewer.addEventListener(
+        'keydown',
+        (e) => {
+          if (e.key === 'ArrowLeft') { go(index - 1); e.preventDefault(); }
+          if (e.key === 'ArrowRight') { go(index + 1); e.preventDefault(); }
+        },
+        { signal },
+      );
+
+      // Pointer drag / touch swipe support.
+      let startX = 0;
+      let startedAt = 0;
+      let dragging = false;
+      let pointerId = -1;
+
+      track.addEventListener(
+        'pointerdown',
+        (e) => {
+          if ((e.target as HTMLElement).closest('.book-nav')) return;
+          dragging = true;
+          startX = e.clientX;
+          startedAt = performance.now();
+          pointerId = e.pointerId;
+          track.classList.add('is-dragging');
+          track.setPointerCapture(pointerId);
+        },
+        { signal },
+      );
+
+      track.addEventListener(
+        'pointermove',
+        (e) => {
+          if (!dragging) return;
+          const dx = e.clientX - startX;
+          const width = track.parentElement!.clientWidth;
+          const pct = (dx / width) * 100;
+          track.style.transform = `translateX(calc(${-index * 100}% + ${pct}%))`;
+        },
+        { signal },
+      );
+
+      const endDrag = (e: PointerEvent) => {
+        if (!dragging) return;
+        dragging = false;
+        track.classList.remove('is-dragging');
+        try { track.releasePointerCapture(pointerId); } catch {}
+        const dx = e.clientX - startX;
+        const elapsed = performance.now() - startedAt;
+        const width = track.parentElement!.clientWidth;
+        const threshold = width * 0.15;
+        const isQuickSwipe = elapsed < 250 && Math.abs(dx) > 30;
+        if (dx < -threshold || (isQuickSwipe && dx < 0)) go(index + 1);
+        else if (dx > threshold || (isQuickSwipe && dx > 0)) go(index - 1);
+        else update();
+      };
+      track.addEventListener('pointerup', endDrag, { signal });
+      track.addEventListener('pointercancel', endDrag, { signal });
+
+      update();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapBookViewers, { once: true });
+  } else {
+    bootstrapBookViewers();
+  }
+  document.addEventListener('astro:after-swap', bootstrapBookViewers);
+</script>

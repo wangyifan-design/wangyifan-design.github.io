@@ -13,6 +13,7 @@ export interface FeaturedItem {
 // content collection (sorted by frontmatter `order`) instead of hardcoding.
 export const featuredWork: FeaturedItem[] = [
   { href: '/projects/rockhood/',   title: 'Rockhood.ai',                              year: 2025, cover: '/img/project-1.png', alt: 'Rockhood.ai project cover' },
+  { href: '/projects/book-design/',title: 'Book Design',                              year: 2024, cover: '/img/book-design/cover.jpg', alt: 'Book design project cover' },
   { href: '/projects/heidegger/',  title: 'Heidegger’s Heaps of Brocade and Ash',     year: 2023, cover: '/videos/cover1.mp4', video: true },
   { href: '/projects/livingjiagu/',title: 'Living Jiagu',                              year: 2019, cover: '/videos/cover5.mp4', video: true },
   { href: '/projects/virtualzoo/', title: 'Shengqinyuan - Virtual Zoo',                year: 2019, cover: '/img/project-2.jpg', alt: 'Virtual Zoo project cover' },
