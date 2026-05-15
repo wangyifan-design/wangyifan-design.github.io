@@ -234,24 +234,28 @@
   box-sizing: border-box;
 }
 
-/* Featured Work grid: pure CSS masonry via column-count.
-   - Zero JS, so navigating in via View Transitions can't lose the
-     layout. (The old Masonry/imagesLoaded setup had a race condition
-     where the CDN scripts weren't ready when the inline init script
-     ran on SPA navigation, causing the grid to render single-column
-     until the user refreshed.)
-   - Items flow top-to-bottom within each column. */
+/* Featured Work grid: two-column masonry, zero JS.
+   - The page template splits the sorted project list into two columns
+     server-side (left = even indices, right = odd) so the reading
+     order across the page runs left→right, top→bottom.
+   - Each column is its own flex stack with varying card heights
+     (true masonry — never any forced equal-height rows or gaps).
+   - On mobile the columns collapse to a single column. We use
+     `display: contents` on the column wrappers so the cards become
+     direct children of the flex parent, then `order` (set inline per
+     card) re-interleaves them back into newest-first sequence. */
 .projects.home .project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   width: 100%;
-  column-count: 2;
-  column-gap: 16px;
 }
 
-.projects.home .project-grid .project {
-  break-inside: avoid;
-  width: 100%;
-  margin-bottom: 1rem;
-  display: block;
+.project-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0; /* let grid items shrink instead of overflowing */
 }
 
 #featured-work {
@@ -261,7 +265,12 @@
 }
 
 @media (max-width: 768px) {
-  .projects.home .project-grid { column-count: 1; }
+  .projects.home .project-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .project-column { display: contents; }
 }
 
 body[data-page="home"] main > section {
