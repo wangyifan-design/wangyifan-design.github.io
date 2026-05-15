@@ -234,28 +234,23 @@
   box-sizing: border-box;
 }
 
-/* Featured Work grid: two-column masonry, zero JS.
-   - The page template splits the sorted project list into two columns
-     server-side (left = even indices, right = odd) so the reading
-     order across the page runs left→right, top→bottom.
-   - Each column is its own flex stack with varying card heights
-     (true masonry — never any forced equal-height rows or gaps).
-   - On mobile the columns collapse to a single column. We use
-     `display: contents` on the column wrappers so the cards become
-     direct children of the flex parent, then `order` (set inline per
-     card) re-interleaves them back into newest-first sequence. */
+/* Featured Work grid: 2-column on desktop, 1-column on mobile.
+   - Cards are rendered as a flat newest-first list in index.astro,
+     so DOM order = reading order = newest first.
+   - Grid lays them out row-by-row: top-left = newest, top-right =
+     second-newest, etc.
+   - align-items: start so a row's two cards keep their natural
+     heights (no forced stretching). Rows are still height-aligned
+     to the taller card, but vertical gaps stay small as long as
+     covers have similar aspect ratios.
+   - Mobile (≤768px) collapses to a single column; cards stack in
+     the same newest-first order. */
 .projects.home .project-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: start;
   gap: 16px;
   width: 100%;
-}
-
-.project-column {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0; /* let grid items shrink instead of overflowing */
 }
 
 #featured-work {
@@ -265,12 +260,7 @@
 }
 
 @media (max-width: 768px) {
-  .projects.home .project-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .project-column { display: contents; }
+  .projects.home .project-grid { grid-template-columns: 1fr; }
 }
 
 body[data-page="home"] main > section {

@@ -72,27 +72,15 @@ const jsonLd = `<script type="application/ld+json">${JSON.stringify({
 
   <section class="projects home" aria-labelledby="featured-work">
     <h2 id="featured-work">Featured Work</h2>
-    {/* Split the sorted (newest-first) list into two columns by
-        odd/even index so the reading order across the grid runs
-        left→right, top→bottom (matches how the eye scans, not
-        column-by-column). The `order` style on each tile lets us
-        re-flatten back into newest-first sequence on mobile, where
-        the two columns collapse into a single column. */}
+    {/* Flat list of cards rendered in newest-first order. The grid
+        below lays them out as 2 columns row-by-row on desktop
+        (left→right, top→bottom reading order), single column on
+        mobile. Much more robust than the previous display:contents
+        trick which had iOS Safari rendering bugs. */}
     <div class="project-grid">
-      <div class="project-column">
-        {featuredWork.filter((_, i) => i % 2 === 0).map((p, i) => (
-          <div class="project-slot" style={`order: ${i * 2}`}>
-            <ProjectCard href={p.href} title={p.title} year={p.year} cover={p.cover} alt={p.alt} video={p.video} />
-          </div>
-        ))}
-      </div>
-      <div class="project-column">
-        {featuredWork.filter((_, i) => i % 2 === 1).map((p, i) => (
-          <div class="project-slot" style={`order: ${i * 2 + 1}`}>
-            <ProjectCard href={p.href} title={p.title} year={p.year} cover={p.cover} alt={p.alt} video={p.video} />
-          </div>
-        ))}
-      </div>
+      {featuredWork.map((p) => (
+        <ProjectCard href={p.href} title={p.title} year={p.year} cover={p.cover} alt={p.alt} video={p.video} />
+      ))}
     </div>
   </section>
 </BaseLayout>
