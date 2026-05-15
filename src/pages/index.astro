@@ -44,60 +44,9 @@ const jsonLd = `<script type="application/ld+json">${JSON.stringify({
   <section class="projects home" aria-labelledby="featured-work">
     <h2 id="featured-work">Featured Work</h2>
     <div class="project-grid">
-      <div class="grid-sizer" aria-hidden="true"></div>
       {featuredWork.map((p) => (
         <ProjectCard href={p.href} title={p.title} year={p.year} cover={p.cover} alt={p.alt} video={p.video} />
       ))}
     </div>
   </section>
-
-  <!-- Masonry layout for the featured grid. Loaded only on the home page.
-       data-astro-rerun makes the inline script execute again every time the
-       user navigates back here via View Transitions. -->
-  <script is:inline src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-  <script is:inline src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-  <script is:inline data-astro-rerun>
-    (function () {
-      const grid = document.querySelector('.project-grid');
-      if (!grid) return;
-
-      // Clean up the resize handler from a previous run (this script can
-      // execute multiple times across View Transitions).
-      if (window.__homeMasonryResize) {
-        window.removeEventListener('resize', window.__homeMasonryResize);
-      }
-
-      let msnry;
-      const ensureMasonry = () => {
-        if (typeof Masonry === 'undefined') return null;
-        if (!msnry) {
-          msnry = new Masonry(grid, {
-            itemSelector: '.project',
-            columnWidth: '.grid-sizer',
-            percentPosition: true,
-            gutter: 16,
-          });
-        }
-        return msnry;
-      };
-      const layoutMasonry = () => { const i = ensureMasonry(); if (i) i.layout(); };
-      const createMasonry = () => {
-        if (typeof imagesLoaded === 'undefined') { layoutMasonry(); return; }
-        imagesLoaded(grid, layoutMasonry);
-      };
-      createMasonry();
-      grid.querySelectorAll('.project-image').forEach((media) => {
-        const isVideo = media.tagName === 'VIDEO';
-        const eventName = isVideo ? 'loadeddata' : 'load';
-        if ((isVideo && media.readyState >= 3) || (!isVideo && media.complete)) {
-          layoutMasonry();
-          return;
-        }
-        media.addEventListener(eventName, layoutMasonry);
-      });
-
-      window.__homeMasonryResize = layoutMasonry;
-      window.addEventListener('resize', layoutMasonry);
-    })();
-  </script>
 </BaseLayout>

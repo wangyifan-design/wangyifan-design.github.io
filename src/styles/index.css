@@ -234,15 +234,24 @@
   box-sizing: border-box;
 }
 
+/* Featured Work grid: pure CSS masonry via column-count.
+   - Zero JS, so navigating in via View Transitions can't lose the
+     layout. (The old Masonry/imagesLoaded setup had a race condition
+     where the CDN scripts weren't ready when the inline init script
+     ran on SPA navigation, causing the grid to render single-column
+     until the user refreshed.)
+   - Items flow top-to-bottom within each column. */
 .projects.home .project-grid {
-  position: relative;
   width: 100%;
+  column-count: 2;
+  column-gap: 16px;
 }
 
-.projects.home .project-grid .grid-sizer,
 .projects.home .project-grid .project {
-  width: calc((100% - 16px) / 2);
+  break-inside: avoid;
+  width: 100%;
   margin-bottom: 1rem;
+  display: block;
 }
 
 #featured-work {
@@ -252,11 +261,7 @@
 }
 
 @media (max-width: 768px) {
-
-  .projects.home .project-grid .grid-sizer,
-  .projects.home .project-grid .project {
-    width: 100%;
-  }
+  .projects.home .project-grid { column-count: 1; }
 }
 
 body[data-page="home"] main > section {
