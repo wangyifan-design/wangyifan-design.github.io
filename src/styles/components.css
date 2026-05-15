@@ -170,10 +170,16 @@
   .lightbox-close { top: 10px; right: 10px; }
 }
 
-/* Shared site footer (extracted out of inline styles on each page) */
+/* Shared site footer (extracted out of inline styles on each page).
+   One-line layout: copyright on the left, contact links on the right.
+   Horizontal padding mirrors #navbar (2rem desktop / 1rem mobile) so the
+   footer edges visually align with the nav above. */
 .site-footer {
-  text-align: center;
-  padding: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
   font-size: 0.9rem;
   color: #666;
   /* Project pages put a fixed image at z-index: -1, so the footer needs
@@ -182,10 +188,9 @@
   position: relative;
   z-index: 1;
 }
-.site-footer p { margin-bottom: 0.5rem; }
+.site-footer p { margin: 0; }
 .site-footer .contact-nav {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 1.5rem;
 }
@@ -195,4 +200,21 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+}
+
+/* On very narrow phones the one-row layout would overflow, so stack
+   vertically and re-center. Matches the nav's mobile padding. */
+@media (max-width: 480px) {
+  .site-footer {
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+}
+
+/* On tablet-ish widths just tighten horizontal padding to match the
+   mobile nav (0.75rem 1rem), but keep the row layout. */
+@media (max-width: 768px) and (min-width: 481px) {
+  .site-footer { padding: 1.25rem 1rem; }
 }
