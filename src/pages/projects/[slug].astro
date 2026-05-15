@@ -55,9 +55,11 @@ const extraHead = `
 >
   <section class="project-hero">
     {/* Matching `transition:name` with ProjectCard makes the cover image
-        morph from the grid tile into this full-bleed hero during navigation. */}
+        morph from the grid tile into this full-bleed hero during navigation.
+        If `hero` is set in frontmatter it takes precedence; otherwise we
+        fall back to `cover` (the same image used on the home tile). */}
     <img
-      src={data.cover}
+      src={data.hero ?? data.cover}
       class="hero-image"
       alt={`${data.title} hero image`}
       transition:name={`cover-${project.id}`}

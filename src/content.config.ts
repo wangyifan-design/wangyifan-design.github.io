@@ -11,6 +11,11 @@ const projects = defineCollection({
     subtitle: z.string().optional(),
     description: z.string(),
     cover: z.string(),
+    /** Optional full-bleed image at the top of the project page. If
+     *  omitted, falls back to `cover`. Useful when the home-page
+     *  thumbnail looks better cropped square but the hero should
+     *  be a wider/landscape shot. */
+    hero: z.string().optional(),
     ogImage: z.string().optional(),
     year: z.union([z.string(), z.number()]),
     date: z.coerce.date().optional(),

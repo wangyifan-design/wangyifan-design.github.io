@@ -151,6 +151,15 @@ for (let i = 0; i < pages.length; i += 2) {
     object-fit: cover;
     display: block;
     pointer-events: none;
+    /* Project pages have a global rule that sets `.project-content img`
+       to opacity:0 until a scroll-reveal observer adds `.visible`.
+       Our book pages handle their own reveal via the slide transition,
+       so opt out of that global animation here. */
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    margin: 0 !important;
+    max-width: none !important;
   }
 
   .book-nav {
