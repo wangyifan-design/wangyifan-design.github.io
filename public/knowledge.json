@@ -148,8 +148,8 @@
             "海德格尔"
         ],
         "a": {
-            "en": "This digital interactive video artwork examines how AI reshapes the meaning of images. Drawing on Heidegger’s notion of technology as a “framework,” it explores the process of visual decay and reinterpretation. Inspired by the traditional Chinese aesthetic of “Heaps of Brocade and Ash” (锦灰堆), the piece constructs a layered visual composition that reflects the tension between machine logic and cultural memory.<a href='heidegger.html'>👀</a>",
-            "zh": "这是一件数字影像交互作品，探讨人工智能如何重塑图像的意义。作品借鉴了海德格尔关于技术是一种“框架”（Enframing）的哲学观念，模拟AI生成的图像衰变过程。视觉形式受中国传统艺术风格“锦灰堆”的启发，通过层叠图像和文化符号的堆叠，呈现出机器逻辑与文化记忆之间的张力。<a href='heidegger.html'>👀</a>"
+            "en": "This digital interactive video artwork examines how AI reshapes the meaning of images. Drawing on Heidegger’s notion of technology as a “framework,” it explores the process of visual decay and reinterpretation. Inspired by the traditional Chinese aesthetic of “Heaps of Brocade and Ash” (锦灰堆), the piece constructs a layered visual composition that reflects the tension between machine logic and cultural memory.<a href='/projects/heidegger/'>👀</a>",
+            "zh": "这是一件数字影像交互作品，探讨人工智能如何重塑图像的意义。作品借鉴了海德格尔关于技术是一种“框架”（Enframing）的哲学观念，模拟AI生成的图像衰变过程。视觉形式受中国传统艺术风格“锦灰堆”的启发，通过层叠图像和文化符号的堆叠，呈现出机器逻辑与文化记忆之间的张力。<a href='/projects/heidegger/'>👀</a>"
         }
     },
     {
@@ -199,8 +199,8 @@
             "Google Arts & Culture"
         ],
         "a": {
-            "en": "Living Jiagu is an interactive installation that brings ancient Chinese oracle bone script to life using machine learning. Visitors draw characters on a tablet, which are recognized by TensorFlow and transformed into animations on a large LED wall. The project connects early Chinese writing with modern AI technology, creating a cultural experience that visualizes how tradition and innovation can merge through interaction and image recognition.<a href='livingjiagu.html'>👀</a>",
-            "zh": "《智绘甲骨》是一件结合甲骨文与人工智能的交互装置作品。观众在平板上书写甲骨文字符，系统通过 TensorFlow 图像识别技术进行识别，并将其转化为动画呈现在大型 LED 屏幕上。该项目融合古老文字与现代科技，探索传统文化与机器学习在交互艺术中的新可能。<a href='livingjiagu.html'>👀</a>"
+            "en": "Living Jiagu is an interactive installation that brings ancient Chinese oracle bone script to life using machine learning. Visitors draw characters on a tablet, which are recognized by TensorFlow and transformed into animations on a large LED wall. The project connects early Chinese writing with modern AI technology, creating a cultural experience that visualizes how tradition and innovation can merge through interaction and image recognition.<a href='/projects/livingjiagu/'>👀</a>",
+            "zh": "《智绘甲骨》是一件结合甲骨文与人工智能的交互装置作品。观众在平板上书写甲骨文字符，系统通过 TensorFlow 图像识别技术进行识别，并将其转化为动画呈现在大型 LED 屏幕上。该项目融合古老文字与现代科技，探索传统文化与机器学习在交互艺术中的新可能。<a href='/projects/livingjiagu/'>👀</a>"
         }
     },
     {
