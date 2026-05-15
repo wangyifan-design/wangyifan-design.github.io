@@ -128,12 +128,13 @@ if (backCover) {
 
   /* The book frame is the visible double-page area. Spreads stack on top
      of each other; only the active one is `display: grid`. No sliding,
-     so we don't need a clipping container. */
+     so we don't need a clipping container. No shadow either — empty
+     pages on the cover/back-cover spreads would otherwise show shadow
+     under nothing. */
   .book-frame {
     flex: 1;
     position: relative;
     aspect-ratio: 2 / 1.35;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
     border-radius: 2px;
     overflow: hidden;
   }
@@ -221,7 +222,6 @@ if (backCover) {
   }
   :global([data-theme='dark']) .book-indicator { color: var(--muted-2, #b0b0b0); }
   :global([data-theme='dark']) .book-spread { background: rgba(255, 255, 255, 0.14); }
-  :global([data-theme='dark']) .book-frame { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
 
   @media (max-width: 640px) {
     .book-stage { gap: 0.35rem; }
