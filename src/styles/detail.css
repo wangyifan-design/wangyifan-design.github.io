@@ -51,7 +51,10 @@
 
 .meta-table {
   display: grid;
-  grid-template-columns: 80px 1fr;
+  /* auto-sized label column so long labels like "Organization" or
+     "Duration" don't get cropped or run into the value column. */
+  grid-template-columns: auto 1fr;
+  column-gap: 1rem;
   row-gap: 0.5rem;
   font-size: 0.8rem;
   color: black;

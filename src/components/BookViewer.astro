@@ -124,9 +124,6 @@ if (backCover) {
     </button>
   </div>
 
-  <div class="book-indicator" aria-live="polite">
-    <span class="book-current">1</span>&nbsp;/&nbsp;<span class="book-total">{spreads.length}</span>
-  </div>
 </div>
 
 <style>
@@ -146,20 +143,17 @@ if (backCover) {
   }
 
   /* The book frame is the visible double-page area. Spreads stack on top
-     of each other; only the active one is `display: grid`. No sliding,
-     so we don't need a clipping container.
-     - No shadow (empty cover/back-cover pages would show "floating"
+     of each other; only the active one is `display: grid`.
+     - No shadow (empty cover/back-cover pages would show a "floating"
        shadow under nothing)
-     - A subtle 1px border so all-white pages (TOC, blank pages) still
-       read as "a book on the page" instead of disappearing
+     - No border here — moved to .book-page so empty halves of the
+       cover/back-cover spreads have nothing around them
      - aspect-ratio is set inline from the `aspectRatio` prop so each
        book can match its own proportions */
   .book-frame {
     flex: 1;
     position: relative;
     border-radius: 2px;
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.12);
   }
 
   .book-spread {
@@ -167,17 +161,22 @@ if (backCover) {
     inset: 0;
     display: none;
     grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: rgba(0, 0, 0, 0.12); /* visible through the gap = spine */
   }
   .book-spread.is-active { display: grid; }
 
+  /* Each page carries its own 1px border so all-white pages still read
+     as part of a book. When two real pages sit next to each other, the
+     two touching borders form the spine line. When a cover-only spread
+     has an empty side, that empty side has NO border / no background
+     (see .book-page.is-empty below) so the cover looks like a single
+     page floating on the website. */
   .book-page {
     background: #fff;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.12);
   }
   .book-page img {
     width: 100%;
@@ -197,9 +196,13 @@ if (backCover) {
     margin: 0 !important;
     max-width: none !important;
   }
-  /* Empty pages (left of cover spread, right of back-cover spread) stay
-     white — like a blank page on the open side of the book. */
-  .book-page.is-empty { background: #fff; }
+  /* Empty halves of the cover / back-cover spreads — fully transparent,
+     no border, so the visible page next to them looks like a single
+     standalone book cover (not half of an open spread). */
+  .book-page.is-empty {
+    background: transparent;
+    border: none;
+  }
 
   .book-nav {
     flex: 0 0 auto;
@@ -229,14 +232,6 @@ if (backCover) {
   .book-nav.is-hidden { visibility: hidden; }
   .book-nav svg { display: block; }
 
-  .book-indicator {
-    text-align: center;
-    margin-top: 0.9rem;
-    font-size: 0.85rem;
-    color: #777;
-    letter-spacing: 0.02em;
-  }
-
   /* Dark-mode tweaks. */
   :global([data-theme='dark']) .book-nav {
     background: var(--surface, #161616);
@@ -246,9 +241,7 @@ if (backCover) {
   :global([data-theme='dark']) .book-nav:hover:not(:disabled) {
     background: var(--surface-alt, #1f1f1f);
   }
-  :global([data-theme='dark']) .book-indicator { color: var(--muted-2, #b0b0b0); }
-  :global([data-theme='dark']) .book-spread { background: rgba(255, 255, 255, 0.14); }
-  :global([data-theme='dark']) .book-frame { border-color: rgba(255, 255, 255, 0.18); }
+  :global([data-theme='dark']) .book-page { border-color: rgba(255, 255, 255, 0.18); }
 
   @media (max-width: 640px) {
     .book-stage { gap: 0.35rem; }
@@ -273,7 +266,6 @@ if (backCover) {
       const spreads = Array.from(viewer.querySelectorAll<HTMLElement>('.book-spread'));
       const prev = viewer.querySelector<HTMLButtonElement>('.book-nav.prev');
       const next = viewer.querySelector<HTMLButtonElement>('.book-nav.next');
-      const current = viewer.querySelector<HTMLElement>('.book-current');
       const frame = viewer.querySelector<HTMLElement>('.book-frame');
       const total = spreads.length;
       if (!total) return;
@@ -302,7 +294,6 @@ if (backCover) {
 
       const update = () => {
         spreads.forEach((s, i) => s.classList.toggle('is-active', i === index));
-        if (current) current.textContent = String(index + 1);
         // Hide (not just disable) arrows at the ends so it reads "no
         // previous page" / "no next page" visually.
         if (prev) prev.classList.toggle('is-hidden', index === 0);
