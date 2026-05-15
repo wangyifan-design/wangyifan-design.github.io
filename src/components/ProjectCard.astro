@@ -1,0 +1,47 @@
+---
+// A single tile in the home-page featured-work grid.
+// Supports either an image or an autoplaying muted video as the cover.
+export interface Props {
+  href: string;
+  title: string;
+  year: string | number;
+  cover: string;            // path under /public, e.g. "/img/project-1.png" or "/videos/cover1.mp4"
+  alt?: string;
+  video?: boolean;          // set true if cover is a video file
+}
+const { href, title, year, cover, alt, video = false } = Astro.props;
+
+// Derive the slug from the href (".../projects/<slug>/" → "<slug>") so we can
+// give the cover a shared `transition:name`. Astro will then morph it into the
+// matching hero image on the project page during navigation.
+const slugMatch = href.match(/^\/projects\/([^/]+)\/?$/);
+const slug = slugMatch ? slugMatch[1] : null;
+---
+
+<article class="project">
+  <a href={href} class="project-link">
+    <figure class="project-figure">
+      {video ? (
+        <video
+          class="project-image"
+          src={cover}
+          autoplay muted loop playsinline aria-hidden="true"
+          {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
+        ></video>
+      ) : (
+        <img
+          class="project-image"
+          src={cover}
+          alt={alt ?? `${title} project cover`}
+          loading="lazy"
+          decoding="async"
+          {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
+        />
+      )}
+      <figcaption class="project-labels">
+        <span class="project-title">{title}</span>
+        <span class="project-year">{year}</span>
+      </figcaption>
+    </figure>
+  </a>
+</article>

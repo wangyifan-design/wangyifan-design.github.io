@@ -1,0 +1,303 @@
+.project-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: -1;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 1s ease;
+}
+
+.project-intro {
+  margin-top: 100vh;
+  background: white;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.project-intro-wrapper {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  align-items: start;
+  gap: 2rem;
+}
+
+.project-intro-left,
+.project-intro-right {
+  text-align: left;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: black;
+  margin-bottom: 5rem;
+  margin-top: 0.5rem;
+}
+
+.subtitle {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 1.8rem;
+  color: black;
+  margin-bottom: 0.5rem;
+}
+
+.meta-table {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  row-gap: 0.5rem;
+  font-size: 0.8rem;
+  color: black;
+  margin-top: 2rem;
+}
+
+.meta-table dt,
+.meta-table dd {
+  margin: 0;
+}
+
+.meta-label {
+  font-weight: 400;
+  color: #777;
+}
+
+.project-intro-right {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1rem;
+  color: black;
+}
+
+.project-content {
+  background: white;
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  padding-bottom: 4rem;
+  margin-bottom: 2rem;
+}
+
+.project-content p,
+.project-content h2,
+.project-content h3  {
+  width: min(100%, 700px);
+  margin: 0 auto 1rem auto;
+  line-height: 1.6;
+}
+
+.project-content img,
+.project-content video {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+  border-radius: 0 !important;
+}
+
+.project-content img.visible,
+.project-content video.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.img-full {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  border-radius: 0;
+}
+
+.img-medium {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  border-radius: 0;
+}
+
+.img-small {
+  width: min(100%, 700px);
+}
+
+.img-mini {
+  width: 30%;
+}
+
+.content-block {
+  margin-bottom: 3rem;
+  overflow: hidden;
+}
+
+.image-caption {
+  margin: 0.25rem auto 1.5rem auto;
+  max-width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.image-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.image-row img {
+  flex: 1;
+  max-width: 48%;
+}
+
+/* ============================================================
+   Prev / Next project navigation (bottom of every project page)
+   - Two big touch targets, thumbnail + title.
+   - Sits on a subtle bordered top edge so it visually separates from
+     the project content above it.
+   - Stacks vertically on mobile.
+   ============================================================ */
+
+.project-nav {
+  background: white;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 2.5rem 2rem 4rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.project-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.25s ease, transform 0.25s ease;
+  min-width: 0; /* allow text truncation in grid */
+}
+
+.project-nav-link.prev { justify-content: flex-start; }
+.project-nav-link.next { justify-content: flex-end; text-align: right; }
+
+.project-nav-link:hover {
+  background: #f5f5f5;
+  transform: translateY(-2px);
+}
+
+.project-nav-thumb {
+  flex: 0 0 auto;
+  width: 120px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.project-nav-thumb img,
+.project-nav-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-nav-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.project-nav-label {
+  font-size: 0.8rem;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.project-nav-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.project-nav-link.prev:hover .project-nav-arrow { transform: translateX(-3px); }
+.project-nav-link.next:hover .project-nav-arrow { transform: translateX(3px); }
+
+.project-nav-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: black;
+  line-height: 1.3;
+  /* Truncate to 2 lines so long titles don't blow up the layout. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .project-intro-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .project-intro-left,
+  .project-intro-right {
+    text-align: left;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .project-intro-right p,
+  .project-intro-right h3 {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .image-row img {
+    max-width: 100%;
+  }
+
+  .img-small,
+  .img-medium,
+  .img-mini {
+    width: 100% !important;
+  }
+
+  .project-content p,
+  .project-content h2,
+  .project-content h3 {
+    max-width: 100%;
+    padding: 0 2rem;
+  }
+
+  .project-nav {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .project-nav-link,
+  .project-nav-link.next {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* On mobile both prev and next show thumb on the left, text on the right. */
+  .project-nav-link.next {
+    flex-direction: row-reverse;
+  }
+
+  .project-nav-thumb {
+    width: 90px;
+    height: 60px;
+  }
+}

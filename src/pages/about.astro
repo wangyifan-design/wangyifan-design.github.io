@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/about.css';
+
+const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wangyifan-design.github.io/" },
+    { "@type": "ListItem", "position": 2, "name": "About", "item": "https://wangyifan-design.github.io/about/" }
+  ]
+})}<\/script>`;
+
+const experience = [
+  { role: 'Product Designer, Rockhood.ai', time: 'Feb 2025 – Now', detail: 'Leading brand, UI, and product design for an AI-powered conversational real estate platform.' },
+  { role: 'UX Designer, Tsinghua Future Lab', time: '2024 – Now',   detail: 'Designed user journey maps and AI tools for senior care and natural language interaction.' },
+  { role: 'Design Intern, Baidu / Alibaba / SenseTime', detail: 'Explored large-scale product systems and AI-driven interfaces across different industry contexts. Gained experience working within cross-functional teams and understanding real-world design constraints.' },
+];
+
+const education = [
+  { role: 'PhD in Visual Communication', time: '2020 – 2024, Tsinghua University', detail: 'Research in intelligent design, ancient character innovation, and speculative AI interfaces.' },
+  { role: 'MA in Visual Communication',  time: '2016 – 2019, Tsinghua University', detail: 'Focus on revitalizing traditional culture through virtual exhibitions and visual systems.' },
+  { role: 'BA in Visual Communication',  time: '2012 – 2016, Tsinghua University', detail: 'Trained in fundamental design skills: logo design, typography, packaging, and motion graphics.' },
+];
+
+const projects = [
+  { name: 'Personalized Service Stamp Design', link: 'https://www.ad.tsinghua.edu.cn/info/1061/8148.htm', time: 'Tsinghua University' },
+  { name: 'Central Asian Cultural Cookbook',   time: 'FAO (UN Volunteer)' },
+  { name: 'Digital Oracle Bone Script Project', time: 'Tsinghua University' },
+];
+
+const exhibitions = [
+  { name: 'National Graphic Design Exhibition (Selected / Finalist)', time: '2025, China Artists Association' },
+  { name: 'Tianjin Youth Art Season (Selected Work)', time: '2025, Tianjin Academy of Fine Arts' },
+  { name: 'Chinese Character Interactive Festival', time: '2022, Macao' },
+  { name: 'Moments in Sound and Image - Tsinghua Alumni Boston Art Festival', link: 'https://www.tsinghua.org.cn/info/1013/41767.htm', time: '2025, North America Federation of Tsinghua Alumni Association' },
+];
+
+const awards = [
+  { name: 'Shenzhen Global Design Award (Excellence Award / Kunpeng Award)', time: '2024, Shenzhen Municipal Government / Shenzhen Innovation & Creative Design Development Office' },
+  { name: 'BIAF Busan International Art Festival (Silver Award)', time: '2024, Busan Metropolitan City / BIAF Organizing Committee' },
+];
+
+const activities = [
+  { name: 'GDC Show 2017 — Tell the Future (Execution Team)', link: 'https://www.gdcaward.com/gdc-show-243.html?lang=cn', time: '2017, Tsinghua University' },
+  { name: 'Tsinghua International Art & Design Education Conference (Volunteer)', time: '2023, Tsinghua University' },
+];
+
+const photoStripImages = [1, 2, 3, 4, 5, 6].map(n => `/img/strip/strip-${n}.jpg`);
+---
+
+<BaseLayout
+  title="About Wang Yifan | Visual & UX Designer"
+  description="Learn about Wang Yifan, a visual and UX designer with deep experience in intelligent design systems, research, and interactive storytelling."
+  ogType="profile"
+  pageType="default"
+  extraHead={breadcrumbJsonLd}
+>
+  <section class="about-intro">
+    <h1>About Me</h1>
+    <p>
+      I'm Yifan, a visual communication designer and researcher with a Ph.D. from Tsinghua University. Over the past
+      decade, I've focused on how intelligent technologies can foster new forms of visual interaction. My design
+      philosophy centers on clarity, usability, and joy. I believe in system thinking and aim to create experiences
+      that are simple, consistent, and impactful.
+    </p>
+  </section>
+
+  <section class="photo-strip-wrapper">
+    <div class="photo-strip">
+      {photoStripImages.map((src) => (
+        <img src={src} alt="Wang Yifan at work" />
+      ))}
+      {/* Duplicate for continuous scrolling */}
+      {photoStripImages.map((src) => (
+        <img src={src} alt="" aria-hidden="true" />
+      ))}
+    </div>
+  </section>
+
+  <section class="about-text">
+    <div class="about-sections">
+      <div class="about-section">
+        <h2>Selected Experience</h2>
+        <ul class="about-list">
+          {experience.map((it) => (
+            <li>
+              <div>{it.role}</div>
+              {it.time && <div class="meta">{it.time}</div>}
+              <div>{it.detail}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Education</h2>
+        <ul class="about-list">
+          {education.map((it) => (
+            <li>
+              <div>{it.role}</div>
+              <div class="meta">{it.time}</div>
+              <div>{it.detail}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Projects</h2>
+        <ul class="about-list">
+          {projects.map((it) => (
+            <li>
+              <div>
+                {it.link
+                  ? <a href={it.link} target="_blank" rel="noopener noreferrer" class="inline-link">{it.name}</a>
+                  : it.name}
+              </div>
+              <div class="meta">{it.time}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Exhibitions</h2>
+        <ul class="about-list">
+          {exhibitions.map((it) => (
+            <li>
+              <div>
+                {it.link
+                  ? <a href={it.link} target="_blank" rel="noopener noreferrer" class="inline-link">{it.name}</a>
+                  : it.name}
+              </div>
+              <div class="meta">{it.time}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Awards</h2>
+        <ul class="about-list">
+          {awards.map((it) => (
+            <li>
+              <div>{it.name}</div>
+              <div class="meta">{it.time}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Activities</h2>
+        <ul class="about-list">
+          {activities.map((it) => (
+            <li>
+              <div>
+                {it.link
+                  ? <a href={it.link} target="_blank" rel="noopener noreferrer" class="inline-link">{it.name}</a>
+                  : it.name}
+              </div>
+              <div class="meta">{it.time}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

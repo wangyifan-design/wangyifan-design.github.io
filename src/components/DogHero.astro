@@ -1,0 +1,52 @@
+---
+// Animated dog face shown above the home-page intro.
+//
+// Both light and dark modes share the SAME head outline (the original
+// /img/doghead.svg). In dark mode CSS just inverts its color to white via
+// `filter: invert(1)`. No ear animation — the outline is static.
+//
+// What changes between modes are the features (eyes + nose):
+//   • Light mode  — CSS-drawn divs that follow the cursor (dog.js)
+//   • Dark mode   — inline SVG rect "sleeping" eyes that wake up and blink
+//                   on hover, and a nose that scales up + wiggles on hover
+---
+
+<div class="dog-hero" aria-hidden="true">
+  <div class="dog-face" id="dog-face">
+    {/* Head outline — shown in both modes; CSS inverts it in dark mode. */}
+    <img class="dog-head" src="/img/doghead.svg" alt="" />
+
+    {/* Light-mode features — CSS divs that track the cursor via dog.js. */}
+    <div class="dog-eye light-only left"  data-feature="eye"></div>
+    <div class="dog-eye light-only right" data-feature="eye"></div>
+    <div class="dog-nose light-only"      data-feature="nose"></div>
+
+    {/* Dark-mode features — sleeping eyes + nose drawn as inline SVG.
+        Each feature is wrapped in a <g> tagged with data-feature so
+        dog.js sets --dog-tx / --dog-ty on the WRAPPER for cursor-tracking,
+        leaving the inner <rect> free to handle scale/blink/wiggle. */}
+    <svg
+      class="dog-features-dark"
+      viewBox="0 0 215 159"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Each eye is a 14×14 fully-circular rect squashed flat (scaleY 0.143)
+          by default — mimicking the daytime blink frame. On hover the rect
+          scales open into a circle, runs the blink loop, AND the wrapping
+          <g> picks up cursor tracking via --dog-tx/--dog-ty. */}
+      <g class="dog-eye-dark-wrap" data-feature="eye">
+        <rect class="dog-eye-dark" x="64"  y="78" width="14" height="14" rx="7" fill="currentColor" />
+      </g>
+      <g class="dog-eye-dark-wrap" data-feature="eye">
+        <rect class="dog-eye-dark" x="137" y="78" width="14" height="14" rx="7" fill="currentColor" />
+      </g>
+
+      {/* Nose — matches light-mode default size. On hover scales 1.2×,
+          briefly wiggles, and follows the cursor. */}
+      <g class="dog-nose-dark-wrap" data-feature="nose">
+        <rect class="dog-nose-shape" x="93.5" y="103.5" width="28" height="18" rx="7" fill="currentColor" />
+      </g>
+    </svg>
+  </div>
+</div>

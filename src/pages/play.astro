@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { playItems } from '../data/play';
+import '../styles/play.css';
+
+const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wangyifan-design.github.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Play", "item": "https://wangyifan-design.github.io/play/" }
+  ]
+})}<\/script>`;
+---
+
+<BaseLayout
+  title="Playground Projects | Wang Yifan Design"
+  description="Browse personal explorations by designer Wang Yifan, from illustrations and typography to branding experiments."
+  ogImage="/img/play/zhenzhen-2025.jpg"
+  pageType="play"
+  extraHead={breadcrumbJsonLd}
+>
+  <section class="projects play">
+    <div class="grid-sizer" aria-hidden="true"></div>
+    {playItems.map((item) => (
+      <div class="project">
+        <img class="project-image" src={item.image} alt={item.alt} loading="lazy" decoding="async" />
+        <div class="project-labels">
+          {item.labels.map((label) => <span>{label}</span>)}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <!-- Lightbox container — opened by global script.js.
+       Prev/next/close are wired up in initLightbox(). -->
+  <div id="lightbox" class="lightbox">
+    <button type="button" class="lightbox-close" aria-label="Close image viewer">&times;</button>
+    <button type="button" class="lightbox-nav lightbox-prev" aria-label="Previous image">‹</button>
+    <button type="button" class="lightbox-nav lightbox-next" aria-label="Next image">›</button>
+    <img id="lightbox-img" class="lightbox-content" alt="" />
+  </div>
+
+  <!-- Masonry layout (only loaded on this page).
+       data-astro-rerun makes it execute again after View Transitions. -->
+  <script is:inline src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script is:inline src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script is:inline data-astro-rerun>
+    (function () {
+      const grid = document.querySelector('.projects.play');
+      if (!grid || typeof imagesLoaded === 'undefined' || typeof Masonry === 'undefined') return;
+      imagesLoaded(grid, function () {
+        new Masonry(grid, {
+          itemSelector: '.project',
+          columnWidth: '.grid-sizer',
+          percentPosition: true,
+          gutter: 8,
+        });
+        grid.classList.add('is-ready');
+      });
+    })();
+  </script>
+</BaseLayout>

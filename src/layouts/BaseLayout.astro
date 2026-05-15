@@ -1,0 +1,140 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+// Global styles — imported once here, Astro bundles + hashes them.
+// theme.css comes LAST so its [data-theme="dark"] overrides win over the
+// hard-coded colors in the earlier stylesheets.
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/components.css';
+import '../styles/theme.css';
+
+export interface Props {
+  /** <title> tag. Should already include " | Wang Yifan ..." if you want that. */
+  title: string;
+  /** <meta name="description"> */
+  description: string;
+  /** Path to OG image (relative to site root or absolute URL). */
+  ogImage?: string;
+  /** OG type — "website" for landing pages, "article" for project pages, "profile" for about. */
+  ogType?: 'website' | 'article' | 'profile';
+  /** Value of <body data-page="...">. Lets CSS + script.js know which page they're on. */
+  pageType?: 'home' | 'chat' | 'play' | 'project' | 'default';
+  /** Optional extra <head> markup (e.g. JSON-LD or page-specific font links). */
+  extraHead?: string;
+  /** Show the global navigation bar. Defaults to true. */
+  showNav?: boolean;
+  /** Show the global footer. Defaults to true. */
+  showFooter?: boolean;
+  /** Whether the chat page needs a slimmer footer (legacy 1rem vs 2rem padding). */
+  slimFooter?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogImage = '/img/illustration/1.jpg',
+  ogType = 'website',
+  pageType = 'default',
+  extraHead,
+  showNav = true,
+  showFooter = true,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script is:inline>document.documentElement.classList.add('js-ready');</script>
+
+    <!-- Google Analytics -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-PV9ZKLPVH4"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PV9ZKLPVH4');
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Wang Yifan" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="Wang Yifan Design Portfolio" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Fonts (keep the legacy CDN for now; self-host in a future pass) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+    <link rel="icon" type="image/svg+xml" href="/img/logo.svg" />
+
+    {extraHead && <Fragment set:html={extraHead} />}
+
+    <slot name="head" />
+
+    <!-- Theme: apply persisted choice before first paint to avoid a flash of light.
+         Also re-apply on every View Transition so the choice persists across pages
+         (ClientRouter copies html attributes from the new document, which would
+         otherwise drop our data-theme attribute). -->
+    <script is:inline>
+      (function () {
+        function applyTheme(target) {
+          try {
+            var saved = localStorage.getItem('theme');
+            var preferDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved || (preferDark ? 'dark' : 'light');
+            (target || document.documentElement).dataset.theme = theme;
+          } catch (e) {}
+        }
+        applyTheme();
+        // Set the theme on the *incoming* document before swap so it lands themed.
+        document.addEventListener('astro:before-swap', function (event) {
+          applyTheme(event.newDocument.documentElement);
+        });
+      })();
+    </script>
+
+    <!-- Enable View Transitions between pages -->
+    <ClientRouter />
+  </head>
+
+  <body data-page={pageType}>
+    {/* The cursor dot and nav persist across page transitions so they don't
+        re-animate or lose their pointer-tracking listeners every navigation. */}
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true" transition:persist></div>
+
+    {showNav && <Nav />}
+
+    <main>
+      <slot />
+    </main>
+
+    {showFooter && <SiteFooter />}
+
+    <!-- Legacy client-side behavior. Stays as-is for now; could be modularized later. -->
+    <script is:inline src="/js/dog.js"></script>
+    <script is:inline src="/js/script.js"></script>
+  </body>
+</html>

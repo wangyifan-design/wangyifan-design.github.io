@@ -1,0 +1,85 @@
+---
+// Prev / Next project navigation shown at the bottom of every project page.
+//
+// Uses the order defined in `featuredWork.ts` as the canonical sequence
+// (same order shown on the home page). Wraps around at the ends so the
+// reader can keep clicking forward forever — last → first.
+//
+// Each side shows: a thumbnail of the neighbouring project + its title.
+// Video covers play silently on hover; static covers just sit there.
+
+import { featuredWork } from '../data/featuredWork';
+
+interface Props {
+  currentSlug: string;
+}
+
+const { currentSlug } = Astro.props;
+
+const list = featuredWork;
+const currentIndex = list.findIndex((item) => {
+  const match = item.href.match(/^\/projects\/([^/]+)\/?$/);
+  return match && match[1] === currentSlug;
+});
+
+const total = list.length;
+const prev = currentIndex >= 0 ? list[(currentIndex - 1 + total) % total] : null;
+const next = currentIndex >= 0 ? list[(currentIndex + 1) % total] : null;
+---
+
+{(prev || next) && (
+  <nav class="project-nav" aria-label="Project navigation">
+    {prev && (
+      <a href={prev.href} class="project-nav-link prev" aria-label={`Previous project: ${prev.title}`}>
+        <div class="project-nav-thumb">
+          {prev.video ? (
+            <video src={prev.cover} muted playsinline preload="metadata" loop />
+          ) : (
+            <img src={prev.cover} alt={prev.alt ?? prev.title} loading="lazy" />
+          )}
+        </div>
+        <div class="project-nav-text">
+          <span class="project-nav-label"><span class="project-nav-arrow">←</span> Previous</span>
+          <span class="project-nav-title">{prev.title}</span>
+        </div>
+      </a>
+    )}
+
+    {next && (
+      <a href={next.href} class="project-nav-link next" aria-label={`Next project: ${next.title}`}>
+        <div class="project-nav-text">
+          <span class="project-nav-label">Next <span class="project-nav-arrow">→</span></span>
+          <span class="project-nav-title">{next.title}</span>
+        </div>
+        <div class="project-nav-thumb">
+          {next.video ? (
+            <video src={next.cover} muted playsinline preload="metadata" loop />
+          ) : (
+            <img src={next.cover} alt={next.alt ?? next.title} loading="lazy" />
+          )}
+        </div>
+      </a>
+    )}
+  </nav>
+)}
+
+<script>
+  // Play the video thumbnails silently on hover, pause on leave.
+  // Re-attaches after every Astro View Transition.
+  function bootstrapProjectNavVideos() {
+    document.querySelectorAll('.project-nav-link video').forEach((video) => {
+      const v = video as HTMLVideoElement;
+      const link = v.closest('.project-nav-link');
+      if (!link) return;
+      link.addEventListener('mouseenter', () => { v.play().catch(() => {}); });
+      link.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapProjectNavVideos, { once: true });
+  } else {
+    bootstrapProjectNavVideos();
+  }
+  document.addEventListener('astro:after-swap', bootstrapProjectNavVideos);
+</script>

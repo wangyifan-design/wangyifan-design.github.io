@@ -1,0 +1,118 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectNav from '../../components/ProjectNav.astro';
+import '../../styles/detail.css';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const data = project.data;
+
+const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wangyifan-design.github.io/" },
+    { "@type": "ListItem", "position": 2, "name": data.title, "item": new URL(Astro.url.pathname, Astro.site).toString() }
+  ]
+})}<\/script>`;
+
+const creativeWorkJsonLd = `<script type="application/ld+json">${JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": data.title,
+  "url": new URL(Astro.url.pathname, Astro.site).toString(),
+  "image": data.ogImage ?? data.cover,
+  "creator": { "@type": "Person", "name": "Wang Yifan", "url": "https://wangyifan-design.github.io/" },
+  "datePublished": data.date ? data.date.toISOString().split('T')[0] : String(data.year),
+  "headline": data.subtitle ?? data.title,
+  "description": data.description,
+})}<\/script>`;
+
+// EB Garamond is only needed on project detail pages; load it here rather than globally.
+const extraHead = `
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,400&display=swap" />
+  ${creativeWorkJsonLd}
+  ${breadcrumbJsonLd}
+`;
+---
+
+<BaseLayout
+  title={`${data.title} | Wang Yifan`}
+  description={data.description}
+  ogImage={data.ogImage ?? data.cover}
+  ogType="article"
+  pageType="project"
+  extraHead={extraHead}
+>
+  <section class="project-hero">
+    {/* Matching `transition:name` with ProjectCard makes the cover image
+        morph from the grid tile into this full-bleed hero during navigation. */}
+    <img
+      src={data.cover}
+      class="hero-image"
+      alt={`${data.title} hero image`}
+      transition:name={`cover-${project.id}`}
+    />
+  </section>
+
+  <section class="project-intro">
+    <h1 class="title">{data.title}</h1>
+
+    <div class="project-intro-wrapper">
+      <div class="project-intro-left">
+        {data.subtitle && <p class="subtitle">{data.subtitle}</p>}
+
+        <dl class="meta-table">
+          {data.artists      && (<><dt class="meta-label">Artists</dt>      <dd class="meta-value" set:html={data.artists} /></>)}
+          {data.designers    && (<><dt class="meta-label">Designers</dt>    <dd class="meta-value" set:html={data.designers} /></>)}
+          {data.supervisor   && (<><dt class="meta-label">Supervisor</dt>   <dd class="meta-value">{data.supervisor}</dd></>)}
+          {data.partner      && (<><dt class="meta-label">Partner</dt>      <dd class="meta-value">{data.partner}</dd></>)}
+          {data.company      && (<><dt class="meta-label">Company</dt>      <dd class="meta-value">{data.company}</dd></>)}
+          {data.client       && (<><dt class="meta-label">Client</dt>       <dd class="meta-value">{data.client}</dd></>)}
+          {data.organization && (<><dt class="meta-label">Organization</dt> <dd class="meta-value">{data.organization}</dd></>)}
+          {data.role         && (<><dt class="meta-label">Role</dt>         <dd class="meta-value">{data.role}</dd></>)}
+          {data.duration     && (<><dt class="meta-label">Duration</dt>     <dd class="meta-value">{data.duration}</dd></>)}
+          {data.medium       && (<><dt class="meta-label">Medium</dt>       <dd class="meta-value">{data.medium}</dd></>)}
+                                  <dt class="meta-label">Year</dt>          <dd class="meta-value">{data.year}</dd>
+          {data.location     && (<><dt class="meta-label">Location</dt>     <dd class="meta-value">{data.location}</dd></>)}
+        </dl>
+      </div>
+
+      <div class="project-intro-right">
+        {data.overview && (
+          <>
+            <h3>{data.overviewTitle ?? ((data.role || data.company) ? 'Project Overview' : 'Intro')}</h3>
+            <p set:html={data.overview} />
+          </>
+        )}
+        {data.highlights && data.highlights.length > 0 && (
+          <>
+            <h3>Highlights</h3>
+            <p set:html={data.highlights.join('<br />')} />
+          </>
+        )}
+        {data.awards && data.awards.length > 0 && (
+          <>
+            <h3>Awards</h3>
+            <p set:html={data.awards.join('<br />')} />
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-bottom: 0;" class="project-content">
+    <Content />
+  </section>
+
+  <ProjectNav currentSlug={project.id} />
+</BaseLayout>

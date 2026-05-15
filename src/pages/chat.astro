@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ChatBox from '../components/ChatBox.astro';
+import '../styles/index.css';
+---
+
+<BaseLayout
+  title="Chat with Wang Yifan"
+  description="Ask Wang Yifan about projects, research, and design practice."
+  pageType="chat"
+>
+  <section class="chat-page-hero" aria-labelledby="chat-heading">
+    <header class="chat-page-intro">
+      <h1 id="chat-heading">Let’s Chat</h1>
+      <p class="subtitle">Ask anything about my work, process, or interests.</p>
+    </header>
+
+    <ChatBox />
+  </section>
+</BaseLayout>

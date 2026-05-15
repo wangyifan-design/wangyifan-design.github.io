@@ -1,2 +1,24 @@
+# Astro / Node
+node_modules/
+dist/
+.astro/
+
+# Vercel
+.vercel/
+
+# Environment (NEVER commit secrets — set them in Vercel dashboard)
 .env
-/documents
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# NOTE: public/img and public/videos ARE tracked in git so Vercel can deploy them.

@@ -15,7 +15,7 @@ let cachedChatMedia = null;
 let registeredLightbox = null;
 let closeMobileNav = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+function bootstrapPage() {
   const input = document.getElementById('user-input');
   const chat = document.getElementById('chat-content');
   const presetQuestionsContainer = document.getElementById('preset-questions');
@@ -40,7 +40,18 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavigationScroll();
   initCursor(cursorDot);
   initLightbox(lightbox, lightboxImg);
-});
+  initImageReveal();
+}
+
+// First page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrapPage, { once: true });
+} else {
+  bootstrapPage();
+}
+
+// Re-run after each Astro View Transition swap
+document.addEventListener('astro:after-swap', bootstrapPage);
 
 function setupHomeChat(input, container, form) {
   if (!input || !container || !form) return;
@@ -65,7 +76,7 @@ function navigateToChat(rawMessage) {
 
   sessionStorage.setItem('initialQuestion', message);
   triggerPageExit(() => {
-    window.location.href = 'chat.html';
+    window.location.href = '/chat/';
   });
 }
 
@@ -411,25 +422,68 @@ function initCursor(cursorDot) {
   });
 }
 
+let lightboxAbortCtl = null;
+let lightboxState = { images: [], index: 0 };
+
 function initLightbox(lightbox, lightboxImg) {
   registeredLightbox = lightbox;
-
   if (!lightbox || !lightboxImg) return;
 
-  document.querySelectorAll('.project-image').forEach(img => {
-    if (img.tagName === 'IMG') {
-      img.addEventListener('click', () => {
-        lightbox.style.display = 'block';
-        lightboxImg.src = img.src;
-      });
-    }
+  // Clean up listeners from a previous run (View Transitions re-bootstrap).
+  if (lightboxAbortCtl) lightboxAbortCtl.abort();
+  lightboxAbortCtl = new AbortController();
+  const { signal } = lightboxAbortCtl;
+
+  // Collect the clickable project images in order so we can step through them.
+  const imgs = Array.from(document.querySelectorAll('.project-image')).filter(
+    (el) => el.tagName === 'IMG'
+  );
+  lightboxState.images = imgs;
+
+  function show(i) {
+    const total = lightboxState.images.length;
+    if (!total) return;
+    const idx = ((i % total) + total) % total;     // wrap-around
+    lightboxState.index = idx;
+    const el = lightboxState.images[idx];
+    lightboxImg.src = el.src;
+    lightboxImg.alt = el.alt || '';
+    lightbox.style.display = 'block';
+    // Hide the prev/next controls if there's only one image.
+    const navs = lightbox.querySelectorAll('.lightbox-nav');
+    navs.forEach((n) => { n.style.display = total > 1 ? '' : 'none'; });
+  }
+  function close() {
+    lightbox.style.display = 'none';
+  }
+  function next() { show(lightboxState.index + 1); }
+  function prev() { show(lightboxState.index - 1); }
+
+  // Click on any image opens the lightbox at that index.
+  imgs.forEach((img, i) => {
+    img.addEventListener('click', () => show(i), { signal });
   });
 
-  window.addEventListener('click', (event) => {
-    if (event.target === lightbox) {
-      lightbox.style.display = 'none';
-    }
-  });
+  // Click outside the image (on the dim backdrop) closes.
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox) close();
+  }, { signal });
+
+  // Prev / next / close buttons.
+  const prevBtn  = lightbox.querySelector('.lightbox-prev');
+  const nextBtn  = lightbox.querySelector('.lightbox-next');
+  const closeBtn = lightbox.querySelector('.lightbox-close');
+  if (prevBtn)  prevBtn.addEventListener('click',  (e) => { e.stopPropagation(); prev();  }, { signal });
+  if (nextBtn)  nextBtn.addEventListener('click',  (e) => { e.stopPropagation(); next();  }, { signal });
+  if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); close(); }, { signal });
+
+  // Keyboard: arrows step, Escape closes (only while the lightbox is open).
+  document.addEventListener('keydown', (event) => {
+    if (lightbox.style.display !== 'block') return;
+    if (event.key === 'ArrowRight') { event.preventDefault(); next(); }
+    else if (event.key === 'ArrowLeft') { event.preventDefault(); prev(); }
+    else if (event.key === 'Escape') { close(); }
+  }, { signal });
 }
 
 function closeLightbox() {
@@ -677,21 +731,34 @@ function handleVisibilityOnLoad() {
 // // 保留滚动触发，用于后续图片进入视口时添加 .visible
 // window.addEventListener('scroll', handleVisibilityOnLoad);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+// Image reveal — fades in `.project-image` elements when they enter the viewport.
+// Lives outside DOMContentLoaded so it can be called by bootstrapPage()
+// on every page load *and* after every View Transition swap.
+let imageRevealObserver = null;
+function initImageReveal() {
+  if (imageRevealObserver) imageRevealObserver.disconnect();
+
+  imageRevealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // 一旦可见就不再监听
+        imageRevealObserver.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.2  // 进入视口 10% 就触发
-  });
+  }, { threshold: 0.2 });
 
-  const targets = document.querySelectorAll('.project-image');
-  targets.forEach(el => observer.observe(el));
-});
+  // Mark already-loaded images that happen to be in the viewport immediately,
+  // so they don't sit at opacity:0 if IntersectionObserver fires late.
+  document.querySelectorAll('.project-image').forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inView) {
+      el.classList.add('visible');
+    } else {
+      imageRevealObserver.observe(el);
+    }
+  });
+}
 
 // 监听用户消息和 AI 回复
 // 获取你的 Google Apps Script Web App URL

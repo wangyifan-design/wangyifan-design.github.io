@@ -1,0 +1,55 @@
+---
+// Primary site navigation, fixed to the top of every page.
+// Mobile open/close toggle behavior is handled by /js/script.js.
+// Marked `transition:persist` so the bar doesn't re-animate or lose its
+// state during View Transitions navigation.
+---
+
+<header class="site-header" transition:persist>
+  <nav id="navbar" aria-label="Primary navigation">
+    <div class="nav-left">
+      <a href="/" class="logo-link">
+        <img src="/img/logo.svg" alt="Wang Yifan logo" class="logo" />
+        <span class="site-title">Wang Yifan Design Portfolio</span>
+      </a>
+    </div>
+    <ul class="nav-right">
+      <li><a href="/" class="hover-underline">Work</a></li>
+      <li><a href="/play/" class="hover-underline">Play</a></li>
+      <li><a href="/chat/" class="hover-underline">Chat</a></li>
+      <li><a href="/about/" class="hover-underline">About</a></li>
+      <li>
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+          {/* Moon (shown in light mode — click to go dark) */}
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          {/* Sun (shown in dark mode — click to go light) */}
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script is:inline>
+  (function () {
+    function setTheme(value) {
+      document.documentElement.dataset.theme = value;
+      try { localStorage.setItem('theme', value); } catch (e) {}
+    }
+    function toggle() {
+      var current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+    // Use event delegation so the button keeps working after view transitions
+    // (which can swap the navigation DOM even with transition:persist edge cases).
+    document.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest && e.target.closest('.theme-toggle');
+      if (btn) toggle();
+    });
+  })();
+</script>

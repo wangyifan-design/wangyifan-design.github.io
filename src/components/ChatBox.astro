@@ -1,0 +1,29 @@
+---
+// The interactive chat widget. Used both on the home page (compact, no message history)
+// and on /chat/ (full-height conversation). Behavior lives in /js/script.js,
+// which reads `data-page` on <body> to decide between the two modes.
+---
+
+<section class="chat-container" aria-label="Interactive bio chatbot">
+  <div class="chat-box">
+    <div id="chat-content" class="chat-content"></div>
+
+    <form class="chat-input" action="#" aria-label="Ask a question about Wang Yifan">
+      <div class="preset-questions-viewport">
+        <div class="preset-questions" id="preset-questions">
+          {/* Preset questions are injected by /js/script.js */}
+        </div>
+      </div>
+
+      <div class="chat-input-field">
+        <label class="visually-hidden" for="user-input">Ask a question about Wang Yifan</label>
+        <input type="text" id="user-input" placeholder="Ask anything about me :)" autocomplete="off" />
+        <button type="submit" class="chat-send-button" aria-label="Send question">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+            <path d="M9 3l-5.5 5.5 1.06 1.06L8.25 5.87V15h1.5V5.87l3.69 3.69 1.06-1.06L9 3z" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

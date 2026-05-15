@@ -1,0 +1,152 @@
+/* ============================================================
+   Theme tokens + dark-mode overrides
+   - Light mode: the site's existing hard-coded colors keep applying as-is.
+   - Dark mode: rules prefixed with [data-theme="dark"] kick in, replacing the
+     hard-coded colors via attribute-selector specificity.
+   - The actual theme is set by an inline script in BaseLayout that reads
+     localStorage + prefers-color-scheme and writes data-theme onto <html>.
+   ============================================================ */
+
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: #666666;
+  --muted-2: #777777;
+  --subtitle: #555555;
+  --surface: #ffffff;
+  --surface-alt: #f0f0f0;
+  --surface-alt-2: #f5f5f5;
+  --border: rgba(0, 0, 0, 0.12);
+  --accent-bg: #000000;
+  --accent-fg: #ffffff;
+  --nav-bg: #ffffff;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d0d0d;
+  --fg: #f4f4f4;
+  --muted: #9a9a9a;
+  --muted-2: #b0b0b0;
+  --subtitle: #c0c0c0;
+  --surface: #161616;
+  --surface-alt: #1f1f1f;
+  --surface-alt-2: #242424;
+  --border: rgba(255, 255, 255, 0.14);
+  --accent-bg: #f4f4f4;
+  --accent-fg: #0d0d0d;
+  --nav-bg: rgba(13, 13, 13, 0.96);
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Dark-mode overrides ---------- */
+
+[data-theme="dark"] body                       { background: var(--bg); color: var(--fg); }
+[data-theme="dark"] #navbar                    { background: var(--nav-bg); }
+[data-theme="dark"] .nav-right a               { color: var(--fg); }
+[data-theme="dark"] .site-title                { color: var(--fg); }
+[data-theme="dark"] .site-footer               { background: var(--bg); color: var(--muted); }
+
+/* Project detail surfaces */
+[data-theme="dark"] .project-intro,
+[data-theme="dark"] .project-content           { background: var(--bg); color: var(--fg); }
+[data-theme="dark"] .title                     { color: var(--fg); }
+[data-theme="dark"] .subtitle                  { color: var(--subtitle); }
+[data-theme="dark"] .meta-label                { color: var(--muted-2); }
+[data-theme="dark"] .meta-value                { color: var(--fg); }
+[data-theme="dark"] .project-intro-right       { color: var(--fg); }
+[data-theme="dark"] .image-caption             { color: var(--muted-2); }
+
+/* Prev / Next project nav */
+[data-theme="dark"] .project-nav               { background: var(--bg); border-top-color: var(--border); }
+[data-theme="dark"] .project-nav-link:hover    { background: var(--surface-alt); }
+[data-theme="dark"] .project-nav-thumb         { background: var(--surface-alt); }
+[data-theme="dark"] .project-nav-label         { color: var(--muted-2); }
+[data-theme="dark"] .project-nav-title         { color: var(--fg); }
+
+/* About page */
+[data-theme="dark"] .photo-strip-wrapper       { background: var(--bg); }
+[data-theme="dark"] .about-list li::before     { color: var(--muted); }
+
+/* Chat */
+[data-theme="dark"] .chat-input input          { background: var(--surface-alt); color: var(--fg); }
+[data-theme="dark"] .chat-input input::placeholder { color: var(--muted); }
+[data-theme="dark"] .chat-send-button          { background: var(--surface); color: var(--fg); }
+[data-theme="dark"] .chat-send-button:hover   { background: var(--fg); color: var(--bg); }
+[data-theme="dark"] .chat-message.user         { background: var(--accent-bg); color: var(--accent-fg); }
+[data-theme="dark"] .chat-message.ai           { background: var(--surface-alt); color: var(--fg); }
+[data-theme="dark"] .preset-question {
+  background: var(--surface);
+  color: var(--fg);
+  border-color: var(--border);
+}
+[data-theme="dark"] .preset-question:hover    { background: var(--fg); color: var(--bg); }
+[data-theme="dark"] .chat-media-card          { background: var(--surface); box-shadow: var(--shadow); }
+[data-theme="dark"] .chat-media-desc          { color: var(--muted); }
+[data-theme="dark"] body[data-page="chat"] .chat-box,
+[data-theme="dark"] body[data-page="chat"] .chat-input input { background: var(--surface-alt); }
+
+/* Mobile nav slide-out menu */
+[data-theme="dark"] html.js-ready .nav-right  { background: var(--bg); }
+[data-theme="dark"] .nav-toggle-bar,
+[data-theme="dark"] .nav-close-icon::before,
+[data-theme="dark"] .nav-close-icon::after    { background: var(--fg); }
+[data-theme="dark"] .nav-toggle:hover,
+[data-theme="dark"] .nav-toggle:focus-visible,
+[data-theme="dark"] .nav-close                { background: rgba(255, 255, 255, 0.12); }
+[data-theme="dark"] .hover-underline::after   { background: var(--fg); }
+
+/* Invert pure-black SVG art (logo + dog head) so it's visible on dark bg. */
+[data-theme="dark"] .logo,
+[data-theme="dark"] .dog-head           { filter: invert(1); }
+
+/* ============================================================
+   Theme toggle button (in the nav)
+   ============================================================ */
+
+/* Vertically center every item (text links and the icon button) on the same line. */
+.nav-right    { align-items: center; }
+.nav-right li { align-items: center; }
+
+.theme-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  padding: 0;
+  border-radius: 50%;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  background: rgba(127, 127, 127, 0.14);
+  outline: none;
+}
+.theme-toggle:active { transform: scale(0.94); }
+.theme-toggle svg { width: 18px; height: 18px; display: block; }
+
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* ============================================================
+   View Transitions tuning
+   - The default Astro cross-fade is nice, but on the home → project
+     navigation we'd rather have only the cover image morph (the
+     shared-element `transition:name` we attached). Everything else fades.
+   - Respect prefers-reduced-motion.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,101 @@
+/* About page styles (extracted from inline <style> in legacy about.html) */
+.about-intro {
+  margin-top: 100px;
+  padding: 2rem;
+  max-width: 800px;
+  font-size: 1.1em;
+  line-height: 1.8;
+}
+
+.about-text {
+  margin-top: 100px;
+  padding: 2rem;
+  max-width: 800px;
+}
+
+.about-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.about-section h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.about-list {
+  list-style: none;
+  padding: 0 0 0 1.75rem;
+  margin: 0;
+}
+
+.about-list li {
+  position: relative;
+  margin-bottom: 1.5em;
+}
+
+.about-list li::before {
+  content: "•";
+  position: absolute;
+  left: -1rem;
+  top: 0.1rem;
+  color: #666;
+}
+
+.about-list .meta { color: gray; }
+
+.inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.inline-link::after {
+  content: "↗";
+  opacity: 0;
+  transform: translate(-0.2rem, 0.1rem);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-size: 0.85em;
+}
+
+.inline-link:hover::after,
+.inline-link:focus-visible::after {
+  opacity: 1;
+  transform: translate(0, 0.1rem);
+}
+
+.photo-strip-wrapper {
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.photo-strip {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  animation: scrollPhotos 60s linear infinite;
+}
+
+.photo-strip img {
+  height: 20rem;
+  flex-shrink: 0;
+  filter: grayscale(100%);
+  border-radius: 8px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.photo-strip-wrapper:hover .photo-strip { animation-play-state: paused; }
+
+.photo-strip img:hover {
+  filter: grayscale(0%);
+  animation-play-state: paused;
+}
+
+@keyframes scrollPhotos {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

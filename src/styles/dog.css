@@ -1,0 +1,210 @@
+.dog-hero {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  width: fit-content;
+  overflow: visible;
+}
+
+.dog-face {
+  width: 226px;
+  height: 169px;
+  position: relative;
+  transition: transform 200ms ease;
+  overflow: visible;
+}
+
+.dog-head {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  /* Dark-mode invert is handled in theme.css alongside the logo. */
+}
+
+.dog-hero:hover .dog-face {
+  transform: scale(1.04);
+}
+
+/* ============================================================
+   Light vs. dark FEATURES (eyes + nose).
+   • Light mode CSS divs (.dog-eye / .dog-nose) are visible.
+   • Dark mode inline SVG (.dog-features-dark with .dog-eye-dark + .dog-nose-shape) is visible.
+   ============================================================ */
+
+.dog-features-dark {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--fg);
+  pointer-events: none;
+  overflow: visible;
+}
+
+[data-theme="dark"] .dog-features-dark      { display: block; }
+[data-theme="dark"] .dog-eye.light-only,
+[data-theme="dark"] .dog-nose.light-only    { display: none; }
+
+/* ============================================================
+   Light-mode features — eyes track cursor (--dog-tx, --dog-ty);
+   periodic blink animation; hover scales them up via --dog-scale.
+   ============================================================ */
+
+.dog-eye,
+.dog-nose {
+  position: absolute;
+  will-change: transform;
+  transition: transform 60ms linear;
+  --dog-tx: 0px;
+  --dog-ty: 0px;
+  --dog-scale: 1;
+}
+
+.dog-eye {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #222;
+  top: 70px;
+  animation: dog-blink 5s infinite;
+  transform: translate(var(--dog-tx), var(--dog-ty)) scale(var(--dog-scale));
+}
+
+.dog-eye.left  { left: 70px; }
+.dog-eye.right { right: 80px; }
+
+.dog-nose {
+  width: 30px;
+  height: 20px;
+  top: 90px;
+  left: 45%;
+  transform: translate(-50%, 0) translate(var(--dog-tx), var(--dog-ty)) scale(var(--dog-scale));
+}
+
+.dog-nose::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #222;
+  border-radius: 8px;
+}
+
+@keyframes dog-blink {
+  0%, 46%, 55% {
+    height: 14px;
+    top: 70px;
+    border-radius: 50%;
+  }
+  47%, 49% {
+    height: 2px;
+    top: 76px;
+    border-radius: 2px;
+  }
+}
+
+@keyframes dog-nose-wiggle {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(3px, 0); }
+  50%  { transform: translate(-3px, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+.dog-hero:hover .dog-nose::after {
+  animation: dog-nose-wiggle 0.3s ease;
+}
+
+.dog-hero:hover .dog-eye,
+.dog-hero:hover .dog-nose {
+  --dog-scale: 1.2;
+}
+
+/* ============================================================
+   Dark-mode features
+   - Each feature has two layers:
+       <g class="*-wrap"> ← cursor-tracking translate (only while hovered)
+         <rect>          ← scale / blink / wiggle animations
+   - Default eye: scaleY(0.143) — looks like the daytime blink frame,
+     unmoved (no translate) so it sits perfectly centered while sleeping.
+   - On hover: the wrap picks up --dog-tx/--dog-ty (set by dog.js),
+     and the inner rect plays its wake-up + blink animation (eye) or
+     wake-up + wiggle (nose). Two layers compose: cursor offset on the
+     outside, shape animation on the inside.
+   - Nose: scales 1.2× on hover and briefly wiggles left/right at the
+     start of the hover (same flavor as the light-mode nose wiggle).
+   ============================================================ */
+
+/* Outer wrapper: cursor-tracking translate. Only applied during hover.
+   Two different transition speeds:
+     • Default (cursor leaves) — slow 800ms ease, so the eye/nose drifts
+       back to center sleepily.
+     • Hovered (cursor on dog) — snappy 60ms linear, matches daytime feel. */
+.dog-eye-dark-wrap,
+.dog-nose-dark-wrap {
+  --dog-tx: 0px;
+  --dog-ty: 0px;
+  transition: transform 800ms ease-out;
+}
+.dog-hero:hover .dog-eye-dark-wrap,
+.dog-hero:hover .dog-nose-dark-wrap {
+  transform: translate(var(--dog-tx), var(--dog-ty));
+  transition: transform 60ms linear;
+}
+
+/* Inner shapes: scale / blink / wiggle.
+   We DON'T use `animation: ... forwards` to hold the awake-state any more —
+   when the animation is removed (hover ends), the browser snaps from the
+   animation's frozen value back to the underlying CSS value WITHOUT
+   triggering `transition`. That made the eyes close instantly.
+   Instead we set the awake transform statically inside :hover; the base
+   800ms transition then animates the slow "going to sleep". The blink /
+   wiggle keyframe animations layer on top while the cursor is on the dog. */
+.dog-eye-dark,
+.dog-nose-shape {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 800ms ease-out;  /* slow close / shrink on un-hover */
+}
+
+/* Default sleeping eye — squashed flat like the daytime blink frame. */
+.dog-eye-dark {
+  transform: scaleY(0.143);
+}
+
+/* Default nose — normal size. */
+.dog-nose-shape {
+  transform: scale(1);
+}
+
+/* Awake eye: scale up to 1.2× then loop the blink.
+   Static `transform: scale(1.2)` gives the transition a real "to" value,
+   so un-hover slowly closes the eye back to scaleY(0.143) over 800ms. */
+.dog-hero:hover .dog-eye-dark {
+  transform: scale(1.2);
+  transition: transform 350ms ease;
+  animation: dog-dark-blink-loop 5s 350ms linear infinite;
+}
+
+/* Awake nose: scale up to 1.2× and wiggle once. Same trick as the eye. */
+.dog-hero:hover .dog-nose-shape {
+  transform: scale(1.2);
+  transition: transform 350ms ease;
+  animation: dog-dark-nose-wiggle 500ms ease;
+}
+
+@keyframes dog-dark-blink-loop {
+  0%, 46%, 55%, 100% { transform: scale(1.2); }
+  47%, 49%           { transform: scale(1.2, 0.172); }
+}
+
+@keyframes dog-dark-nose-wiggle {
+  /* Wiggle left/right at the start of hover, then settle at scale(1.2).
+     After the animation ends, the static `transform: scale(1.2)` above
+     takes over so the nose stays awake-sized while the cursor is on the dog. */
+  0%, 60%, 100% { transform: scale(1.2); }
+  20%           { transform: translate(3px, 0)  scale(1.2); }
+  40%           { transform: translate(-3px, 0) scale(1.2); }
+}
