@@ -39,8 +39,10 @@ interface Props {
   /** ARIA label for the whole viewer region. */
   label?: string;
   /** CSS aspect-ratio of the whole spread (left + right combined).
-   *  Defaults to "2 / 1.4" — adjust to match your book's proportions
-   *  (e.g. "2 / 1.5" for a taller book, "2 / 1.2" for a wider one). */
+   *  Defaults to "auto" — the viewer measures the first page image's
+   *  natural dimensions and sets the frame to match. Pass an explicit
+   *  value (e.g. "2 / 1.414" for A4, "2 / 1.5" for a taller book) to
+   *  override the auto-detection. */
   aspectRatio?: string;
 }
 
@@ -50,8 +52,14 @@ const {
   backCover,
   alt = 'Book page',
   label = 'Book pages',
-  aspectRatio = '2 / 1.4',
+  aspectRatio = 'auto',
 } = Astro.props;
+
+// Until JS auto-measures (or if the user explicitly set a ratio), the
+// inline style applies. "auto" → use a sensible fallback (A4 spread) so
+// the frame has a height before the first image loads, avoiding a
+// noticeable layout shift.
+const initialAspect = aspectRatio === 'auto' ? '2 / 1.414' : aspectRatio;
 
 type Spread = { left?: string; right?: string; leftAlt?: string; rightAlt?: string };
 const spreads: Spread[] = [];
@@ -80,7 +88,7 @@ if (backCover) {
       </svg>
     </button>
 
-    <div class="book-frame" style={`aspect-ratio: ${aspectRatio}`}>
+    <div class="book-frame" style={`aspect-ratio: ${initialAspect}`} data-auto-aspect={aspectRatio === 'auto' ? '' : null}>
       {spreads.map((s, i) => (
         <div class={`book-spread${i === 0 ? ' is-active' : ''}`} data-index={i}>
           <div class={`book-page left${s.left ? '' : ' is-empty'}`}>
@@ -266,8 +274,29 @@ if (backCover) {
       const prev = viewer.querySelector<HTMLButtonElement>('.book-nav.prev');
       const next = viewer.querySelector<HTMLButtonElement>('.book-nav.next');
       const current = viewer.querySelector<HTMLElement>('.book-current');
+      const frame = viewer.querySelector<HTMLElement>('.book-frame');
       const total = spreads.length;
       if (!total) return;
+
+      // Auto-fit: when the frame has [data-auto-aspect], measure the
+      // first page image's natural dimensions and set
+      //   aspect-ratio: (2 × pageWidth) / pageHeight
+      // so the spread exactly matches the book's proportions
+      // (works for A4, A5, Letter, square — whatever the file is).
+      if (frame && frame.dataset.autoAspect !== undefined) {
+        const firstImg = viewer.querySelector<HTMLImageElement>('.book-page img');
+        const applyAuto = () => {
+          if (!firstImg) return;
+          const w = firstImg.naturalWidth;
+          const h = firstImg.naturalHeight;
+          if (w && h) frame.style.aspectRatio = `${2 * w} / ${h}`;
+        };
+        if (firstImg?.complete && firstImg.naturalWidth) {
+          applyAuto();
+        } else {
+          firstImg?.addEventListener('load', applyAuto, { once: true, signal });
+        }
+      }
 
       let index = 0;
 
