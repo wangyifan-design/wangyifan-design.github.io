@@ -21,7 +21,6 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
   extraHead={breadcrumbJsonLd}
 >
   <section class="projects play">
-    <div class="grid-sizer" aria-hidden="true"></div>
     {playItems.map((item) => (
       <div class="project">
         <img class="project-image" src={item.image} alt={item.alt} loading="lazy" decoding="async" />
@@ -40,24 +39,4 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
     <button type="button" class="lightbox-nav lightbox-next" aria-label="Next image">›</button>
     <img id="lightbox-img" class="lightbox-content" alt="" />
   </div>
-
-  <!-- Masonry layout (only loaded on this page).
-       data-astro-rerun makes it execute again after View Transitions. -->
-  <script is:inline src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-  <script is:inline src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-  <script is:inline data-astro-rerun>
-    (function () {
-      const grid = document.querySelector('.projects.play');
-      if (!grid || typeof imagesLoaded === 'undefined' || typeof Masonry === 'undefined') return;
-      imagesLoaded(grid, function () {
-        new Masonry(grid, {
-          itemSelector: '.project',
-          columnWidth: '.grid-sizer',
-          percentPosition: true,
-          gutter: 8,
-        });
-        grid.classList.add('is-ready');
-      });
-    })();
-  </script>
 </BaseLayout>
