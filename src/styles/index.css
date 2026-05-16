@@ -1,4 +1,18 @@
-.intro {  width: 100%;padding: 100px 100px; }
+.intro {
+  width: 100%;
+  padding: 100px 100px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* On phones the 100px-each-side desktop padding eats more than half
+   of a 375px viewport, pushing the dog hero off-center. Shrink to
+   something proportional so the dog sits truly centered. */
+@media (max-width: 768px) {
+  .intro {
+    padding: 72px 1rem 32px;
+  }
+}
 .subtitle { color: #555; }
 .chat-intro-copy { margin-top: 0.5rem; color: #777; }
 

@@ -21,23 +21,29 @@ const slug = slugMatch ? slugMatch[1] : null;
 <article class="project">
   <a href={href} class="project-link">
     <figure class="project-figure">
-      {video ? (
-        <video
-          class="project-image"
-          src={cover}
-          autoplay muted loop playsinline aria-hidden="true"
-          {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
-        ></video>
-      ) : (
-        <img
-          class="project-image"
-          src={cover}
-          alt={alt ?? `${title} project cover`}
-          loading="lazy"
-          decoding="async"
-          {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
-        />
-      )}
+      {/* Fixed 16:9 box. All covers (image OR video) fill via
+          object-fit: cover, so the entire grid renders at uniform
+          heights — no masonry, no scroll-reveal, no layout shift on
+          mobile. Crops are accepted by design. */}
+      <div class="project-media">
+        {video ? (
+          <video
+            class="project-image"
+            src={cover}
+            autoplay muted loop playsinline aria-hidden="true"
+            {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
+          ></video>
+        ) : (
+          <img
+            class="project-image"
+            src={cover}
+            alt={alt ?? `${title} project cover`}
+            loading="lazy"
+            decoding="async"
+            {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
+          />
+        )}
+      </div>
       <figcaption class="project-labels">
         <span class="project-title">{title}</span>
         <span class="project-year">{year}</span>

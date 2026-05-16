@@ -1,6 +1,4 @@
 .project {
-  break-inside: avoid;
-  margin-bottom: 0.5rem;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
@@ -10,29 +8,40 @@
 
 .project-figure { margin: 0; position: relative; }
 
-.project-image {
-  border-radius: 12px;
+/* Fixed 16:9 frame. Every Featured-Work tile is rendered into one of
+   these, regardless of the original image's aspect ratio. No more
+   masonry / no scroll-reveal: the grid is now perfectly uniform on
+   every viewport, which fixes the mobile bug where lazy-loaded
+   variable-height covers all collapsed to height:0 and stacked behind
+   each other.
+
+   `overflow: hidden` clips the cover; `position: relative` is so the
+   absolutely-positioned hover label sits inside the frame. */
+.project-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  transition: transform 0.3s ease, opacity 0.5s ease;
+  border-radius: 12px;
+  background: #f0f0f0;
 }
 
-.project img, .project video {
+/* Only home-page Featured Work tiles wrap their image in .project-media.
+   The play page uses bare <img class="project-image"> inside a CSS
+   `column-count` masonry, so we scope the absolute-fill behaviour to
+   media-wrapped images only. Play images keep their natural sizing
+   from play.css. */
+.project-media .project-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 12px;
-  transition: transform 0.3s ease, opacity 0.5s ease;
-  opacity: 0;
-  transform: translateY(50px);
+  transition: transform 0.4s ease;
 }
 
-.project img.visible, .project video.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.project:hover img, .project:hover video { transform: scale(1.05); }
+.project-media:hover .project-image { transform: scale(1.05); }
 
 .project-labels {
   position: absolute;
