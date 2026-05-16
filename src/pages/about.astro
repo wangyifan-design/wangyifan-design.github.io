@@ -23,6 +23,40 @@ const education = [
   { role: 'BA in Visual Communication',  time: '2012 – 2016, Tsinghua University', detail: 'Trained in fundamental design skills: logo design, typography, packaging, and motion graphics.' },
 ];
 
+const publications = [
+  {
+    name: 'Transformation with AI: Zhuangzi’s “Wuhua” Theory Inspires AI-Generated Art Development',
+    time: '2026, Thinking Skills and Creativity (Elsevier) · with H. Yang and U. Amnueypol',
+    link: 'https://doi.org/10.1016/j.tsc.2026.102239',
+  },
+  {
+    name: 'Covered with AI: The Speculative Design (AI包浆：一种思辨性设计)',
+    time: '2024, Chinese Art 《中国艺术》, 2024(3) · with Jiang Xiangwei',
+  },
+  {
+    name: 'How Artificial Intelligence Is Affecting Logo Design (人工智能对标志设计的影响)',
+    time: '2024, Design 《设计》, 37(9)',
+    link: 'https://doi.org/10.20055/j.cnki.1003-0069.001749',
+  },
+  {
+    name: 'Research on the Application and Impact of Artificial Intelligence in Visual Communication Design (人工智能在视觉传达设计中的应用与影响研究)',
+    time: '2024, PhD Dissertation, Tsinghua University · Advisor: Prof. Chen Nan',
+  },
+  {
+    name: 'Creating Cultural Sculpture: Analyzing the Value of Traditional Chinese Sculpture Based on the Five Levels of Human Cognition',
+    time: '2023, International Journal of Arts Theory & History, 18(2): 21–42 · with H. Yang and U. Amnueypol',
+    link: 'https://doi.org/10.18848/2326-9952/CGP/v18i02/21-42',
+  },
+  {
+    name: 'Design Philosophy Under the Compulsion of Technology: Materiality, Holism, and Creativity (技术促逼下的设计哲学：物质性、整体性、创造力)',
+    time: '2023, Journal of Oriental Design 《东方设计学报》, 3(4): 83–87',
+  },
+  {
+    name: 'Virtual Zoo Design Based on Animal Imagery in Traditional Chinese Culture (基于中国传统文化中动物形象研究的虚拟动物园设计)',
+    time: '2019, Master’s Thesis, Tsinghua University · Advisor: Prof. Chen Nan',
+  },
+];
+
 const projects = [
   { name: 'Personalized Service Stamp Design', link: 'https://www.ad.tsinghua.edu.cn/info/1061/8148.htm', time: 'Tsinghua University' },
   { name: 'Central Asian Cultural Cookbook',   time: 'FAO (UN Volunteer)' },
@@ -32,8 +66,9 @@ const projects = [
 const exhibitions = [
   { name: 'National Graphic Design Exhibition (Selected / Finalist)', time: '2025, China Artists Association' },
   { name: 'Tianjin Youth Art Season (Selected Work)', time: '2025, Tianjin Academy of Fine Arts' },
-  { name: 'Chinese Character Interactive Festival', time: '2022, Macao' },
   { name: 'Moments in Sound and Image - Tsinghua Alumni Boston Art Festival', link: 'https://www.tsinghua.org.cn/info/1013/41767.htm', time: '2025, North America Federation of Tsinghua Alumni Association' },
+  { name: '“Heidegger’s Jin Hui Dui” 海德格尔的锦灰堆 (Selected Design Work)', time: '2024, China Higher Education Design Works Selection 《中国高等院校设计作品精选》, Digital Tech Innovation Section, p. 449' },
+  { name: 'Chinese Character Interactive Festival', time: '2022, Macao' },
 ];
 
 const awards = [
@@ -101,6 +136,22 @@ const photoStripImages = [1, 2, 3, 4, 5, 6].map(n => `/img/strip/strip-${n}.jpg`
               <div>{it.role}</div>
               <div class="meta">{it.time}</div>
               <div>{it.detail}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Publications</h2>
+        <ul class="about-list">
+          {publications.map((it) => (
+            <li>
+              <div>
+                {it.link
+                  ? <a href={it.link} target="_blank" rel="noopener noreferrer" class="inline-link">{it.name}</a>
+                  : it.name}
+              </div>
+              <div class="meta">{it.time}</div>
             </li>
           ))}
         </ul>
