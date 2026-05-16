@@ -16,6 +16,8 @@ overview: |
 order: 6
 ---
 
+import BookViewer from '../../components/BookViewer.astro';
+
 <div class="content-block">
   <video style="margin-top:0;" class="project-image" src="/img/patapata/pdf-1.mp4" autoplay loop muted playsinline aria-label="Animated Philosophy Drama Festival poster"></video>
 </div>
@@ -42,6 +44,28 @@ order: 6
   ## Conference Handbooks
   I explored sound as a visual metaphor, using fragmented composition, kinetic tension, and typographic rhythm to evoke
   the feeling of interruption and sudden emergence.
+  <BookViewer
+    frontCover="/img/patapata/p01.jpg"
+    backCover="/img/patapata/p16.jpg"
+    pages={[
+      '/img/patapata/p02.jpg',
+      '/img/patapata/p03.jpg',
+      '/img/patapata/p04.jpg',
+      '/img/patapata/p05.jpg',
+      '/img/patapata/p06.jpg',
+      '/img/patapata/p07.jpg',
+      '/img/patapata/p08.jpg',
+      '/img/patapata/p09.jpg',
+      '/img/patapata/p10.jpg',
+      '/img/patapata/p11.jpg',
+      '/img/patapata/p12.jpg',
+      '/img/patapata/p13.jpg',
+      '/img/patapata/p14.jpg',
+      '/img/patapata/p15.jpg',
+    ]}
+    alt="4th handbooks"
+    label="Interior spreads of The 4th handbooks"
+  />
   <img class="project-image" src="/img/patapata/pdf-1.jpg" alt="Editorial spread introducing Philosophy Drama Festival program" />
   <img class="project-image" src="/img/patapata/pdf-2.jpg" alt="Handbook layout detailing festival schedule" />
   <img class="project-image" src="/img/patapata/pdf-4.jpg" alt="Typography-focused spread highlighting performers" />

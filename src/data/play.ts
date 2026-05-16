@@ -26,11 +26,11 @@ export const playItems: PlayItem[] = [
   { image: '/img/play/philosophy.gif', alt: 'philosophy', labels: ['drama festival', 'logo'] },
   { image: '/img/play/above the body-2.jpg', alt: 'body2', labels: ['above the body-2', 'poster'] },
   { image: '/img/play/new year red bag.jpg', alt: 'newyear', labels: ['new year red bag', 'print'] },
-  { image: '/img/play/fan.gif', alt: 'fan', labels: ['fan', '3D'] },
+  { image: '/img/play/fan.mp4', alt: 'fan', labels: ['fan', '3D'] },
   { image: '/img/play/stickers.jpg', alt: 'stickers', labels: ['d&r', 'stickers'] },
   { image: '/img/play/lightbox.jpg', alt: 'forum', labels: ['the second pioneer forum', 'event visual'] },
   { image: '/img/play/poster.jpg', alt: 'forum poster', labels: ['the second pioneer forum', 'event visual'] },
   { image: '/img/play/history.jpg', alt: 'history', labels: ['history', 'acrylic'] },
   { image: '/img/play/buddha.jpg', alt: 'buddha', labels: ['buddha bless', 'interactive game'] },
-  { image: '/img/play/apple.gif', alt: 'apple', labels: ['apple', 'crayon'] },
+  { image: '/img/play/apple.mp4', alt: 'apple', labels: ['apple', 'crayon'] },
 ];

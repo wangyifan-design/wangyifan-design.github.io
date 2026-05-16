@@ -21,14 +21,36 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
   extraHead={breadcrumbJsonLd}
 >
   <section class="projects play">
-    {playItems.map((item) => (
-      <div class="project">
-        <img class="project-image" src={item.image} alt={item.alt} loading="lazy" decoding="async" />
-        <div class="project-labels">
-          {item.labels.map((label) => <span>{label}</span>)}
+    {playItems.map((item) => {
+      // Items can be either a still image (.jpg/.png) or a short looping
+      // video (.mp4 — replaces the original .gif files for ~80% size
+      // savings while keeping the same visual feel).
+      const isVideo = /\.(mp4|webm)$/i.test(item.image);
+      return (
+        <div class="project">
+          {isVideo ? (
+            <video
+              class="project-image"
+              src={item.image}
+              autoplay muted loop playsinline
+              aria-label={item.alt}
+              preload="metadata"
+            ></video>
+          ) : (
+            <img
+              class="project-image"
+              src={item.image}
+              alt={item.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          <div class="project-labels">
+            {item.labels.map((label) => <span>{label}</span>)}
+          </div>
         </div>
-      </div>
-    ))}
+      );
+    })}
   </section>
 
   <!-- Lightbox container — opened by global script.js.
