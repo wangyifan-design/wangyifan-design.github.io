@@ -11,6 +11,21 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
   ]
 })}<\/script>`;
 
+const research = [
+  {
+    name: 'Human–Machine Collaborative Design',
+    detail: 'I study how AI participates in visual creation, design decision-making, and professional workflows.',
+  },
+  {
+    name: 'Cultural Interfaces & Chinese Visual Systems',
+    detail: 'I explore Chinese characters, traditional symbols, and cultural memory as living design systems in contemporary media.',
+  },
+  {
+    name: 'Speculative AI Art & Design Philosophy',
+    detail: 'I use AI as a medium to investigate materiality, memory, authorship, and the boundary between human imagination and machine generation.',
+  },
+];
+
 const experience = [
   { role: 'Product Designer, Rockhood.ai', time: 'Feb 2025 – Now', detail: 'Leading brand, UI, and product design for an AI-powered conversational real estate platform.' },
   { role: 'UX Designer, Tsinghua Future Lab', time: '2024 – Now',   detail: 'Designed user journey maps and AI tools for senior care and natural language interaction.' },
@@ -39,6 +54,10 @@ const publications = [
     link: 'https://doi.org/10.20055/j.cnki.1003-0069.001749',
   },
   {
+    name: 'Harmonizing with Machines: Development and Challenges of Human-Machine Collaborative Design (与机器共鸣：人机协同设计的发展与挑战)',
+    time: '2024, Design Research 《设计艺术研究》, 14(5): 11–16',
+  },
+  {
     name: 'Research on the Application and Impact of Artificial Intelligence in Visual Communication Design (人工智能在视觉传达设计中的应用与影响研究)',
     time: '2024, PhD Dissertation, Tsinghua University · Advisor: Prof. Chen Nan',
   },
@@ -57,23 +76,24 @@ const publications = [
   },
 ];
 
-const projects = [
-  { name: 'Personalized Service Stamp Design', link: 'https://www.ad.tsinghua.edu.cn/info/1061/8148.htm', time: 'Tsinghua University' },
-  { name: 'Central Asian Cultural Cookbook',   time: 'FAO (UN Volunteer)' },
-  { name: 'Digital Oracle Bone Script Project', time: 'Tsinghua University' },
+const conferencePresentations = [
+  {
+    name: '“Visualization of Dreams: An Analysis of Artificial Intelligence in Surrealist Art Creation” (presentation proposal)',
+    time: '2024, Nineteenth International Conference on the Arts in Society · Hanyang University, Seoul, South Korea + Online · May 24–26, 2024',
+  },
 ];
 
 const exhibitions = [
   { name: 'National Graphic Design Exhibition (Selected / Finalist)', time: '2025, China Artists Association' },
   { name: 'Tianjin Youth Art Season (Selected Work)', time: '2025, Tianjin Academy of Fine Arts' },
   { name: 'Moments in Sound and Image - Tsinghua Alumni Boston Art Festival', link: 'https://www.tsinghua.org.cn/info/1013/41767.htm', time: '2025, North America Federation of Tsinghua Alumni Association' },
-  { name: '“Heidegger’s Jin Hui Dui” 海德格尔的锦灰堆 (Selected Design Work)', time: '2024, China Higher Education Design Works Selection 《中国高等院校设计作品精选》, Digital Tech Innovation Section, p. 449' },
   { name: 'Chinese Character Interactive Festival', time: '2022, Macao' },
 ];
 
 const awards = [
   { name: 'Shenzhen Global Design Award (Excellence Award / Kunpeng Award)', time: '2024, Shenzhen Municipal Government / Shenzhen Innovation & Creative Design Development Office' },
   { name: 'BIAF Busan International Art Festival (Silver Award)', time: '2024, Busan Metropolitan City / BIAF Organizing Committee' },
+  { name: 'Asia Vanguard Art and Design Competition / 亚洲新锐艺术与设计大赛 AVADC (First Prize)', time: '2024' },
 ];
 
 const activities = [
@@ -94,10 +114,10 @@ const photoStripImages = [1, 2, 3, 4, 5, 6].map(n => `/img/strip/strip-${n}.jpg`
   <section class="about-intro">
     <h1>About Me</h1>
     <p>
-      I'm Yifan, a visual communication designer and researcher with a Ph.D. from Tsinghua University. Over the past
-      decade, I've focused on how intelligent technologies can foster new forms of visual interaction. My design
-      philosophy centers on clarity, usability, and joy. I believe in system thinking and aim to create experiences
-      that are simple, consistent, and impactful.
+      I am a visual communication designer and researcher working at the intersection of artificial intelligence,
+      visual systems, and cultural imagination. With a Ph.D. in Visual Communication from Tsinghua University, my
+      work explores how intelligent technologies reshape design authorship, human–machine collaboration, and the
+      contemporary expression of traditional visual culture.
     </p>
   </section>
 
@@ -115,6 +135,18 @@ const photoStripImages = [1, 2, 3, 4, 5, 6].map(n => `/img/strip/strip-${n}.jpg`
 
   <section class="about-text">
     <div class="about-sections">
+      <div class="about-section">
+        <h2>Research &amp; Creative Practice</h2>
+        <ul class="about-list">
+          {research.map((it) => (
+            <li>
+              <div>{it.name}</div>
+              <div>{it.detail}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <div class="about-section">
         <h2>Selected Experience</h2>
         <ul class="about-list">
@@ -158,9 +190,9 @@ const photoStripImages = [1, 2, 3, 4, 5, 6].map(n => `/img/strip/strip-${n}.jpg`
       </div>
 
       <div class="about-section">
-        <h2>Projects</h2>
+        <h2>Conference Presentations</h2>
         <ul class="about-list">
-          {projects.map((it) => (
+          {conferencePresentations.map((it) => (
             <li>
               <div>
                 {it.link

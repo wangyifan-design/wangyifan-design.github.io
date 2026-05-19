@@ -1,6 +1,6 @@
 /* About page styles (extracted from inline <style> in legacy about.html) */
 .about-intro {
-  margin-top: 100px;
+  margin: 100px auto 0;
   padding: 2rem;
   max-width: 800px;
   font-size: 1.1em;
@@ -8,7 +8,7 @@
 }
 
 .about-text {
-  margin-top: 100px;
+  margin: 100px auto 0;
   padding: 2rem;
   max-width: 800px;
 }
@@ -27,21 +27,13 @@
 
 .about-list {
   list-style: none;
-  padding: 0 0 0 1.75rem;
+  padding: 0;
   margin: 0;
 }
 
 .about-list li {
   position: relative;
   margin-bottom: 1.5em;
-}
-
-.about-list li::before {
-  content: "•";
-  position: absolute;
-  left: -1rem;
-  top: 0.1rem;
-  color: #666;
 }
 
 .about-list .meta { color: gray; }
