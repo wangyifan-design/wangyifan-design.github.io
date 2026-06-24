@@ -15,7 +15,7 @@
  */
 (function () {
   const SELECTOR = '.about-section';
-  const STAGGER_MS = 100; // delay between blocks already in viewport on init
+  const STAGGER_MS = 180; // delay between blocks already in viewport on init
 
   function reveal(el) {
     if (el.classList.contains('in-view')) return;
