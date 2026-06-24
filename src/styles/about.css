@@ -91,3 +91,31 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* Block-by-block fade-up reveal on scroll.
+ * Hidden initial state is gated by `html.js-ready` (set before first paint by
+ * an inline script in BaseLayout), so users with JS disabled see all content
+ * normally — no opacity:0 stuck state.
+ */
+html.js-ready .about-section {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+html.js-ready .about-section.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-ready .about-section,
+  html.js-ready .about-section.in-view {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
