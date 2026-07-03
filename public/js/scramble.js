@@ -88,10 +88,16 @@
       return;
     }
 
-    const targets = document.querySelectorAll(
+    const rawTargets = document.querySelectorAll(
       'main h1:not([data-no-scramble]):not(.no-scramble),' +
       'main h2:not([data-no-scramble]):not(.no-scramble)'
     );
+    // Exclude h2 headings inside MDX-rendered project content — those come
+    // from `##` in markdown and can't easily be given a class; skip wholesale.
+    const targets = Array.from(rawTargets).filter((el) => {
+      if (el.tagName === 'H2' && el.closest('.project-content')) return false;
+      return true;
+    });
     if (targets.length === 0) return;
 
     let immediateDelay = 0;
