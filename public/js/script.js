@@ -30,9 +30,7 @@ function bootstrapPage() {
     setTimeout(() => document.body.classList.remove('page-transition-in'), PAGE_TRANSITION_IN_DURATION);
   });
 
-  if (pageType === 'home') {
-    setupHomeChat(input, presetQuestionsContainer, chatForm);
-  } else if (pageType === 'chat') {
+  if (pageType === 'chat') {
     setupChatPage(input, chat, presetQuestionsContainer, chatForm);
   }
 
@@ -52,33 +50,6 @@ if (document.readyState === 'loading') {
 
 // Re-run after each Astro View Transition swap
 document.addEventListener('astro:after-swap', bootstrapPage);
-
-function setupHomeChat(input, container, form) {
-  if (!input || !container || !form) return;
-
-  renderPresetQuestions(container, (question) => navigateToChat(question), { removeOnClick: false });
-
-  if (!form.dataset.homeSubmitBound) {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const value = input.value.trim();
-      if (!value) return;
-      navigateToChat(value);
-      input.value = '';
-    });
-    form.dataset.homeSubmitBound = 'true';
-  }
-}
-
-function navigateToChat(rawMessage) {
-  const message = (rawMessage || '').trim();
-  if (!message) return;
-
-  sessionStorage.setItem('initialQuestion', message);
-  triggerPageExit(() => {
-    window.location.href = '/chat/';
-  });
-}
 
 function setupChatPage(input, chat, container, form) {
   if (!input || !chat || !container || !form) return;

@@ -94,25 +94,45 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro
 
     <slot name="head" />
 
-    <!-- Theme: apply persisted choice before first paint to avoid a flash of light.
-         Also re-apply on every View Transition so the choice persists across pages
-         (ClientRouter copies html attributes from the new document, which would
-         otherwise drop our data-theme attribute). -->
+    <!-- Theme: use local time by default (light 07:00–18:59, dark otherwise).
+         A manual choice made with the nav button overrides the automatic theme. -->
     <script is:inline>
       (function () {
+        function automaticTheme() {
+          var hour = new Date().getHours();
+          return hour >= 7 && hour < 19 ? 'light' : 'dark';
+        }
+
         function applyTheme(target) {
           try {
-            var saved = localStorage.getItem('theme');
-            var preferDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            var theme = saved || (preferDark ? 'dark' : 'light');
+            var saved = localStorage.getItem('themeOverride');
+            var theme = saved === 'light' || saved === 'dark' ? saved : automaticTheme();
             (target || document.documentElement).dataset.theme = theme;
-          } catch (e) {}
+          } catch (e) {
+            (target || document.documentElement).dataset.theme = automaticTheme();
+          }
         }
+
+        // Ignore the previous system-preference setting so existing visitors
+        // receive the new time-based default on their next visit.
+        try { localStorage.removeItem('theme'); } catch (e) {}
+
         applyTheme();
-        // Set the theme on the *incoming* document before swap so it lands themed.
         document.addEventListener('astro:before-swap', function (event) {
           applyTheme(event.newDocument.documentElement);
         });
+
+        // Keep an open page in sync when it crosses the morning/evening boundary.
+        if (window.__portfolioThemeInterval) {
+          window.clearInterval(window.__portfolioThemeInterval);
+        }
+        window.__portfolioThemeInterval = window.setInterval(function () {
+          try {
+            if (!localStorage.getItem('themeOverride')) applyTheme();
+          } catch (e) {
+            applyTheme();
+          }
+        }, 60000);
       })();
     </script>
 
@@ -136,7 +156,6 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro
     <!-- Legacy client-side behavior. Stays as-is for now; could be modularized later. -->
     <script is:inline src="/js/dog.js"></script>
     <script is:inline src="/js/script.js"></script>
-    <script is:inline src="/js/scramble.js"></script>
     <script is:inline src="/js/reveal.js"></script>
   </body>
 </html>

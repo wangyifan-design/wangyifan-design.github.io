@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DogHero from '../components/DogHero.astro';
-import ChatBox from '../components/ChatBox.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { featuredOverrides } from '../data/featuredWork';
 
@@ -16,12 +15,13 @@ import { featuredOverrides } from '../data/featuredWork';
 // Sorted newest first; ties broken by frontmatter `order` ascending.
 const overrideMap = new Map(featuredOverrides.map((o) => [o.slug, o]));
 const allProjects = await getCollection('projects');
-const featuredWork = allProjects
+const homeProjects = allProjects
   .filter((p) => overrideMap.has(p.id))
   .map((p) => {
     const o = overrideMap.get(p.id)!;
     const yearNum = typeof p.data.year === 'number' ? p.data.year : parseInt(String(p.data.year), 10);
     return {
+      slug: p.id,
       href: `/projects/${p.id}/`,
       title: p.data.title,
       year: p.data.year,
@@ -33,6 +33,38 @@ const featuredWork = allProjects
     };
   })
   .sort((a, b) => b._yearNum - a._yearNum || a._order - b._order);
+
+const projectPresentation: Record<string, { category: string; summary?: string }> = {
+  rockhood: {
+    category: 'AI Product Design · Conversational UX',
+    summary: 'A conversational real estate platform designed across desktop and mobile, launched in Washington, Arizona, and California.',
+  },
+  livingjiagu: {
+    category: 'Interactive AI · Cultural Experience',
+    summary: 'A machine-learning installation created with Google Arts & Culture, engaging more than 2,000 participants at Google Developer Days.',
+  },
+  heidegger: {
+    category: 'AI Art · Design Research',
+    summary: 'An award-winning interactive installation exploring visual memory, technology, and cultural transformation in the age of AI.',
+  },
+  patapata: {
+    category: 'Visual Identity · Motion · Editorial',
+    summary: 'A complete festival identity spanning logo design, motion posters, editorial publications, and physical applications.',
+  },
+  'book-design': { category: 'Editorial Design · FAO' },
+  bird: { category: 'UX/UI · Digital Cultural Experience' },
+  poster: { category: 'Typography · Cultural Commentary' },
+  ram: { category: 'Character Design · Art Direction' },
+  virtualzoo: { category: 'UX/UI · Digital Exhibition' },
+  redpacket: { category: 'Packaging · Typography' },
+};
+
+const selectedOrder = ['rockhood', 'livingjiagu', 'heidegger', 'patapata'];
+const selectedWork = selectedOrder
+  .map((slug) => homeProjects.find((project) => project.slug === slug))
+  .filter((project): project is NonNullable<typeof project> => Boolean(project));
+const selectedSlugs = new Set(selectedOrder);
+const moreWork = homeProjects.filter((project) => !selectedSlugs.has(project.slug));
 
 // Page-specific CSS
 import '../styles/index.css';
@@ -60,27 +92,67 @@ const jsonLd = `<script type="application/ld+json">${JSON.stringify({
   pageType="home"
   extraHead={jsonLd}
 >
-  <section class="intro-with-chat" aria-labelledby="intro-heading">
+  <section class="home-hero" aria-labelledby="intro-heading">
     <header class="intro">
       <DogHero />
       <h1 id="intro-heading">Wang Yifan</h1>
-      <p class="subtitle">AI Product Designer | UX/UI Designer | Visual Designer</p>
+      <p class="home-value-proposition">
+        I bring research and visual thinking to AI product design.
+      </p>
+      <p class="home-positioning">
+        Product designer and researcher combining AI, visual systems, and cultural insight to make
+        emerging technology feel human. <span>Based in Redmond, WA.</span>
+      </p>
     </header>
 
-    <ChatBox />
   </section>
 
-  <section class="projects home" aria-labelledby="featured-work">
-    <h2 id="featured-work">Featured Work</h2>
-    {/* Flat list of cards rendered in newest-first order. The grid
-        below lays them out as 2 columns row-by-row on desktop
-        (left→right, top→bottom reading order), single column on
-        mobile. Much more robust than the previous display:contents
-        trick which had iOS Safari rendering bugs. */}
-    <div class="project-grid">
-      {featuredWork.map((p) => (
-        <ProjectCard href={p.href} title={p.title} year={p.year} cover={p.cover} alt={p.alt} video={p.video} />
+  <section class="projects home selected-work" aria-label="Selected work">
+    <div class="selected-work-grid">
+      {selectedWork.map((p) => (
+        <ProjectCard
+          href={p.href}
+          title={p.title}
+          year={p.year}
+          cover={p.cover}
+          alt={p.alt}
+          video={p.video}
+          variant="selected"
+          wide={p.slug === 'rockhood' || p.slug === 'patapata'}
+          category={projectPresentation[p.slug]?.category}
+          summary={projectPresentation[p.slug]?.summary}
+        />
       ))}
     </div>
+  </section>
+
+  <section class="projects home more-work" aria-labelledby="more-work-heading">
+    <div class="home-section-heading">
+      <h2 id="more-work-heading">More Work</h2>
+    </div>
+    <div class="more-work-grid">
+      {moreWork.map((p) => (
+        <ProjectCard
+          href={p.href}
+          title={p.title}
+          year={p.year}
+          cover={p.cover}
+          alt={p.alt}
+          video={p.video}
+          variant="more"
+          category={projectPresentation[p.slug]?.category}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="home-play" aria-label="Experimental work">
+    <a href="/play/">
+      <span>
+        <strong>Play</strong>
+        <small>Experiments, visual studies, and works in progress</small>
+      </span>
+      <span class="home-play-arrow" aria-hidden="true">↗</span>
+    </a>
   </section>
 </BaseLayout>

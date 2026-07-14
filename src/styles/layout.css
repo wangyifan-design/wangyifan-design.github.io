@@ -127,12 +127,11 @@ body.nav-menu-open { overflow: hidden; }
   html.js-ready body.nav-menu-open .nav-close { transform: scale(1.02); }
 }
 
-.intro-with-chat {
+.home-hero {
   display: flex;
   flex-direction: column;
-  padding: 120px 0 5vw;
+  padding: 72px 0 1.5rem;
   justify-content: center;
   align-items: center;
-  gap: 2.5rem;
   text-align: center;
 }

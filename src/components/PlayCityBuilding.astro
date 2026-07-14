@@ -1,0 +1,81 @@
+---
+import type { PlayItem } from '../data/play';
+
+export interface Props {
+  id: string;
+  name: string;
+  items: readonly PlayItem[];
+  variant?: 'house' | 'tower' | 'lab';
+  metaSide?: 'left' | 'right' | 'alternate';
+}
+
+const { id, name, items, variant = 'house', metaSide = 'alternate' } = Astro.props;
+const roofImages = {
+  house: '/img/building1.svg',
+  tower: '/img/building2.svg',
+  lab: '/img/building3.svg',
+};
+---
+
+<section
+  class:list={['city-building', `city-building--${variant}`]}
+  id={id}
+  aria-labelledby={`${id}-heading`}
+>
+  <div class="building-drawing" aria-hidden="true">
+    <img class="building-drawing-svg" src={roofImages[variant]} alt="" />
+  </div>
+
+  <h2 class="visually-hidden" id={`${id}-heading`}>{name}</h2>
+
+  <div class="building-facade">
+    <div class="building-windows">
+      {items.map((item, index) => {
+        const isVideo = /\.(mp4|webm)$/i.test(item.image);
+        const category = item.labels[1] ?? 'art & design';
+        const metaPosition = metaSide === 'alternate'
+          ? (index % 2 === 0 ? 'right' : 'left')
+          : metaSide;
+        return (
+          <figure
+            class:list={[
+              'project',
+              'building-window',
+              `building-window--${(index % 8) + 1}`,
+              `building-window--meta-${metaPosition}`,
+            ]}
+            tabindex="0"
+          >
+            <div class="building-work-media">
+              {isVideo ? (
+                <video
+                  class="project-image"
+                  src={item.image}
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  aria-label={item.alt}
+                ></video>
+              ) : (
+                <img
+                  class="project-image"
+                  src={item.image}
+                  alt={item.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </div>
+            <figcaption class="building-work-meta">
+              <span class="building-work-arrow" aria-hidden="true">{metaPosition === 'right' ? '←' : '→'}</span>
+              <span class="building-work-title">{item.labels[0]}</span>
+              <span class="building-work-category">{category}</span>
+            </figcaption>
+          </figure>
+        );
+      })}
+    </div>
+  </div>
+</section>

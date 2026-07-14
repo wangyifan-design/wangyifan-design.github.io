@@ -1,8 +1,36 @@
 .intro {
   width: 100%;
-  padding: 100px 100px;
+  padding: 40px 100px 24px;
   box-sizing: border-box;
   text-align: center;
+}
+
+.intro h1 {
+  margin-bottom: 0.75rem;
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.home-value-proposition {
+  max-width: 820px;
+  margin: 0 auto;
+  font-size: clamp(2.1rem, 3.4vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.home-positioning {
+  max-width: 760px;
+  margin: 1.25rem auto 0;
+  color: var(--muted);
+  font-size: clamp(0.95rem, 1.25vw, 1.1rem);
+  line-height: 1.7;
+  text-wrap: balance;
+}
+
+.home-positioning span {
+  white-space: nowrap;
 }
 
 /* On phones the 100px-each-side desktop padding eats more than half
@@ -10,10 +38,26 @@
    something proportional so the dog sits truly centered. */
 @media (max-width: 768px) {
   .intro {
-    padding: 72px 1rem 32px;
+    padding: 52px 1rem 24px;
+  }
+
+  .intro h1 {
+    margin-bottom: 0.65rem;
+    font-size: 2rem;
+  }
+
+  .home-value-proposition {
+    font-size: clamp(1.7rem, 7vw, 2rem);
+    line-height: 1.16;
+  }
+
+  .home-positioning {
+    max-width: 34rem;
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 }
-.subtitle { color: #555; }
 .chat-intro-copy { margin-top: 0.5rem; color: #777; }
 
 .chat-container {
@@ -248,33 +292,101 @@
   box-sizing: border-box;
 }
 
-/* Featured Work grid: 2-column on desktop, 1-column on mobile.
-   - Cards are rendered as a flat newest-first list in index.astro,
-     so DOM order = reading order = newest first.
-   - Grid lays them out row-by-row: top-left = newest, top-right =
-     second-newest, etc.
-   - align-items: start so a row's two cards keep their natural
-     heights (no forced stretching). Rows are still height-aligned
-     to the taller card, but vertical gaps stay small as long as
-     covers have similar aspect ratios.
-   - Mobile (≤768px) collapses to a single column; cards stack in
-     the same newest-first order. */
-.projects.home .project-grid {
+.selected-work-grid,
+.more-work-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   align-items: start;
-  gap: 16px;
   width: 100%;
 }
 
-#featured-work {
-  text-align: center;
-  padding-bottom: 2rem;
-  font-weight: 400;
+.selected-work-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 2vw, 2rem);
+}
+
+.more-work {
+  margin-top: clamp(6rem, 10vw, 10rem);
+}
+
+.more-work-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vw, 4.5rem) clamp(1rem, 2vw, 2rem);
+}
+
+.home-section-heading {
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.home-section-heading h2 {
+  padding-top: 1rem;
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.home-play {
+  margin-top: clamp(6rem, 10vw, 10rem);
+  margin-bottom: clamp(3rem, 6vw, 6rem);
+}
+
+.home-play a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-play a > span:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.home-play strong {
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+  font-weight: 500;
+}
+
+.home-play small {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.home-play-arrow {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  transition: transform 0.25s ease;
+}
+
+.home-play a:hover .home-play-arrow {
+  transform: translate(4px, -4px);
 }
 
 @media (max-width: 768px) {
-  .projects.home .project-grid { grid-template-columns: 1fr; }
+  .selected-work-grid,
+  .more-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-work-grid { gap: 2.75rem; }
+  .more-work-grid { gap: 1.5rem; }
+
+  .more-work { margin-top: 5rem; }
+
+  .home-section-heading { margin-bottom: 2rem; }
+
+  .home-play a > span:first-child { display: block; }
+
+  .home-play small {
+    display: block;
+    margin-top: 0.3rem;
+  }
 }
 
 body[data-page="home"] main > section {
@@ -304,41 +416,6 @@ body[data-page="home"] main > section {
 }
 .dot:nth-child(3) {
   animation-delay: 0.4s;
-}
-
-body[data-page="home"] .chat-container {
-  align-items: center;
-}
-
-body[data-page="home"] .chat-content {
-  display: none;
-}
-
-body[data-page="home"] .chat-input {
-  width: min(80vw, 720px);
-  margin: 0 auto;
-}
-
-body[data-page="home"] .preset-questions-viewport {
-  width: 100vw;
-  max-width: none;
-  overflow: hidden;
-  margin: 0.35rem calc((100vw - 100%) / -2) 0.5rem;
-}
-
-body[data-page="home"] .preset-questions {
-  gap: 1rem;
-  animation: presetMarquee 18s linear infinite;
-  will-change: transform;
-  align-items: stretch;
-}
-
-body[data-page="home"] .preset-questions:hover {
-  animation-play-state: paused;
-}
-
-body[data-page="home"] .preset-question {
-  min-width: 220px;
 }
 
 .chat-page-hero {
@@ -408,7 +485,7 @@ body[data-page="chat"] .preset-questions {
 body[data-page="chat"] .preset-questions-viewport {
   width: 100%;
   overflow: visible;
-  display: none;
+  display: block;
 }
 
 body[data-page="chat"] .chat-input input {
@@ -476,25 +553,7 @@ body[data-page="chat"] .chat-input-field {
   overflow: visible;
 }
 
-@keyframes presetMarquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 @media (max-width: 768px) {
-  body[data-page="home"] .chat-input,
-  body[data-page="home"] .preset-questions-viewport {
-    width: 100%;
-  }
-
-  body[data-page="home"] .preset-question {
-    min-width: 180px;
-  }
-
   .chat-input input {
     padding-right: 3.25rem;
   }

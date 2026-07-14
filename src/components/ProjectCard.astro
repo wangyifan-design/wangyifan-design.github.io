@@ -8,8 +8,23 @@ export interface Props {
   cover: string;            // path under /public, e.g. "/img/project-1.png" or "/videos/cover1.mp4"
   alt?: string;
   video?: boolean;          // set true if cover is a video file
+  variant?: 'selected' | 'more';
+  wide?: boolean;
+  category?: string;
+  summary?: string;
 }
-const { href, title, year, cover, alt, video = false } = Astro.props;
+const {
+  href,
+  title,
+  year,
+  cover,
+  alt,
+  video = false,
+  variant = 'more',
+  wide = false,
+  category,
+  summary,
+} = Astro.props;
 
 // Derive the slug from the href (".../projects/<slug>/" → "<slug>") so we can
 // give the cover a shared `transition:name`. Astro will then morph it into the
@@ -18,8 +33,8 @@ const slugMatch = href.match(/^\/projects\/([^/]+)\/?$/);
 const slug = slugMatch ? slugMatch[1] : null;
 ---
 
-<article class="project">
-  <a href={href} class="project-link">
+<article class:list={['home-project-card', `home-project-card--${variant}`, { 'home-project-card--wide': wide }]}>
+  <a href={href} class="home-project-link">
     <figure class="project-figure">
       {/* Fixed 16:9 box. All covers (image OR video) fill via
           object-fit: cover, so the entire grid renders at uniform
@@ -30,7 +45,7 @@ const slug = slugMatch ? slugMatch[1] : null;
           <video
             class="project-image"
             src={cover}
-            autoplay muted loop playsinline aria-hidden="true"
+            autoplay muted loop playsinline preload="metadata" aria-hidden="true"
             {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
           ></video>
         ) : (
@@ -44,10 +59,111 @@ const slug = slugMatch ? slugMatch[1] : null;
           />
         )}
       </div>
-      <figcaption class="project-labels">
-        <span class="project-title">{title}</span>
-        <span class="project-year">{year}</span>
+      <figcaption class="home-project-copy">
+        <div class="home-project-heading">
+          <h3>{title}</h3>
+          <span class="home-project-year">{year}</span>
+        </div>
+        {category && <p class="home-project-category">{category}</p>}
+        {variant === 'selected' && summary && <p class="home-project-summary">{summary}</p>}
       </figcaption>
     </figure>
   </a>
 </article>
+
+<style>
+  .home-project-card { min-width: 0; }
+  .home-project-card--wide { grid-column: 1 / -1; }
+
+  .home-project-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .project-figure { margin: 0; }
+  .home-project-card--selected .project-media { aspect-ratio: 16 / 10; }
+  .home-project-card--selected.home-project-card--wide .project-media { aspect-ratio: 12 / 5; }
+  .home-project-card--more .project-media { aspect-ratio: 4 / 3; }
+
+  .home-project-copy { padding: 1rem 0 0.25rem; }
+
+  .home-project-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .home-project-heading h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .home-project-card--selected .home-project-heading h3 {
+    font-size: clamp(1.35rem, 2vw, 1.85rem);
+  }
+
+  .home-project-year,
+  .home-project-category,
+  .home-project-summary { color: var(--muted); }
+
+  .home-project-year {
+    flex: 0 0 auto;
+    font-size: 0.85rem;
+  }
+
+  .home-project-category {
+    margin: 0.3rem 0 0;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.45;
+    text-transform: uppercase;
+  }
+
+  .home-project-summary {
+    max-width: 760px;
+    margin: 0.65rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .home-project-card--more .home-project-copy { padding-top: 0.8rem; }
+  .home-project-card--more .home-project-heading h3 { font-size: 1rem; }
+  .home-project-link:hover .project-image { transform: scale(1.025); }
+
+  .home-project-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 6px;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .home-project-card--wide { grid-column: auto; }
+
+    .home-project-card--selected .project-media,
+    .home-project-card--selected.home-project-card--wide .project-media { aspect-ratio: 16 / 10; }
+
+    .home-project-card--selected .home-project-heading h3 { font-size: 1.3rem; }
+
+    .home-project-card--more .project-figure {
+      display: grid;
+      grid-template-columns: minmax(104px, 32vw) minmax(0, 1fr);
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .home-project-card--more .project-media { aspect-ratio: 1; }
+    .home-project-card--more .home-project-copy { padding: 0; }
+    .home-project-card--more .home-project-heading { align-items: flex-start; }
+    .home-project-card--more .home-project-heading h3 { font-size: 0.95rem; }
+    .home-project-card--more .home-project-year { font-size: 0.75rem; }
+    .home-project-card--more .home-project-category {
+      font-size: 0.68rem;
+      letter-spacing: 0.045em;
+    }
+  }
+</style>
