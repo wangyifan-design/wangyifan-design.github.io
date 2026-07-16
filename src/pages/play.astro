@@ -166,6 +166,7 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
 
       initReversibleMenuAnimations();
       initReversibleMenuVideos();
+      initFloorVideos();
       initProjectLightbox();
     }
 
@@ -231,6 +232,17 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
         link.addEventListener('pointerleave', playBackward);
         link.addEventListener('focus', playForward);
         link.addEventListener('blur', playBackward);
+      });
+    }
+
+    function initFloorVideos() {
+      document.querySelectorAll<HTMLVideoElement>('.floor-project-media video').forEach((video) => {
+        if (video.dataset.videoBound === 'true') return;
+        video.dataset.videoBound = 'true';
+        const start = () => { void video.play().catch(() => {}); };
+        if (video.readyState >= 2) start();
+        else video.addEventListener('loadeddata', start, { once: true });
+        video.load();
       });
     }
 
