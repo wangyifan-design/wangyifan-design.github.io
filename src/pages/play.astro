@@ -196,6 +196,15 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
         let reverseFrame = 0;
         let previousTime = 0;
 
+        // Astro's client-side page swap does not always start loading newly inserted
+        // video elements. Explicitly load and decode the first frame for the menu.
+        const holdFirstFrame = () => {
+          video.pause();
+          if (video.duration && video.currentTime > video.duration) video.currentTime = 0;
+        };
+        video.addEventListener('loadeddata', holdFirstFrame, { once: true });
+        video.load();
+
         const stopReverse = () => {
           cancelAnimationFrame(reverseFrame);
           reverseFrame = 0;
