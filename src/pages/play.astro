@@ -1,70 +1,330 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PlayCityBuilding from '../components/PlayCityBuilding.astro';
-import { playItems } from '../data/play';
+import PlayFloor from '../components/PlayFloor.astro';
+import { playFloors } from '../data/play';
+import { readFileSync } from 'node:fs';
 import '../styles/play-city.css';
+
+const namespaceSvg = (source: string, prefix: string) => {
+  const names = [...source.matchAll(/id="([^"]+)"/g)].map((match) => match[1]).sort((a, b) => b.length - a.length);
+  let result = source.replaceAll(/kf_([A-Za-z0-9_]+)/g, `${prefix}_kf_$1`);
+  names.forEach((name) => {
+    result = result.replaceAll(`id="${name}"`, `id="${prefix}_${name}"`);
+    result = result.replace(new RegExp(`#${name}(?![A-Za-z0-9_-])`, 'g'), `#${prefix}_${name}`);
+  });
+  return result;
+};
+
+const bookSvg = namespaceSvg(readFileSync(new URL('../../public/img/book.svg', import.meta.url), 'utf8'), 'book');
+const logofolioSvg = readFileSync(new URL('../../public/img/logofolio.svg', import.meta.url), 'utf8');
+const posterSvg = namespaceSvg(readFileSync(new URL('../../public/img/poster.svg', import.meta.url), 'utf8'), 'poster')
+  .replaceAll('30%', '100%');
+
+const prepareMenuSvg = (file: string, key: string) => {
+  let source = readFileSync(new URL(`../../public/img/${file}`, import.meta.url), 'utf8');
+  let svg = namespaceSvg(source, key);
+  const rules: string[] = [];
+  svg = svg.replace(/#([A-Za-z0-9_-]+)\s*\{([\s\S]*?)animation:\s*([^;]+);([\s\S]*?)\}/g, (_match, id, before, animation, after) => {
+    rules.push(
+      `.floor-menu-link--${key}.is-svg-opening #${id}{animation:${animation.replace('infinite', '1 both')} !important}`,
+      `.floor-menu-link--${key}.is-svg-reversing #${id}{animation:${animation.replace('infinite', '1 reverse both')} !important}`,
+    );
+    return `#${id}{${before}animation:none;${after}}`;
+  });
+  return { svg, css: rules.join('\n') };
+};
+
+const digitalMenu = prepareMenuSvg('digital.svg', 'digital');
+const extraMenuCss = digitalMenu.css;
+const menuSvgs: Record<string, string> = {
+  books: bookSvg,
+  identity: logofolioSvg,
+  posters: posterSvg,
+  digital: digitalMenu.svg,
+};
+const menuKeys: Record<string, string> = { identity: 'logofolio', 'three-d': 'characters' };
 
 const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://wangyifan-design.com/' },
-    { '@type': 'ListItem', position: 2, name: 'Play City', item: 'https://wangyifan-design.com/play/' },
+    { '@type': 'ListItem', position: 2, name: 'Play Building', item: 'https://wangyifan-design.com/play/' },
   ],
 })}<\/script>`;
-
-const cityBuildings = [
-  {
-    id: 'building-one',
-    name: 'Play City building one',
-    items: playItems.slice(0, 9),
-    variant: 'house',
-    metaSide: 'right',
-  },
-  {
-    id: 'building-two',
-    name: 'Play City building two',
-    items: [...playItems.slice(9, 13), ...playItems.slice(14, 18)],
-    variant: 'tower',
-    metaSide: 'alternate',
-  },
-  {
-    id: 'building-three',
-    name: 'Play City building three',
-    items: [...playItems.slice(13, 14), ...playItems.slice(18)],
-    variant: 'lab',
-    metaSide: 'left',
-  },
-] as const;
 ---
 
 <BaseLayout
-  title="Play City | Wang Yifan Design"
-  description="A small city built from Wang Yifan's art and design works, including books, posters, characters, and interactive experiments."
+  title="Play Building | Wang Yifan Design"
+  description="Explore Wang Yifan's books, identities, posters, illustrations, 3D work and interactive experiments floor by floor."
   ogImage="/img/play/zhenzhen-2025.jpg"
   pageType="play"
   extraHead={breadcrumbJsonLd}
 >
-  <div class="play-city-page">
-    <h1 class="visually-hidden">Play City</h1>
+  <div class="play-building-page">
+    <h1 class="visually-hidden">Play Building</h1>
+    <style is:global set:html={extraMenuCss}></style>
 
-    <section class="city-skyline" aria-label="Play City skyline">
-      {cityBuildings.map((building) => (
-        <PlayCityBuilding
-          id={building.id}
-          name={building.name}
-          items={building.items}
-          variant={building.variant}
-          metaSide={building.metaSide}
-        />
+    <nav class="floor-menu" aria-label="Play Building floors">
+      <p class="floor-menu-label">Directory</p>
+      {playFloors.map((floor) => (
+        <a class:list={['floor-menu-link', 'floor-menu-link--svg', floor.id !== 'identity' && floor.id !== 'three-d' && floor.id !== 'illustration' && 'floor-menu-link--animated', (floor.id === 'three-d' || floor.id === 'illustration') && 'floor-menu-link--video', `floor-menu-link--${menuKeys[floor.id] || floor.id}`]} href={`#${floor.id}`} data-floor-link={floor.id} aria-label={`${floor.number} ${floor.name}`}>
+          <span class="visually-hidden">{floor.number} {floor.name}</span>
+          {floor.id === 'three-d' || floor.id === 'illustration' ? (
+            <video class:list={['floor-menu-art', `floor-menu-${menuKeys[floor.id] || floor.id}-video`]} src={floor.id === 'three-d' ? '/img/3d.webm' : '/img/illustration.webm'} muted playsinline preload="auto" aria-hidden="true"></video>
+          ) : (
+            <div
+              class:list={['floor-menu-art', `floor-menu-${menuKeys[floor.id] || floor.id}-svg`]}
+              set:html={menuSvgs[floor.id]}
+            ></div>
+          )}
+        </a>
       ))}
-    </section>
+    </nav>
+
+    <div class="building-shell">
+      <header class="building-roof">
+        <img src="/img/building2.svg" alt="" aria-hidden="true" />
+      </header>
+
+      <div class="building-floors">
+        {playFloors.map((floor, index) => <PlayFloor floor={floor} index={index} />)}
+      </div>
+    </div>
+
+    <aside class="building-elevator">
+      <label class="visually-hidden" for="building-elevator-control">Move through Play Building</label>
+      <span class="elevator-car" aria-hidden="true"><img class="elevator-art" src="/img/elevator.svg" alt="" /></span>
+      <input id="building-elevator-control" class="elevator-control" type="range" min="0" max="1000" value="0" step="1" aria-label="Play Building scroll position" />
+    </aside>
   </div>
 
-  <div id="lightbox" class="lightbox">
+  <div id="project-lightbox" class="lightbox play-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
     <button type="button" class="lightbox-close" aria-label="Close image viewer">&times;</button>
     <button type="button" class="lightbox-nav lightbox-prev" aria-label="Previous image">‹</button>
     <button type="button" class="lightbox-nav lightbox-next" aria-label="Next image">›</button>
-    <img id="lightbox-img" class="lightbox-content" alt="" />
+    <div class="play-lightbox-stage">
+      <img class="lightbox-content play-lightbox-image" alt="" />
+      <video class="lightbox-content play-lightbox-video" controls playsinline></video>
+      <div class="play-lightbox-meta">
+        <span id="lightbox-title"></span>
+        <span class="play-lightbox-index"></span>
+      </div>
+      <div class="play-lightbox-thumbnails" aria-label="Project media"></div>
+    </div>
   </div>
+
+  <script>
+    const isVideo = (src: string) => /\.(mp4|webm)$/i.test(src);
+
+    function initPlayBuilding() {
+      const page = document.querySelector<HTMLElement>('.play-building-page');
+      if (!page || page.dataset.initialized === 'true') return;
+      page.dataset.initialized = 'true';
+
+      const floors = Array.from(document.querySelectorAll<HTMLElement>('[data-floor]'));
+      const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-floor-link]'));
+      const elevator = document.querySelector<HTMLInputElement>('.elevator-control');
+      const elevatorShell = document.querySelector<HTMLElement>('.building-elevator');
+      const building = document.querySelector<HTMLElement>('.building-shell');
+
+      const setActive = (id: string) => links.forEach((link) => link.classList.toggle('is-active', link.dataset.floorLink === id));
+      links.forEach((link) => link.addEventListener('click', (event) => {
+        const id = link.dataset.floorLink;
+        const target = id ? document.querySelector<HTMLElement>(`[data-floor="${id}"]`) : null;
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          block: 'start',
+        });
+        history.pushState(null, '', `#${id}`);
+      }));
+      const floorObserver = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive((visible.target as HTMLElement).dataset.floor || '');
+      }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.2, 0.5] });
+      floors.forEach((floor) => floorObserver.observe(floor));
+
+      const updateElevator = () => {
+        if (!elevator || !building) return;
+        const rect = building.getBoundingClientRect();
+        const distance = rect.height - window.innerHeight;
+        const progress = Math.min(1, Math.max(0, -rect.top / Math.max(1, distance)));
+        elevator.value = String(Math.round(progress * 1000));
+        elevatorShell?.style.setProperty('--elevator-progress', String(progress));
+      };
+      updateElevator();
+      window.addEventListener('scroll', updateElevator, { passive: true });
+      elevator?.addEventListener('input', () => {
+        if (!building) return;
+        elevatorShell?.style.setProperty('--elevator-progress', String(Number(elevator.value) / 1000));
+        const pageTop = window.scrollY + building.getBoundingClientRect().top;
+        const distance = Math.max(0, building.offsetHeight - window.innerHeight);
+        window.scrollTo({ top: pageTop + (Number(elevator.value) / 1000) * distance, behavior: 'auto' });
+      });
+
+      initReversibleMenuAnimations();
+      initReversibleMenuVideos();
+      initProjectLightbox();
+    }
+
+    function initReversibleMenuAnimations() {
+      document.querySelectorAll<HTMLElement>('.floor-menu-link--animated').forEach((link) => {
+        const art = link.querySelector<HTMLElement>('.floor-menu-art');
+        if (!art || link.dataset.animationBound === 'true') return;
+        link.dataset.animationBound = 'true';
+
+        const playToward = (open: boolean) => {
+          link.classList.remove('is-svg-opening', 'is-svg-reversing');
+          void link.offsetWidth;
+          link.classList.add(open ? 'is-svg-opening' : 'is-svg-reversing');
+        };
+
+        link.addEventListener('pointerenter', () => playToward(true));
+        link.addEventListener('pointerleave', () => playToward(false));
+        link.addEventListener('focus', () => playToward(true));
+        link.addEventListener('blur', () => playToward(false));
+      });
+    }
+
+    function initReversibleMenuVideos() {
+      document.querySelectorAll<HTMLAnchorElement>('.floor-menu-link--video').forEach((link) => {
+        const video = link.querySelector<HTMLVideoElement>('video');
+        if (!video || link.dataset.videoBound === 'true') return;
+        link.dataset.videoBound = 'true';
+        let reverseFrame = 0;
+        let previousTime = 0;
+
+        const stopReverse = () => {
+          cancelAnimationFrame(reverseFrame);
+          reverseFrame = 0;
+        };
+        const playForward = () => {
+          stopReverse();
+          if (video.ended) video.currentTime = 0;
+          void video.play().catch(() => {});
+        };
+        const playBackward = () => {
+          video.pause();
+          stopReverse();
+          previousTime = performance.now();
+          const step = (now: number) => {
+            const elapsed = Math.min(0.05, (now - previousTime) / 1000);
+            previousTime = now;
+            video.currentTime = Math.max(0, video.currentTime - elapsed);
+            if (video.currentTime > 0) reverseFrame = requestAnimationFrame(step);
+          };
+          reverseFrame = requestAnimationFrame(step);
+        };
+
+        link.addEventListener('pointerenter', playForward);
+        link.addEventListener('pointerleave', playBackward);
+        link.addEventListener('focus', playForward);
+        link.addEventListener('blur', playBackward);
+      });
+    }
+
+    function initProjectLightbox() {
+      const lightbox = document.querySelector<HTMLElement>('#project-lightbox');
+      const image = lightbox?.querySelector<HTMLImageElement>('.play-lightbox-image');
+      const video = lightbox?.querySelector<HTMLVideoElement>('.play-lightbox-video');
+      const title = lightbox?.querySelector<HTMLElement>('#lightbox-title');
+      const indexLabel = lightbox?.querySelector<HTMLElement>('.play-lightbox-index');
+      const thumbnails = lightbox?.querySelector<HTMLElement>('.play-lightbox-thumbnails');
+      if (!lightbox || !image || !video || !title || !indexLabel || !thumbnails) return;
+
+      let projects: HTMLElement[] = [];
+      let projectIndex = 0;
+      let gallery: Array<{ src: string; alt: string }> = [];
+      let mediaIndex = 0;
+      const renderThumbnails = () => {
+        thumbnails.replaceChildren();
+        gallery.forEach((item, itemIndex) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'play-lightbox-thumbnail';
+          button.classList.toggle('is-active', itemIndex === mediaIndex);
+          button.setAttribute('aria-label', `View media ${itemIndex + 1}`);
+          if (isVideo(item.src)) {
+            const preview = document.createElement('video');
+            preview.src = item.src;
+            preview.muted = true;
+            preview.playsInline = true;
+            preview.preload = 'metadata';
+            button.append(preview);
+          } else {
+            const preview = document.createElement('img');
+            preview.src = item.src;
+            preview.alt = '';
+            button.append(preview);
+          }
+          button.addEventListener('click', () => { mediaIndex = itemIndex; render(); });
+          thumbnails.append(button);
+        });
+        thumbnails.hidden = gallery.length < 2;
+      };
+      const render = () => {
+        const item = gallery[mediaIndex];
+        if (!item) return;
+        const videoItem = isVideo(item.src);
+        image.hidden = videoItem;
+        video.hidden = !videoItem;
+        video.pause();
+        if (videoItem) {
+          image.removeAttribute('src');
+          video.src = item.src;
+          video.setAttribute('aria-label', item.alt);
+          video.load();
+        } else {
+          image.src = item.src;
+          image.alt = item.alt;
+          video.removeAttribute('src');
+          video.load();
+        }
+        indexLabel.textContent = '';
+        lightbox.querySelectorAll<HTMLElement>('.lightbox-nav').forEach((button) => button.hidden = projects.length < 2);
+        renderThumbnails();
+      };
+      const open = (project: HTMLElement) => {
+        const floor = project.closest<HTMLElement>('[data-floor]');
+        projects = floor ? Array.from(floor.querySelectorAll<HTMLElement>('.floor-project')) : [project];
+        projectIndex = Math.max(0, projects.indexOf(project));
+        gallery = JSON.parse(project.dataset.gallery || '[]');
+        mediaIndex = 0;
+        title.textContent = project.dataset.projectTitle || '';
+        lightbox.hidden = false;
+        lightbox.style.display = 'block';
+        document.body.classList.add('lightbox-open');
+        render();
+      };
+      const close = () => { lightbox.hidden = true; lightbox.style.display = 'none'; video.pause(); document.body.classList.remove('lightbox-open'); };
+      const stepProject = (amount: number) => {
+        projectIndex = (projectIndex + amount + projects.length) % projects.length;
+        const project = projects[projectIndex];
+        gallery = JSON.parse(project.dataset.gallery || '[]');
+        mediaIndex = 0;
+        title.textContent = project.dataset.projectTitle || '';
+        render();
+      };
+
+      document.querySelectorAll<HTMLElement>('.floor-project').forEach((project) => {
+        project.addEventListener('click', () => open(project));
+        project.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(project); } });
+      });
+      lightbox.querySelector('.lightbox-close')?.addEventListener('click', close);
+      lightbox.querySelector('.lightbox-prev')?.addEventListener('click', () => stepProject(-1));
+      lightbox.querySelector('.lightbox-next')?.addEventListener('click', () => stepProject(1));
+      lightbox.addEventListener('click', (event) => { if (event.target === lightbox) close(); });
+      document.addEventListener('keydown', (event) => {
+        if (lightbox.hidden) return;
+        if (event.key === 'Escape') close();
+        if (event.key === 'ArrowLeft' && projects.length > 1) stepProject(-1);
+        if (event.key === 'ArrowRight' && projects.length > 1) stepProject(1);
+      });
+    }
+
+    initPlayBuilding();
+    document.addEventListener('astro:page-load', initPlayBuilding);
+  </script>
 </BaseLayout>

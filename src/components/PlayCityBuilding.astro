@@ -4,12 +4,13 @@ import type { PlayItem } from '../data/play';
 export interface Props {
   id: string;
   name: string;
+  description?: string;
   items: readonly PlayItem[];
   variant?: 'house' | 'tower' | 'lab';
   metaSide?: 'left' | 'right' | 'alternate';
 }
 
-const { id, name, items, variant = 'house', metaSide = 'alternate' } = Astro.props;
+const { id, name, description, items, variant = 'house', metaSide = 'alternate' } = Astro.props;
 const roofImages = {
   house: '/img/building1.svg',
   tower: '/img/building2.svg',
@@ -26,7 +27,11 @@ const roofImages = {
     <img class="building-drawing-svg" src={roofImages[variant]} alt="" />
   </div>
 
-  <h2 class="visually-hidden" id={`${id}-heading`}>{name}</h2>
+  <header class="building-heading">
+    <p class="building-kicker">Play City / {String(items.length).padStart(2, '0')}</p>
+    <h2 class="building-title" id={`${id}-heading`}>{name}</h2>
+    {description && <p class="building-description">{description}</p>}
+  </header>
 
   <div class="building-facade">
     <div class="building-windows">
@@ -45,6 +50,8 @@ const roofImages = {
               `building-window--meta-${metaPosition}`,
             ]}
             tabindex="0"
+            data-reveal
+            style={`--reveal-delay: ${(index % 3) * 70}ms`}
           >
             <div class="building-work-media">
               {isVideo ? (

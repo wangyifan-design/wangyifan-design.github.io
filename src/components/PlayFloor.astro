@@ -1,0 +1,55 @@
+---
+import type { PlayFloor } from '../data/play';
+
+export interface Props { floor: PlayFloor; index: number; }
+
+const { floor, index } = Astro.props;
+const layoutClass = `play-floor--layout-${(index % 3) + 1}`;
+---
+
+<section class:list={['play-floor', layoutClass]} id={floor.id} data-floor={floor.id} aria-labelledby={`${floor.id}-title`}>
+  <header class="floor-heading">
+    <span class="floor-number">Floor {floor.number}</span>
+    <h2 id={`${floor.id}-title`}>{floor.name}</h2>
+    <p>{floor.description}</p>
+  </header>
+
+  <div class="floor-gallery">
+    {floor.projects.map((project, projectIndex) => {
+      const media = project.media[0];
+      const isVideo = /\.(mp4|webm)$/i.test(media.src);
+      // Left-column projects open their captions toward the center (right), and vice versa.
+      const metaSide = projectIndex % 2 === 0 ? 'right' : 'left';
+      return (
+        <figure
+          class:list={['floor-project', `floor-project--meta-${metaSide}`, project.media.length > 1 && 'floor-project--stack']}
+          style={`--project-index:${projectIndex};--project-tilt:${((projectIndex % 5) - 2) * 0.65}deg`}
+          data-gallery={JSON.stringify(project.media)}
+          data-project-title={project.title}
+          tabindex="0"
+          role="button"
+          aria-label={`View ${project.title}${project.media.length > 1 ? `, ${project.media.length} images` : ''}`}
+        >
+          <div class="floor-project-stack" aria-hidden="true">
+            {project.media.slice(1, 3).reverse().map((item, stackIndex) => (
+              <img src={item.src} alt="" loading="lazy" style={`--stack-index:${stackIndex + 1}`} />
+            ))}
+          </div>
+          <div class="floor-project-media">
+            {isVideo ? (
+              <video src={media.src} autoplay muted loop playsinline preload="metadata" aria-label={media.alt}></video>
+            ) : (
+              <img src={media.src} alt={media.alt} loading="lazy" decoding="async" />
+            )}
+          </div>
+          {project.media.length > 1 && <span class="floor-project-count">{project.media.length} images</span>}
+          <figcaption>
+            <span class="floor-project-arrow" aria-hidden="true">{metaSide === 'right' ? '←' : '→'}</span>
+            <strong>{project.title}</strong>
+            <span>{project.type}</span>
+          </figcaption>
+        </figure>
+      );
+    })}
+  </div>
+</section>

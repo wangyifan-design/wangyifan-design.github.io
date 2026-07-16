@@ -1,0 +1,29 @@
+<svg width="132" height="263" viewBox="0 0 132 263" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="66" y="157" width="60" height="60" transform="rotate(90 66 157)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="66" y="217" width="6" height="64" transform="rotate(90 66 217)" fill="white" stroke="black" stroke-width="4"/>
+<rect width="6" height="64" transform="matrix(3.63692e-08 1 1 -5.25358e-08 66 217)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="66" y="255" width="6" height="64" transform="rotate(90 66 255)" fill="white" stroke="black" stroke-width="4"/>
+<rect width="6" height="64" transform="matrix(3.63692e-08 1 1 -5.25358e-08 66 255)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="66" y="223" width="32" height="60" transform="rotate(90 66 223)" fill="white" stroke="black" stroke-width="4"/>
+<rect width="32" height="60" transform="matrix(3.63692e-08 1 1 -5.25358e-08 66 223)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="59" y="164" width="46" height="46" transform="rotate(90 59 164)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="111" y="44" width="26" height="89" transform="rotate(90 111 44)" fill="white" stroke="black" stroke-width="4"/>
+<rect width="13" height="23" transform="matrix(3.63692e-08 -1 -1 -5.25358e-08 78 44)" fill="white" stroke="black" stroke-width="4"/>
+<rect width="29" height="6" transform="matrix(3.63692e-08 -1 -1 -5.25358e-08 61 31)" fill="white" stroke="black" stroke-width="4"/>
+<rect width="29" height="6" transform="matrix(3.63692e-08 -1 -1 -5.25358e-08 78 31)" fill="white" stroke="black" stroke-width="4"/>
+<path d="M101 52C110.941 52 119 60.0589 119 70V70L13 70V70C13 60.0589 21.0589 52 31 52L101 52Z" fill="white" stroke="black" stroke-width="4"/>
+<rect x="51" y="172" width="30" height="30" rx="15" transform="rotate(90 51 172)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="66" y="70" width="87" height="60" transform="rotate(90 66 70)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="59" y="77" width="73" height="46" transform="rotate(90 59 77)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="50" y="77" width="73" height="28" transform="rotate(90 50 77)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="41" y="77" width="73" height="10" transform="rotate(90 41 77)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="49" y="113" width="18.3849" height="18.3847" transform="rotate(135 49 113)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="126" y="157" width="60" height="60" transform="rotate(90 126 157)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="119" y="164" width="46" height="46" transform="rotate(90 119 164)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="111" y="172" width="30" height="30" rx="15" transform="rotate(90 111 172)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="126" y="70" width="87" height="60" transform="rotate(90 126 70)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="119" y="77" width="73" height="46" transform="rotate(90 119 77)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="110" y="77" width="73" height="28" transform="rotate(90 110 77)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="101" y="77" width="73" height="10" transform="rotate(90 101 77)" fill="white" stroke="black" stroke-width="4"/>
+<rect x="109" y="113" width="18.3849" height="18.3847" transform="rotate(135 109 113)" fill="white" stroke="black" stroke-width="4"/>
+</svg>
