@@ -15,6 +15,9 @@ export interface PlayProject {
   title: string;
   type: string;
   media: PlayMedia[];
+  year?: string | number;
+  href?: string;
+  caseStudy?: boolean;
 }
 
 export interface PlayFloor {
@@ -52,16 +55,17 @@ export const playFloors: PlayFloor[] = [
     description: 'Symbols, typography and visual systems',
     signStyle: 'round',
     projects: [
-      { title: 'Digital Oracle Bone Script Exhibition', type: 'typography', media: [{ src: '/img/play/exhibition.jpg', alt: 'Digital oracle bone script exhibition' }] },
       { title: 'Tsinghua Alumni Association of Greater New York', type: 'logo', media: [{ src: '/img/play/Tsinghua alumni association of greater new york.jpg', alt: 'Tsinghua alumni logo' }] },
       { title: 'Plant Atlas', type: 'identity', media: [{ src: '/img/play/plants.jpg', alt: 'Plant Atlas identity' }] },
       { title: 'Drama Festival', type: 'identity', media: [{ src: '/img/play/philosophy.gif', alt: 'Drama Festival identity' }] },
-      { title: 'New Year Red Bag', type: 'print', media: [
-        { src: '/img/play/new year red bag0.jpg', alt: 'New Year red bag print design' },
-        { src: '/img/play/new year red bag.jpg', alt: 'New Year red bag print design' },
-        { src: '/img/play/new year red bag2.jpg', alt: 'New Year red bag print design' },
-        { src: '/img/play/new year red bag3.jpg', alt: 'New Year red bag print design' },
-      ] },
+      {
+        title: 'New Year Red Bag', type: 'print', media: [
+          { src: '/img/play/new year red bag0.jpg', alt: 'New Year red bag print design' },
+          { src: '/img/play/new year red bag.jpg', alt: 'New Year red bag print design' },
+          { src: '/img/play/new year red bag2.jpg', alt: 'New Year red bag print design' },
+          { src: '/img/play/new year red bag3.jpg', alt: 'New Year red bag print design' },
+        ]
+      },
 
     ],
   },
@@ -72,6 +76,7 @@ export const playFloors: PlayFloor[] = [
     description: 'Posters, exhibitions and event visuals',
     signStyle: 'vertical',
     projects: [
+      { title: 'Digital Oracle Bone Script Exhibition', type: 'typography', media: [{ src: '/img/play/exhibition.jpg', alt: 'Digital oracle bone script exhibition' }] },
       { title: 'Art Criticism', type: 'event visual', media: [{ src: '/img/play/artcriticism.jpg', alt: 'Art Criticism event visual' }] },
       { title: 'Tsinghua Alumni Boston Arts Festival', type: 'event visual', media: [{ src: '/img/play/Tsinghua Alumni Boston Arts Festival.jpg', alt: 'Tsinghua Alumni Boston Arts Festival event visual' }] },
 
@@ -104,7 +109,7 @@ export const playFloors: PlayFloor[] = [
     description: 'Drawing, painting and personal image-making',
     signStyle: 'cloud',
     projects: [
-      { title: 'Eco-vase', type: 'illustration', media: [{ src: '/img/play/Eco-vase.png', alt: 'Eco-vase illustration cat' },{src: '/img/play/Eco-vase-2.png', alt: 'Eco-vase illustration dog'}] },
+      { title: 'Eco-vase', type: 'illustration', media: [{ src: '/img/play/Eco-vase.png', alt: 'Eco-vase illustration cat' }, { src: '/img/play/Eco-vase-2.png', alt: 'Eco-vase illustration dog' }] },
       { title: 'Bowerbird landing page', type: 'illustration', media: [{ src: '/img/play/bowerbird landing page.jpg', alt: 'Bowerbird landing page illustration' }] },
       { title: 'Beijing Memories', type: 'illustration', media: [{ src: '/img/play/zhenzhen.png', alt: 'Beijing Memories illustration' }] },
       { title: 'Hello California', type: 'illustration', media: [{ src: '/img/rockhood/california.png', alt: 'Hello California illustration' }] },
@@ -138,11 +143,13 @@ export const playFloors: PlayFloor[] = [
     signStyle: 'screen',
     projects: [
       { title: 'Light Up Tsinghua Campus', type: 'UX design', media: [{ src: '/img/play/lightup.jpg', alt: 'Light Up Tsinghua Campus UX design' }] },
-      { title: 'Buddha Bless', type: 'interactive game', media: [
-        { src: '/img/play/buddha2.jpg', alt: 'Buddha Bless interactive game' },
-        { src: '/img/play/buddha.jpg', alt: 'Buddha Bless interactive game' },
-        { src: '/img/play/buddha3.jpg', alt: 'Buddha Bless interactive game' },
-      ] },
+      {
+        title: 'Buddha Bless', type: 'interactive game', media: [
+          { src: '/img/play/buddha2.jpg', alt: 'Buddha Bless interactive game' },
+          { src: '/img/play/buddha.jpg', alt: 'Buddha Bless interactive game' },
+          { src: '/img/play/buddha3.jpg', alt: 'Buddha Bless interactive game' },
+        ]
+      },
       { title: 'Craftopia', type: 'storyboard', media: [{ src: '/img/play/craftopia.jpg', alt: 'Craftopia storyboard' }] },
 
     ],

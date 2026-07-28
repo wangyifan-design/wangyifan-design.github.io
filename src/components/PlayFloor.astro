@@ -1,13 +1,18 @@
 ---
 import type { PlayFloor } from '../data/play';
 
-export interface Props { floor: PlayFloor; index: number; }
+export interface Props { floor: PlayFloor; }
 
-const { floor, index } = Astro.props;
-const layoutClass = `play-floor--layout-${(index % 3) + 1}`;
+const { floor } = Astro.props;
+const densityClass =
+  floor.projects.length <= 4
+    ? 'play-floor--compact'
+    : floor.projects.length <= 6
+      ? 'play-floor--balanced'
+      : 'play-floor--dense';
 ---
 
-<section class:list={['play-floor', layoutClass]} id={floor.id} data-floor={floor.id} aria-labelledby={`${floor.id}-title`}>
+<section class:list={['play-floor', densityClass]} id={floor.id} data-floor={floor.id} aria-labelledby={`${floor.id}-title`}>
   <header class="floor-heading">
     <span class="floor-number">Floor {floor.number}</span>
     <h2 id={`${floor.id}-title`}>{floor.name}</h2>
@@ -18,17 +23,26 @@ const layoutClass = `play-floor--layout-${(index % 3) + 1}`;
     {floor.projects.map((project, projectIndex) => {
       const media = project.media[0];
       const isVideo = /\.(mp4|webm)$/i.test(media.src);
-      // Left-column projects open their captions toward the center (right), and vice versa.
+      // Alternate the direction of stacked-image fanning to keep the gallery varied.
       const metaSide = projectIndex % 2 === 0 ? 'right' : 'left';
+      const ProjectElement = project.href ? 'a' : 'figure';
       return (
-        <figure
-          class:list={['floor-project', `floor-project--meta-${metaSide}`, project.media.length > 1 && 'floor-project--stack']}
+        <ProjectElement
+          class:list={[
+            'floor-project',
+            `floor-project--meta-${metaSide}`,
+            project.media.length > 1 && 'floor-project--stack',
+            project.caseStudy && 'floor-project--case-study',
+          ]}
+          href={project.href}
           style={`--project-index:${projectIndex};--project-tilt:${((projectIndex % 5) - 2) * 0.65}deg`}
-          data-gallery={JSON.stringify(project.media)}
+          data-gallery={project.href ? undefined : JSON.stringify(project.media)}
           data-project-title={project.title}
-          tabindex="0"
-          role="button"
-          aria-label={`View ${project.title}${project.media.length > 1 ? `, ${project.media.length} images` : ''}`}
+          tabindex={project.href ? undefined : '0'}
+          role={project.href ? undefined : 'button'}
+          aria-label={project.href
+            ? `Read case study: ${project.title}`
+            : `View ${project.title}${project.media.length > 1 ? `, ${project.media.length} images` : ''}`}
         >
           <div class="floor-project-stack" aria-hidden="true">
             {project.media.slice(1, 3).reverse().map((item, stackIndex) => (
@@ -43,12 +57,12 @@ const layoutClass = `play-floor--layout-${(index % 3) + 1}`;
             )}
           </div>
           {project.media.length > 1 && <span class="floor-project-count">{project.media.length} images</span>}
+          {project.caseStudy && <span class="floor-project-badge">Case Study ↗</span>}
           <figcaption>
-            <span class="floor-project-arrow" aria-hidden="true">{metaSide === 'right' ? '←' : '→'}</span>
             <strong>{project.title}</strong>
-            <span>{project.type}</span>
+            <span>{project.type}{project.year ? ` · ${project.year}` : ''}</span>
           </figcaption>
-        </figure>
+        </ProjectElement>
       );
     })}
   </div>
