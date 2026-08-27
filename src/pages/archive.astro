@@ -23,7 +23,7 @@ const posterSvg = namespaceSvg(readFileSync(new URL('../../public/img/poster.svg
   .replaceAll('30%', '100%');
 
 const prepareMenuSvg = (file: string, key: string) => {
-  let source = readFileSync(new URL(`../../public/img/${file}`, import.meta.url), 'utf8');
+  const source = readFileSync(new URL(`../../public/img/${file}`, import.meta.url), 'utf8');
   let svg = namespaceSvg(source, key);
   const rules: string[] = [];
   svg = svg.replace(/#([A-Za-z0-9_-]+)\s*\{([\s\S]*?)animation:\s*([^;]+);([\s\S]*?)\}/g, (_match, id, before, animation, after) => {
@@ -113,34 +113,37 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
   <div class="play-building-page">
     <style is:global set:html={extraMenuCss}></style>
 
-    <nav class="floor-menu" aria-label="Project Archive floors">
-      <h1 class="archive-page-title">Archive</h1>
-      <p class="floor-menu-label">Directory</p>
+    <nav class="floor-menu" aria-label="Project categories">
       {archiveFloors.map((floor) => (
-        <div class="floor-menu-item">
-          <a
-            class:list={['floor-menu-link', 'floor-menu-link--svg', floor.id !== 'identity' && floor.id !== 'three-d' && floor.id !== 'illustration' && 'floor-menu-link--animated', (floor.id === 'three-d' || floor.id === 'illustration') && 'floor-menu-link--video', `floor-menu-link--${menuKeys[floor.id] || floor.id}`]}
-            href={`#${floor.id}`}
-            data-floor-link={floor.id}
-            aria-label={`${floor.number} ${floor.name}`}
-            aria-describedby={`${floor.id}-menu-description`}
-          >
-            <span class="visually-hidden">{floor.number} {floor.name}</span>
-            {floor.id === 'three-d' || floor.id === 'illustration' ? (
-              <video class:list={['floor-menu-art', `floor-menu-${menuKeys[floor.id] || floor.id}-video`]} src={floor.id === 'three-d' ? '/img/3d.webm' : '/img/illustration.webm'} muted playsinline preload="auto" aria-hidden="true"></video>
-            ) : (
-              <div
-                class:list={['floor-menu-art', `floor-menu-${menuKeys[floor.id] || floor.id}-svg`]}
-                set:html={menuSvgs[floor.id]}
-              ></div>
-            )}
-          </a>
-          <div class="floor-menu-description" id={`${floor.id}-menu-description`}>
-            <span>Floor {floor.number} · {floor.projects.length} projects</span>
-            <strong>{floor.name}</strong>
-            <p>{floor.description}</p>
-          </div>
-        </div>
+        <a
+          class:list={[
+            'floor-menu-link',
+            'floor-menu-link--svg',
+            floor.id !== 'identity' && floor.id !== 'three-d' && floor.id !== 'illustration' && 'floor-menu-link--animated',
+            (floor.id === 'three-d' || floor.id === 'illustration') && 'floor-menu-link--video',
+            `floor-menu-link--${menuKeys[floor.id] || floor.id}`,
+          ]}
+          href={`#${floor.id}`}
+          data-floor-link={floor.id}
+          aria-label={floor.name}
+        >
+          <span class="visually-hidden">{floor.name}</span>
+          {floor.id === 'three-d' || floor.id === 'illustration' ? (
+            <video
+              class:list={['floor-menu-art', `floor-menu-${menuKeys[floor.id] || floor.id}-video`]}
+              src={floor.id === 'three-d' ? '/img/3d.webm' : '/img/illustration.webm'}
+              muted
+              playsinline
+              preload="auto"
+              aria-hidden="true"
+            ></video>
+          ) : (
+            <div
+              class:list={['floor-menu-art', `floor-menu-${menuKeys[floor.id] || floor.id}-svg`]}
+              set:html={menuSvgs[floor.id]}
+            ></div>
+          )}
+        </a>
       ))}
     </nav>
 
@@ -185,35 +188,110 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
       const elevator = document.querySelector<HTMLInputElement>('.elevator-control');
       const elevatorShell = document.querySelector<HTMLElement>('.building-elevator');
       const building = document.querySelector<HTMLElement>('.building-shell');
+      const floorMotion = floors.map((floor) => ({
+        floor,
+        gallery: floor.querySelector<HTMLElement>('.floor-gallery'),
+        projects: Array.from(floor.querySelectorAll<HTMLElement>('.floor-project')),
+      }));
 
-      const setActive = (id: string) => links.forEach((link) => link.classList.toggle('is-active', link.dataset.floorLink === id));
+      let activeFloorId = '';
+      const setActive = (id: string) => {
+        if (id === activeFloorId) return;
+        activeFloorId = id;
+        let activeLink: HTMLAnchorElement | undefined;
+        links.forEach((link) => {
+          const isActive = link.dataset.floorLink === id;
+          link.classList.toggle('is-active', isActive);
+          if (isActive) {
+            link.setAttribute('aria-current', 'true');
+            activeLink = link;
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+        if (activeLink && window.innerWidth <= 800) {
+          activeLink.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'nearest',
+            inline: 'center',
+          });
+        }
+      };
       links.forEach((link) => link.addEventListener('click', (event) => {
         const id = link.dataset.floorLink;
         const target = id ? document.querySelector<HTMLElement>(`[data-floor="${id}"]`) : null;
         if (!target) return;
         event.preventDefault();
+        const root = document.documentElement;
+        root.classList.add('is-archive-menu-scrolling');
+        let scrollFallback = window.setTimeout(() => {
+          root.classList.remove('is-archive-menu-scrolling');
+        }, 6000);
+        window.addEventListener('scrollend', () => {
+          window.clearTimeout(scrollFallback);
+          root.classList.remove('is-archive-menu-scrolling');
+        }, { once: true });
         target.scrollIntoView({
           behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
           block: 'start',
         });
         history.pushState(null, '', `#${id}`);
       }));
-      const floorObserver = new IntersectionObserver((entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive((visible.target as HTMLElement).dataset.floor || '');
-      }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.2, 0.5] });
-      floors.forEach((floor) => floorObserver.observe(floor));
 
-      const updateElevator = () => {
+      let motionFrame = 0;
+      const updateArchiveMotion = () => {
+        motionFrame = 0;
+        const viewportHeight = Math.max(1, window.innerHeight);
+        let closestFloor = floors[0];
+        let closestDistance = Number.POSITIVE_INFINITY;
+
+        floorMotion.forEach(({ floor, gallery, projects }) => {
+          const distance = Math.abs(floor.getBoundingClientRect().top) / viewportHeight;
+          const focus = 1 - Math.min(1, distance);
+          floor.style.setProperty('--floor-scale', String(0.58 + focus * 0.42));
+          floor.style.setProperty('--floor-opacity', String(0.16 + focus * 0.84));
+          const galleryRect = gallery?.getBoundingClientRect();
+          const galleryCenterX = galleryRect ? galleryRect.left + galleryRect.width / 2 : 0;
+          const galleryCenterY = galleryRect ? galleryRect.top + galleryRect.height / 2 : 0;
+          const maxProjectDistance = galleryRect
+            ? Math.max(1, Math.hypot(galleryRect.width / 2, galleryRect.height / 2))
+            : 1;
+
+          projects.forEach((project) => {
+            const projectRect = project.getBoundingClientRect();
+            const projectCenterX = projectRect.left + projectRect.width / 2;
+            const projectCenterY = projectRect.top + projectRect.height / 2;
+            const radialDistance = Math.min(1, Math.hypot(
+              projectCenterX - galleryCenterX,
+              projectCenterY - galleryCenterY,
+            ) / maxProjectDistance);
+            const delay = radialDistance * 0.32;
+            const localFocus = Math.min(1, Math.max(0, (focus - delay) / Math.max(0.01, 1 - delay)));
+            const easedFocus = 1 - Math.pow(1 - localFocus, 3);
+            project.style.setProperty('--project-scroll-scale', String(0.52 + easedFocus * 0.48));
+            project.style.setProperty('--project-scroll-opacity', String(0.1 + easedFocus * 0.9));
+          });
+
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestFloor = floor;
+          }
+        });
+
+        if (closestFloor) setActive(closestFloor.dataset.floor || '');
         if (!elevator || !building) return;
         const rect = building.getBoundingClientRect();
-        const distance = rect.height - window.innerHeight;
+        const distance = rect.height - viewportHeight;
         const progress = Math.min(1, Math.max(0, -rect.top / Math.max(1, distance)));
         elevator.value = String(Math.round(progress * 1000));
         elevatorShell?.style.setProperty('--elevator-progress', String(progress));
       };
-      updateElevator();
-      window.addEventListener('scroll', updateElevator, { passive: true });
+      const requestMotionUpdate = () => {
+        if (!motionFrame) motionFrame = requestAnimationFrame(updateArchiveMotion);
+      };
+      updateArchiveMotion();
+      window.addEventListener('scroll', requestMotionUpdate, { passive: true });
+      window.addEventListener('resize', requestMotionUpdate, { passive: true });
       elevator?.addEventListener('input', () => {
         if (!building) return;
         elevatorShell?.style.setProperty('--elevator-progress', String(Number(elevator.value) / 1000));
@@ -255,8 +333,6 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
         let reverseFrame = 0;
         let previousTime = 0;
 
-        // Astro's client-side page swap does not always start loading newly inserted
-        // video elements. Explicitly load and decode the first frame for the menu.
         const holdFirstFrame = () => {
           video.pause();
           if (video.duration && video.currentTime > video.duration) video.currentTime = 0;
