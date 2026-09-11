@@ -113,8 +113,12 @@ export const playFloors: PlayFloor[] = [
       { title: 'Bowerbird landing page', type: 'illustration', media: [{ src: '/img/play/bowerbird landing page.jpg', alt: 'Bowerbird landing page illustration' }] },
       { title: 'Beijing Memories', type: 'illustration', media: [{ src: '/img/play/zhenzhen.png', alt: 'Beijing Memories illustration' }] },
       { title: 'Hello California', type: 'illustration', media: [{ src: '/img/rockhood/california.png', alt: 'Hello California illustration' }] },
-      { title: 'Zhenzhen', type: 'acrylic', media: [{ src: '/img/play/zhenzhen-2025.jpg', alt: 'Zhenzhen acrylic painting' }] },
-      { title: 'History', type: 'acrylic', media: [{ src: '/img/play/history.jpg', alt: 'History acrylic painting' }] },
+      {
+        title: 'Paintings', type: 'acrylic', media: [
+          { src: '/img/play/zhenzhen-2025.jpg', alt: 'Zhenzhen acrylic painting' },
+          { src: '/img/play/history.jpg', alt: 'History acrylic painting' },
+        ]
+      },
       { title: 'Apple', type: 'crayon', media: [{ src: '/img/play/apple.mp4', alt: 'Apple crayon animation' }] },
       { title: 'D&R', type: 'stickers', media: [{ src: '/img/play/stickers.jpg', alt: 'D&R sticker collection' }] },
       { title: 'Papyrus', type: 'stickers', media: [{ src: '/img/play/Papyrus.jpg', alt: 'Papyrus sticker' }] },
