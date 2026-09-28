@@ -1,13 +1,13 @@
 ---
 // A single tile in the home-page featured-work grid.
-// Supports either an image or an autoplaying muted video as the cover.
+// Every tile has a static cover. Some tiles enhance it with a muted video.
 export interface Props {
   href: string;
   title: string;
   year: string | number;
-  cover: string;            // path under /public, e.g. "/img/project-1.png" or "/videos/cover1.mp4"
+  cover: string;            // static path under /public, e.g. "/img/project-1.png"
   alt?: string;
-  video?: boolean;          // set true if cover is a video file
+  video?: string;           // optional path under /public, e.g. "/videos/cover1.mp4"
   variant?: 'selected' | 'more';
   wide?: boolean;
   category?: string;
@@ -19,7 +19,7 @@ const {
   year,
   cover,
   alt,
-  video = false,
+  video,
   variant = 'more',
   wide = false,
   category,
@@ -36,18 +36,28 @@ const slug = slugMatch ? slugMatch[1] : null;
 <article class:list={['home-project-card', `home-project-card--${variant}`, { 'home-project-card--wide': wide }]}>
   <a href={href} class="home-project-link">
     <figure class="project-figure">
-      {/* Fixed 16:9 box. All covers (image OR video) fill via
+      {/* Fixed 16:9 box. Static covers and optional videos fill via
           object-fit: cover, so the entire grid renders at uniform
           heights — no masonry, no scroll-reveal, no layout shift on
           mobile. Crops are accepted by design. */}
-      <div class="project-media">
+      <div class:list={['project-media', { 'project-media--video': Boolean(video) }]}>
         {video ? (
-          <video
-            class="project-image"
-            src={cover}
-            autoplay muted loop playsinline preload="metadata" aria-hidden="true"
-            {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
-          ></video>
+          <>
+            <img
+              class="project-image project-poster"
+              src={cover}
+              alt={alt ?? `${title} project cover`}
+              loading="lazy"
+              decoding="async"
+              {...(slug ? { 'transition:name': `cover-${slug}` } : {})}
+            />
+            <video
+              class="project-image project-video"
+              src={video}
+              poster={cover}
+              autoplay muted loop playsinline preload="metadata" aria-hidden="true"
+            ></video>
+          </>
         ) : (
           <img
             class="project-image"
@@ -135,6 +145,16 @@ const slug = slugMatch ? slugMatch[1] : null;
   .home-project-card--more .home-project-heading h3 { font-size: 1rem; }
   .home-project-link:hover .project-image { transform: scale(1.025); }
 
+  /* The real image remains underneath the video at all times. The video only
+     becomes visible after playback has actually started, so a deferred,
+     failed, or autoplay-blocked request can never leave a grey tile. */
+  .project-video {
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.4s ease;
+  }
+
+  .project-video.is-playing { opacity: 1; }
+
   .home-project-link:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 6px;
@@ -167,3 +187,32 @@ const slug = slugMatch ? slugMatch[1] : null;
     }
   }
 </style>
+
+<script>
+  function bootstrapProjectCardVideos() {
+    document.querySelectorAll<HTMLVideoElement>('.project-media--video .project-video').forEach((video) => {
+      if (video.dataset.fallbackReady === 'true') return;
+      video.dataset.fallbackReady = 'true';
+
+      const showVideo = () => video.classList.add('is-playing');
+      const showPoster = () => video.classList.remove('is-playing');
+
+      video.addEventListener('playing', showVideo);
+      video.addEventListener('error', showPoster);
+      video.addEventListener('emptied', showPoster);
+
+      // View Transitions can preserve a video that started before this script
+      // re-runs, so also account for the current state.
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused) {
+        showVideo();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapProjectCardVideos, { once: true });
+  } else {
+    bootstrapProjectCardVideos();
+  }
+  document.addEventListener('astro:after-swap', bootstrapProjectCardVideos);
+</script>

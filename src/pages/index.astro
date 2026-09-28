@@ -9,8 +9,9 @@ import { featuredOverrides } from '../data/featuredWork';
 //   - title + year + (optional) sort order come from each MDX
 //     frontmatter (single source of truth — edit there and it just
 //     propagates here)
-//   - cover image / video flag come from featuredOverrides because
-//     the home tile cover is often different from the project page hero
+//   - static cover image + optional enhancement video come from
+//     featuredOverrides because the home tile is often different from
+//     the project page hero
 //
 // Sorted newest first; ties broken by frontmatter `order` ascending.
 const overrideMap = new Map(featuredOverrides.map((o) => [o.slug, o]));

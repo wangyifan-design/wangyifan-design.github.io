@@ -5,8 +5,8 @@
 // ties broken by `order`). Wraps around at the ends so the reader can
 // keep clicking forward forever — last → first.
 //
-// Each side shows: a thumbnail of the neighbouring project + its title.
-// Video covers play silently on hover; static covers just sit there.
+// Each side shows: a static thumbnail of the neighbouring project + its title.
+// Navigation must never depend on a video request or first-frame decode.
 
 import { getCollection } from 'astro:content';
 import { featuredOverrides } from '../data/featuredWork';
@@ -30,7 +30,6 @@ const list = allProjects
       title: p.data.title,
       cover: o.cover,
       alt: o.alt,
-      video: o.video,
       _yearNum: Number.isFinite(yearNum) ? yearNum : 0,
       _order: p.data.order ?? 999,
     };
@@ -52,11 +51,7 @@ const next = currentIndex >= 0 ? list[(currentIndex + 1) % total] : null;
     {prev && (
       <a href={prev.href} class="project-nav-link prev" aria-label={`Previous project: ${prev.title}`}>
         <div class="project-nav-thumb">
-          {prev.video ? (
-            <video src={prev.cover} muted playsinline preload="metadata" loop />
-          ) : (
-            <img src={prev.cover} alt={prev.alt ?? prev.title} loading="lazy" />
-          )}
+          <img src={prev.cover} alt={prev.alt ?? prev.title} loading="lazy" decoding="async" />
         </div>
         <div class="project-nav-text">
           <span class="project-nav-label"><span class="project-nav-arrow">←</span> Previous</span>
@@ -72,34 +67,9 @@ const next = currentIndex >= 0 ? list[(currentIndex + 1) % total] : null;
           <span class="project-nav-title">{next.title}</span>
         </div>
         <div class="project-nav-thumb">
-          {next.video ? (
-            <video src={next.cover} muted playsinline preload="metadata" loop />
-          ) : (
-            <img src={next.cover} alt={next.alt ?? next.title} loading="lazy" />
-          )}
+          <img src={next.cover} alt={next.alt ?? next.title} loading="lazy" decoding="async" />
         </div>
       </a>
     )}
   </nav>
 )}
-
-<script>
-  // Play the video thumbnails silently on hover, pause on leave.
-  // Re-attaches after every Astro View Transition.
-  function bootstrapProjectNavVideos() {
-    document.querySelectorAll('.project-nav-link video').forEach((video) => {
-      const v = video as HTMLVideoElement;
-      const link = v.closest('.project-nav-link');
-      if (!link) return;
-      link.addEventListener('mouseenter', () => { v.play().catch(() => {}); });
-      link.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootstrapProjectNavVideos, { once: true });
-  } else {
-    bootstrapProjectNavVideos();
-  }
-  document.addEventListener('astro:after-swap', bootstrapProjectNavVideos);
-</script>
