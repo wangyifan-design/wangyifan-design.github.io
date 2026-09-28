@@ -39,6 +39,7 @@ function bootstrapPage() {
   initCursor(cursorDot);
   initLightbox(lightbox, lightboxImg);
   initImageReveal();
+  initAutoplayVideos();
 }
 
 // First page load
@@ -729,6 +730,95 @@ function initImageReveal() {
       imageRevealObserver.observe(el);
     }
   });
+}
+
+// Browsers often defer autoplay videos that start below the fold. In that
+// state the video can remain paused at readyState 0 even after the visitor
+// scrolls to it. Explicitly start muted videos as they approach the viewport
+// and pause them when they move away. Rebuilding the observer after every
+// Astro page swap also makes project videos reliable after client navigation.
+let autoplayVideoObserver = null;
+
+function playAutoplayVideo(video) {
+  video.muted = true;
+  video.playsInline = true;
+
+  // Media elements inserted by Astro View Transitions can briefly have no
+  // selected source even though their `src` attribute is present. Force a
+  // fresh source selection, then retry once media data is available.
+  if (video.readyState === HTMLMediaElement.HAVE_NOTHING) {
+    if (video.dataset.autoplayLoadPending === 'true') return;
+    video.dataset.autoplayLoadPending = 'true';
+
+    const retryAfterLoad = () => {
+      delete video.dataset.autoplayLoadPending;
+      const rect = video.getBoundingClientRect();
+      const nearViewport = rect.top < window.innerHeight + 200 && rect.bottom > -200;
+      if (nearViewport) playAutoplayVideo(video);
+    };
+
+    video.addEventListener('loadeddata', retryAfterLoad, { once: true });
+    video.addEventListener('error', () => {
+      delete video.dataset.autoplayLoadPending;
+    }, { once: true });
+    video.load();
+    return;
+  }
+
+  const playPromise = video.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(() => {
+      // Keep the poster/static fallback visible when the browser declines
+      // autoplay (for example in Low Power Mode).
+    });
+  }
+}
+
+function playVisibleAutoplayVideos() {
+  if (document.visibilityState !== 'visible') return;
+
+  document.querySelectorAll('video[autoplay]').forEach((video) => {
+    const rect = video.getBoundingClientRect();
+    const nearViewport = rect.top < window.innerHeight + 200 && rect.bottom > -200;
+    if (nearViewport) playAutoplayVideo(video);
+  });
+}
+
+function initAutoplayVideos() {
+  if (autoplayVideoObserver) autoplayVideoObserver.disconnect();
+
+  const videos = document.querySelectorAll('video[autoplay]');
+  if (!videos.length) return;
+
+  if (typeof IntersectionObserver === 'undefined') {
+    videos.forEach(playAutoplayVideo);
+    return;
+  }
+
+  autoplayVideoObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        playAutoplayVideo(video);
+      } else {
+        video.pause();
+      }
+    });
+  }, { rootMargin: '200px 0px', threshold: 0.01 });
+
+  videos.forEach((video) => {
+    video.muted = true;
+    video.playsInline = true;
+    autoplayVideoObserver.observe(video);
+  });
+
+  playVisibleAutoplayVideos();
+
+  if (!document.documentElement.dataset.autoplayVisibilityBound) {
+    document.addEventListener('visibilitychange', playVisibleAutoplayVideos);
+    window.addEventListener('pageshow', playVisibleAutoplayVideos);
+    document.documentElement.dataset.autoplayVisibilityBound = 'true';
+  }
 }
 
 // 监听用户消息和 AI 回复
